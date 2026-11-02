@@ -1,6 +1,6 @@
 import type { Profile, WorkoutPlan, SetLog, Session } from "./types";
 import { exercises } from "../data/exercises";
-export const uid = () => crypto.randomUUID();
+export { uid } from "./ids";
 export const localDate = (date = new Date()) =>
   `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, "0")}-${String(date.getDate()).padStart(2, "0")}`;
 export const splitOptions = [

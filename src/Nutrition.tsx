@@ -22,6 +22,7 @@ import {
 import { db, defaults } from "./data/db";
 import { foods as baseFoods, allowedFoods } from "./data/foods";
 import { indianMeals, labelTemplates } from "./data/recipes";
+import HydrationCard from "./features/hydration/HydrationCard";
 import CustomFood from "./components/CustomFood";
 import { localDate, nutrition, uid } from "./domain/engine";
 import type { Profile, Food, MealPlan } from "./domain/types";
@@ -68,7 +69,6 @@ export default function Nutrition({
   const [meal, setMeal] = useState("Breakfast");
   const [selectedDay, setSelectedDay] = useState(new Date().getDay());
   const [editMeal, setEditMeal] = useState<MealPlan>();
-  const [waterSize, setWaterSize] = useState(250);
   const [range, setRange] = useState(7);
   const [date, setDate] = useState(localDate());
   const settings =
@@ -89,9 +89,6 @@ export default function Nutrition({
     },
     { kcal: 0, protein: 0, carbs: 0, fat: 0, fiber: 0 },
   );
-  const waterToday = water
-    .filter((w) => w.date === localDate())
-    .reduce((s, w) => s + w.ml, 0);
   const safe = p ? allowedFoods(p.diet, p.allergies, p.dislikes, foods) : foods;
   async function generate() {
     if (!p || !n || n.blocked) return;
@@ -393,49 +390,7 @@ export default function Nutrition({
                     <Leaf size={32} className="lime" />
                   </Ring>
                 </section>
-                <section className="card hydration-card">
-                  <Droplets className="blue" />
-                  <h3>A moment to hydrate.</h3>
-                  <strong>
-                    {waterToday}
-                    <small> / {settings.hydration} ml</small>
-                  </strong>
-                  <div className="progress-track">
-                    <span
-                      style={{
-                        width: `${Math.min(100, (waterToday / settings.hydration) * 100)}%`,
-                      }}
-                    />
-                  </div>
-                  <div className="inline-form">
-                    <input
-                      type="number"
-                      aria-label="Water serving ml"
-                      min="10"
-                      max="2000"
-                      value={waterSize}
-                      onChange={(e) => setWaterSize(+e.target.value)}
-                    />
-                    <button
-                      className="button secondary"
-                      onClick={() => {
-                        if (waterSize > 0 && waterSize <= 2000)
-                          db.water.add({
-                            id: uid(),
-                            date: localDate(),
-                            ml: waterSize,
-                          });
-                      }}
-                    >
-                      <Plus size={15} />
-                      ml
-                    </button>
-                  </div>
-                  <small>
-                    Needs vary with climate, activity and health. Set your own
-                    target in Settings.
-                  </small>
-                </section>
+                <HydrationCard />
               </div>
               <div className="macro-grid">
                 {(["protein", "carbs", "fat"] as const).map((key, i) => (

@@ -5,7 +5,7 @@ import {
   Check,
   Clock,
   Dumbbell,
-  ExternalLink,
+  BookOpen,
   Pause,
   Play,
   Plus,
@@ -13,6 +13,8 @@ import {
   Trash2,
   X,
 } from "lucide-react";
+import { ExerciseOverview, TutorialLink } from "./components/ExerciseGuide";
+import { bodyPartLabel } from "./domain/exercise-guide";
 import PlanSettings from "./components/PlanSettings";
 import { db, defaults } from "./data/db";
 import { exercises, exerciseById } from "./data/exercises";
@@ -221,7 +223,7 @@ export default function Workout({
           />
         ) : (
           <>
-            {plan && (
+            {plan && !active && (
               <section className="card plan-explanation">
                 <div className="section-title">
                   <div>
@@ -293,6 +295,20 @@ export default function Workout({
                       {active ? "WORKOUT IN PROGRESS" : plan?.split}
                     </span>
                     <h2>{active?.focus || day?.focus}</h2>
+                    <div className="session-muscles">
+                      <span>Main focus</span>
+                      {[
+                        ...new Set(
+                          (active?.exercises || day?.exercises || []).map(
+                            (item) => exerciseById(item.exerciseId).muscle,
+                          ),
+                        ),
+                      ].map((m) => (
+                        <span key={m} className="muscle-chip primary">
+                          {bodyPartLabel(m)}
+                        </span>
+                      ))}
+                    </div>
                     <p>
                       <Clock size={15} />
                       {p.duration} min <span>•</span>{" "}
@@ -365,13 +381,6 @@ export default function Workout({
                             · {item.rest}s rest
                           </p>
                         </div>
-                        <button
-                          className="icon-button"
-                          aria-label={`Instructions for ${ex.name}`}
-                          onClick={() => setInfo(ex.id)}
-                        >
-                          <ExternalLink size={18} />
-                        </button>
                         {active && (
                           <button
                             className="icon-button"
@@ -382,6 +391,18 @@ export default function Workout({
                           </button>
                         )}
                       </header>
+                      <div className="exercise-help-actions">
+                        <button
+                          className="button secondary"
+                          aria-label={`Instructions for ${ex.name}`}
+                          onClick={() => setInfo(ex.id)}
+                        >
+                          <BookOpen size={16} />
+                          How to do it
+                        </button>
+                        <TutorialLink exercise={ex} />
+                      </div>
+                      <ExerciseOverview exercise={ex} />
                       {active && (
                         <>
                           <p className="hint">
@@ -643,23 +664,26 @@ export default function Workout({
                     e.equipment === equipmentFilter),
               )
               .map((e) => (
-                <button
-                  className="card library-item"
-                  key={e.id}
-                  onClick={() => setInfo(e.id)}
-                >
-                  <div className="exercise-glyph">
-                    <Dumbbell size={28} />
-                  </div>
-                  <span className="eyebrow">
-                    {e.muscle} · {e.equipment}
-                  </span>
-                  <h3>{e.name}</h3>
-                  <span className="muted">
-                    {e.pattern}
-                    <ArrowRight size={16} />
-                  </span>
-                </button>
+                <article className="card library-item" key={e.id}>
+                  <button
+                    className="exercise-library-open"
+                    onClick={() => setInfo(e.id)}
+                    aria-label={`Instructions for ${e.name}`}
+                  >
+                    <div className="exercise-glyph">
+                      <Dumbbell size={28} />
+                    </div>
+                    <span className="eyebrow">
+                      {e.muscle} · {e.equipment}
+                    </span>
+                    <h3>{e.name}</h3>
+                    <span className="muted">
+                      How to do it <ArrowRight size={16} />
+                    </span>
+                  </button>
+                  <TutorialLink exercise={e} />
+                  <ExerciseOverview exercise={e} compact />
+                </article>
               ))}
           </div>
           <p className="hint">
@@ -767,6 +791,7 @@ export default function Workout({
           <span className="tag green">
             {exerciseById(info).muscle} · {exerciseById(info).equipment}
           </span>
+          <TutorialLink exercise={exerciseById(info)} />
           {exerciseById(info).source && (
             <p className="hint">{exerciseById(info).source}</p>
           )}
@@ -780,6 +805,7 @@ export default function Workout({
               Read the exercise source (internet required)
             </a>
           )}
+          <ExerciseOverview exercise={exerciseById(info)} />
           <h3>How to move</h3>
           <ol>
             {exerciseById(info).instructions.map((t) => (
@@ -791,18 +817,6 @@ export default function Workout({
           <h4>Common mistakes</h4>
           <p>{exerciseById(info).mistakes}</p>
           <p className="notice">{exerciseById(info).safety}</p>
-          <a
-            className="button secondary"
-            target="_blank"
-            rel="noreferrer"
-            href={`https://www.youtube.com/results?search_query=${encodeURIComponent(exerciseById(info).name + " proper technique tutorial")}`}
-          >
-            Watch exercise tutorial
-            <ExternalLink size={16} />
-          </a>
-          <p className="hint">
-            YouTube opens externally and needs an internet connection.
-          </p>
         </Modal>
       )}
       {replace && p && (

@@ -1,7 +1,8 @@
 import { useState } from "react";
 import type { Profile } from "../domain/types";
 import { generatePlan, splitOptions } from "../domain/engine";
-import { db } from "../data/db";
+import { saveProfileAndPlan } from "../data/profile-repository";
+import { saveErrorMessage } from "../data/errors";
 import { Modal } from "./ui";
 import { days } from "../domain/calendar";
 export default function PlanSettings({
@@ -38,15 +39,13 @@ export default function PlanSettings({
             return;
           setBusy(true);
           try {
-            await db.transaction("rw", [db.profiles, db.plans], async () => {
-              await db.profiles.put(p);
-              await db.plans.put(preview);
+            await saveProfileAndPlan(p, {
+              includeStartingWeight: false,
+              plan: preview,
             });
             onClose();
-          } catch {
-            setError(
-              "Could not save your plan. Check available device storage.",
-            );
+          } catch (error) {
+            setError(saveErrorMessage(error, "your plan"));
           } finally {
             setBusy(false);
           }

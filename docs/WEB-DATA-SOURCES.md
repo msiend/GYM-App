@@ -13,15 +13,15 @@ Retrieved files and SHA-256:
 
 Examples: moong dry NDB 16080, moong cooked 16081, raw mung sprouts 11043, cooked sprouts 11044, urad raw/cooked 16083/16084, pigeon peas raw/cooked 16101/16102, masoor 16144, besan 16157, whole-wheat flour 20080, plain commercial roti 28306, peanut butter unsalted 16398. Whole-bean and commercial references are labeled as such, not falsely claimed to be laboratory measurements of a user's homemade meal. Millet is a generic reference, not a verified value for every regional millet variety.
 
-The seven Indian meal entries are explicitly **recipe estimates**, calculated from the stated ingredient quantities and illustrative yield. They include dal-rice-palak, rajma chawal, chana-roti-curd, cooked moong sprouts chaat, moong-rice, peanut-butter oats, and besan cheela. Added oil is included where listed. Real cooked yield and recipes vary. Raw sprouts are not used automatically in meal suggestions.
+The 12 Indian meal entries are explicitly **recipe estimates**, calculated from the stated ingredient quantities and illustrative yield. They include dal-rice-palak, rajma chawal, chana-roti-curd, cooked moong sprouts chaat, moong-rice, peanut-butter oats, and besan cheela. Added oil is included where listed. Real cooked yield and recipes vary. Raw sprouts are not used automatically in meal suggestions.
 
 Soya chunks, paneer and poha have **label-entry shortcuts**, rather than invented universal nutrition values. Users supply their actual brand/recipe's calories/macros and the label's serving weight. Values normalize to per 100 g, persist in IndexedDB and export in backup format v3. The previous v2 backup format remains importable. The app makes no normal external requests to display these foods.
 
 ## Exercise library researched online
 
-41 additional descriptions were selected from [Free Exercise DB](https://github.com/yuhonas/free-exercise-db), whose README traces its data to `wrkout/exercises.json` and publishes it under the Unlicense. The license text is retained in `docs/free-exercise-db-UNLICENSE.txt`. Individual source URLs are saved per exercise; instructions are retained from the downloaded JSON. Retrieved combined JSON SHA-256: `5bb747e3fc658f095a60dcbf6d53c96627acdcc6ffb6fffde86f7e26995d40bf`.
+98 additional descriptions were selected from [Free Exercise DB](https://github.com/yuhonas/free-exercise-db), whose README traces its data to `wrkout/exercises.json` and publishes it under the Unlicense. The license text is retained in `docs/free-exercise-db-UNLICENSE.txt`. Individual source URLs are saved per exercise; instructions are retained from the downloaded JSON. Retrieved combined JSON SHA-256: `5bb747e3fc658f095a60dcbf6d53c96627acdcc6ffb6fffde86f7e26995d40bf`.
 
-The library now has 63 exercises. Primary/secondary muscle groups, equipment and difficulty come from the source with app category normalization. Pull-ups and parallel-bar dips require gym equipment in the generator despite being described as bodyweight movements in the source. New community descriptions are identified as reference material, not clinically validated instruction. No externally hosted photos or videos are required for normal use.
+The library now has 120 exercises. Primary/secondary muscle groups, equipment and difficulty come from the source with app category normalization. Pull-ups and parallel-bar dips require gym equipment in the generator despite being described as bodyweight movements in the source. New community descriptions are identified as reference material, not clinically validated instruction. No externally hosted photos or videos are required for normal use.
 
 ## Programming corrections
 
@@ -34,3 +34,9 @@ The library now has 63 exercises. Primary/secondary muscle groups, equipment and
 - Plan rationale and warnings are visible. Regeneration requires the user's explicit save and does not overwrite workout history or active-session sets.
 
 USDA's own download page, NHS Strength and Flex, and PubMed's ACSM progression paper were also requested directly, but this environment's proxy denied them (403). Those live pages were **not read** in this session. Required host additions were saved to the environment draft for optional follow-up research. The accessible dataset provenance above is the research actually completed. Exercise and clinical programming review remains appropriate before presenting these templates as individualized professional coaching.
+
+## Subsequent catalog expansion
+
+A further 57 exercise descriptions and 51 USDA SR28 foods were selected from the same downloaded, provenance-recorded datasets above. The totals are 120 exercises and 100 food references. All new food entries carry their original NDB identifier and preparation state, and all five logged macro/energy/fiber fields were present in the source; entries with missing nutrient fields were not filled with invented values. New Indian meal ideas include chana salad, toor dal/roti/vegetables, quinoa/rajma, curd/papaya/chia and sweet-potato/peanut chaat. As before, recipe totals are calculated estimates, not laboratory measurements.
+
+Exercise instructions are adapted reference material. Cardio setup descriptions were shortened to omit generic calorie-burning claims and paired with gradual, capacity-based effort guidance. Mobility and stretching are categorized separately from resistance exercises; no empty-instruction records were included.

@@ -108,3 +108,25 @@ describe("custom foods and versioned backups", () => {
     expect(await db.profiles.count()).toBe(1);
   });
 });
+describe("profile saves on local-IP browsers", () => {
+  it("saves profile, plan and starting weight when randomUUID is unavailable; edits do not duplicate weight records", async () => {
+    const original = globalThis.crypto;
+    const descriptor = Object.getOwnPropertyDescriptor(globalThis, "crypto");
+    Object.defineProperty(globalThis, "crypto", {
+      value: { getRandomValues: original.getRandomValues.bind(original) },
+      configurable: true,
+    });
+    try {
+      const { saveProfileAndPlan } = await import("./profile-repository");
+      await saveProfileAndPlan(profile);
+      expect((await db.profiles.get("me"))?.name).toBe("Test");
+      expect(await db.plans.count()).toBe(1);
+      expect(await db.weights.count()).toBe(1);
+      await saveProfileAndPlan({ ...profile, name: "Updated" });
+      expect((await db.profiles.get("me"))?.name).toBe("Updated");
+      expect(await db.weights.count()).toBe(1);
+    } finally {
+      if (descriptor) Object.defineProperty(globalThis, "crypto", descriptor);
+    }
+  });
+});

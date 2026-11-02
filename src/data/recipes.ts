@@ -81,6 +81,63 @@ const definitions = [
     ],
     aliases: ["moong rice", "khichdi-style bowl"],
   },
+  {
+    id: "meal-chana-salad",
+    name: "Chana & cucumber salad",
+    items: [
+      ["chana", 180],
+      ["cucumber", 80],
+      ["tomato", 60],
+      ["onion", 20],
+      ["lemon", 15],
+      ["oil", 5],
+    ],
+    aliases: ["chana chaat", "chickpea salad"],
+  },
+  {
+    id: "meal-toor-roti",
+    name: "Toor dal, roti & cooked vegetables",
+    items: [
+      ["toor-cooked", 180],
+      ["roti", 60],
+      ["green-beans-cooked", 100],
+      ["oil", 5],
+    ],
+    aliases: ["arhar dal roti", "dal roti"],
+  },
+  {
+    id: "meal-quinoa-rajma",
+    name: "Quinoa & rajma bowl",
+    items: [
+      ["quinoa-cooked", 150],
+      ["rajma", 150],
+      ["tomato", 60],
+      ["cucumber", 60],
+      ["oil", 5],
+    ],
+    aliases: ["quinoa beans"],
+  },
+  {
+    id: "meal-curd-fruit",
+    name: "Curd, papaya & chia bowl",
+    items: [
+      ["yogurt-lowfat", 200],
+      ["papaya", 120],
+      ["chia", 10],
+    ],
+    aliases: ["dahi fruit bowl", "papaya curd"],
+  },
+  {
+    id: "meal-peanut-sweetpotato",
+    name: "Sweet potato & peanut chaat",
+    items: [
+      ["sweet-potato", 200],
+      ["peanut", 20],
+      ["onion", 20],
+      ["lemon", 15],
+    ],
+    aliases: ["shakarkandi chaat", "sweet potato chaat"],
+  },
 ] as const;
 export const indianMeals: Food[] = definitions.map((def) => {
   const ingredients = def.items.map(([foodId, grams]) => ({ foodId, grams }));

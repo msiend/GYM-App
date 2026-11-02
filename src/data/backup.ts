@@ -130,7 +130,12 @@ const schemas: Record<string, z.ZodType> = {
     grams: num.positive().max(2000),
     meal: id,
   }),
-  water: z.object({ id, date, ml: num.positive().max(2000) }),
+  water: z.object({
+    id,
+    date,
+    ml: num.positive().max(2000),
+    createdAt: num.min(0).optional(),
+  }),
   cardio: z
     .object({
       id,
@@ -144,11 +149,26 @@ const schemas: Record<string, z.ZodType> = {
   settings: z.object({
     id: z.literal("preferences"),
     theme: z.enum(["light", "dark"]),
+    textSize: z.enum(["normal", "large"]).optional(),
     language: z.enum(["hi", "en"]),
     unit: z.enum(["kg", "lbs"]),
     rest: num.min(10).max(600),
     hydration: num.min(250).max(6000),
     reminders: z.boolean(),
+    hydrationReminders: z.boolean().optional(),
+    hydrationNotifications: z.boolean().optional(),
+    hydrationInterval: num.int().min(30).max(180).optional(),
+    hydrationStart: z
+      .string()
+      .regex(/^([01]\d|2[0-3]):[0-5]\d$/)
+      .optional(),
+    hydrationEnd: z
+      .string()
+      .regex(/^([01]\d|2[0-3]):[0-5]\d$/)
+      .optional(),
+    hydrationMessage: z.string().max(200).optional(),
+    hydrationEnabledAt: num.min(0).optional(),
+    hydrationLastReminderAt: num.min(0).optional(),
     reminderTime: z.string(),
     reminderDays: z.array(num.int().min(0).max(6)),
     reminderMessage: z.string(),

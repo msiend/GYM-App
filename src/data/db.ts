@@ -43,11 +43,18 @@ db.version(3).stores({ customFoods: "id,name" });
 export const defaults: Settings = {
   id: "preferences",
   theme: "light",
+  textSize: "normal",
   language: "en",
   unit: "kg",
   rest: 75,
   hydration: 2000,
   reminders: false,
+  hydrationReminders: false,
+  hydrationNotifications: false,
+  hydrationInterval: 60,
+  hydrationStart: "09:00",
+  hydrationEnd: "21:00",
+  hydrationMessage: "Time for a water break. Drink to your needs.",
   reminderTime: "18:00",
   reminderDays: [1, 3, 5],
   reminderMessage: "Time to move. Your workout is ready.",
@@ -70,3 +77,15 @@ export const repository = {
     });
   },
 };
+
+export async function saveSettings(patch: Partial<Settings>) {
+  await db.transaction("rw", db.settings, async () => {
+    const current = await db.settings.get("preferences");
+    await db.settings.put({
+      ...defaults,
+      ...current,
+      ...patch,
+      id: "preferences",
+    });
+  });
+}

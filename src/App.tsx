@@ -17,6 +17,9 @@ import {
   Wifi,
   WifiOff,
 } from "lucide-react";
+import HydrationCard from "./features/hydration/HydrationCard";
+import { useHydrationReminders } from "./features/hydration/useHydrationReminders";
+import { saveErrorMessage } from "./data/errors";
 import { db, defaults } from "./data/db";
 import { useUI } from "./store";
 import { localDate, nutrition } from "./domain/engine";
@@ -33,6 +36,8 @@ import type { Profile } from "./domain/types";
 export default function App() {
   const profile = useLiveQuery(() => db.profiles.get("me"));
   const settings = useLiveQuery(() => db.settings.get("preferences"));
+  useHydrationReminders({ ...defaults, ...settings });
+  const [loadError, setLoadError] = useState("");
   const [wizard, setWizard] = useState(false);
   const [loaded, setLoaded] = useState(false);
   const [online, setOnline] = useState(navigator.onLine);
@@ -44,17 +49,15 @@ export default function App() {
         setLoaded(true);
         if (!p) setWizard(true);
       })
-      .catch(() =>
-        notify(
-          "Device storage is unavailable. Enable IndexedDB in your browser.",
-        ),
-      );
+      .catch((error) => {
+        setLoadError(saveErrorMessage(error, "the local database"));
+      });
     const on = () => setOnline(navigator.onLine);
     window.addEventListener("online", on);
     window.addEventListener("offline", on);
     const error = (e: PromiseRejectionEvent) => {
       e.preventDefault();
-      notify("Unable to save this change. Check device storage and try again.");
+      notify(saveErrorMessage(e.reason));
       console.error(e.reason);
     };
     window.addEventListener("unhandledrejection", error);
@@ -67,6 +70,7 @@ export default function App() {
   useEffect(() => {
     document.documentElement.dataset.theme = settings?.theme || "light";
     document.documentElement.lang = settings?.language === "hi" ? "hi" : "en";
+    document.documentElement.dataset.textSize = settings?.textSize || "normal";
   }, [settings]);
   useEffect(() => {
     if (!("serviceWorker" in navigator) || !import.meta.env.PROD) return;
@@ -185,7 +189,13 @@ export default function App() {
           </div>
         </header>
         <main>
-          {!loaded ? (
+          {loadError ? (
+            <Empty title="Local storage unavailable" description={loadError}>
+              <button className="button" onClick={() => location.reload()}>
+                Try again
+              </button>
+            </Empty>
+          ) : !loaded ? (
             <Empty
               title="Preparing your space"
               description="Opening your on-device database…"
@@ -289,9 +299,6 @@ function Home({
   const intake =
     useLiveQuery(() => db.intake.where("date").equals(localDate()).toArray()) ||
     [];
-  const water =
-    useLiveQuery(() => db.water.where("date").equals(localDate()).toArray()) ||
-    [];
   const settings =
     useLiveQuery(() => db.settings.get("preferences")) || defaults;
   const n = p ? nutrition(p) : null;
@@ -308,7 +315,6 @@ function Home({
       ((foods.find((f) => f.id === l.foodId)?.protein || 0) * l.grams) / 100,
     0,
   );
-  const waterMl = water.reduce((s, w) => s + w.ml, 0);
   return (
     <>
       <Heading
@@ -401,35 +407,7 @@ function Home({
           </button>
         </section>
       </div>
-      <section className="card simple-hydration">
-        <div>
-          <DropletIcon />
-          <strong>Water today</strong>
-          <span>
-            {waterMl} / {settings.hydration} ml
-          </span>
-        </div>
-        <div className="progress-track">
-          <span
-            style={{
-              width: `${Math.min(100, (waterMl / settings.hydration) * 100)}%`,
-            }}
-          />
-        </div>
-        <button
-          className="button secondary"
-          onClick={() =>
-            db.water.add({
-              id: crypto.randomUUID(),
-              date: localDate(),
-              ml: 250,
-            })
-          }
-        >
-          <Plus size={15} />
-          250 ml
-        </button>
-      </section>
+      <HydrationCard />
       <SectionTitle
         title="Your week"
         detail={plan?.split || "Set up a profile to create your weekly plan."}
@@ -490,12 +468,5 @@ function Home({
         </button>
       </div>
     </>
-  );
-}
-function DropletIcon() {
-  return (
-    <span className="water-icon" aria-hidden="true">
-      ◒
-    </span>
   );
 }

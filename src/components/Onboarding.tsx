@@ -4,8 +4,9 @@ import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { ArrowRight, Check, ChevronLeft, ShieldCheck } from "lucide-react";
 import type { Profile } from "../domain/types";
-import { db } from "../data/db";
-import { generatePlan, localDate, uid, splitOptions } from "../domain/engine";
+import { saveProfileAndPlan } from "../data/profile-repository";
+import { saveErrorMessage } from "../data/errors";
+import { splitOptions } from "../domain/engine";
 import { Modal } from "./ui";
 import { days } from "../domain/calendar";
 const schema = z.object({
@@ -86,26 +87,10 @@ export default function Onboarding({
   async function save() {
     setBusy(true);
     try {
-      await db.transaction(
-        "rw",
-        [db.profiles, db.plans, db.weights],
-        async () => {
-          await db.profiles.put(p);
-          await db.plans.put(generatePlan(p));
-          if (!profile)
-            await db.weights.add({
-              id: uid(),
-              date: localDate(),
-              weight: p.weight,
-              notes: "Starting weight",
-            });
-        },
-      );
+      await saveProfileAndPlan(p);
       onClose();
-    } catch {
-      setError(
-        "Could not save your profile. Check available device storage and try again.",
-      );
+    } catch (error) {
+      setError(saveErrorMessage(error, "your profile"));
     } finally {
       setBusy(false);
     }

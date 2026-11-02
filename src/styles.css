@@ -3324,3 +3324,810 @@ textarea {
     font-size: 8px;
   }
 }
+.exercise-overview {
+  margin: 18px 0 15px;
+  padding-top: 16px;
+  border-top: 1px solid var(--border);
+}
+.exercise-benefit > strong {
+  display: block;
+  font-size: 12px;
+  font-weight: 650;
+  color: var(--text);
+  margin-bottom: 7px;
+}
+.exercise-card .exercise-benefit p,
+.exercise-benefit p {
+  font-size: 12px;
+  line-height: 1.75;
+  margin: 5px 0;
+  color: var(--muted);
+}
+.muscle-details {
+  display: grid;
+  gap: 11px;
+  margin: 15px 0 0;
+}
+.muscle-details > div {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+}
+.muscle-details dt {
+  width: 90px;
+  flex-shrink: 0;
+  font-size: 11px;
+  color: var(--muted);
+  line-height: 27px;
+}
+.muscle-details dd {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin: 0;
+}
+.muscle-chip {
+  display: inline-flex;
+  align-items: center;
+  border-radius: 5px;
+  border: 1px solid var(--border);
+  padding: 5px 8px;
+  font-size: 10px;
+  line-height: 1.4;
+  color: var(--muted);
+  background: var(--bg);
+}
+.muscle-chip.primary {
+  color: var(--primary);
+  background: color-mix(in srgb, var(--primary) 7%, var(--surface));
+  border-color: color-mix(in srgb, var(--primary) 22%, var(--border));
+}
+.exercise-help-actions {
+  display: flex;
+  gap: 12px;
+  align-items: flex-start;
+  flex-wrap: wrap;
+  margin: 19px 0 6px;
+}
+.exercise-help-actions .button {
+  min-height: 44px;
+}
+.tutorial-action {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 7px;
+}
+.youtube-tutorial {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 9px;
+  padding: 11px 14px;
+  min-height: 44px;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  background: var(--surface);
+  color: var(--text);
+  font-size: 12px;
+  font-weight: 600;
+}
+.youtube-tutorial:hover {
+  border-color: #d25858;
+  background: color-mix(in srgb, #d25858 4%, var(--surface));
+}
+.youtube-play {
+  color: #fff;
+  background: #c52f2f;
+  display: grid;
+  place-items: center;
+  border-radius: 4px;
+  width: 25px;
+  height: 18px;
+}
+.youtube-play svg {
+  width: 11px;
+  height: 11px;
+}
+.tutorial-action > small {
+  font-size: 9px;
+  color: var(--muted);
+}
+.exercise-library-open {
+  display: block;
+  text-align: left;
+  width: 100%;
+  border: 0;
+  background: none;
+  padding: 0;
+  color: var(--text);
+}
+.library-item {
+  display: flex;
+  flex-direction: column;
+}
+.library-item .exercise-overview {
+  flex: 1;
+}
+.library-item .exercise-overview.compact {
+  padding-top: 13px;
+  margin: 15px 0 17px;
+}
+.library-item .exercise-benefit p {
+  font-size: 11px;
+}
+.library-item .muscle-details > div {
+  flex-direction: column;
+  gap: 4px;
+}
+.library-item .muscle-details dt {
+  width: auto;
+  line-height: 1.5;
+}
+.library-item .tutorial-action {
+  margin-top: auto;
+}
+.library-item .youtube-tutorial {
+  width: 100%;
+  font-size: 11px;
+}
+.library-item .tutorial-action > small {
+  font-size: 8px;
+}
+.library-item .exercise-glyph {
+  height: 55px;
+}
+.session-muscles {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin: 13px 0;
+}
+.session-muscles > span:first-child {
+  font-size: 10px;
+  color: var(--muted);
+  margin-right: 4px;
+}
+.session-muscles .muscle-chip {
+  font-size: 9px;
+}
+@media (max-width: 640px) {
+  .exercise-overview {
+    margin-top: 16px;
+    padding-top: 14px;
+  }
+  .exercise-card .exercise-benefit p {
+    font-size: 12px;
+  }
+  .muscle-details dt {
+    width: 77px;
+    font-size: 10px;
+  }
+  .muscle-details > div {
+    gap: 8px;
+  }
+  .muscle-chip {
+    font-size: 9px;
+    padding: 5px 7px;
+  }
+  .exercise-help-actions {
+    gap: 10px;
+  }
+  .exercise-help-actions > .button,
+  .exercise-help-actions > .tutorial-action {
+    flex: 1;
+    min-width: 130px;
+  }
+  .exercise-help-actions .button,
+  .exercise-help-actions .youtube-tutorial {
+    font-size: 11px;
+    min-height: 44px;
+    padding: 10px;
+  }
+  .exercise-help-actions .youtube-tutorial {
+    width: 100%;
+    gap: 6px;
+  }
+  .exercise-help-actions .tutorial-action > small {
+    font-size: 8px;
+    line-height: 1.6;
+  }
+  .library-item .exercise-benefit p {
+    font-size: 11px;
+    line-height: 1.7;
+  }
+  .library-item .youtube-tutorial {
+    padding: 10px 5px;
+    gap: 5px;
+    font-size: 10px;
+  }
+  .library-item .youtube-tutorial > svg {
+    width: 12px;
+  }
+  .library-item .muscle-chip {
+    font-size: 8px;
+  }
+  .library-item .tutorial-action > small {
+    font-size: 8px;
+    line-height: 1.6;
+  }
+  .library-item .exercise-library-open h3 {
+    font-size: 14px;
+  }
+  .session-muscles .muscle-chip {
+    font-size: 9px;
+  }
+}
+.library-item .tutorial-action {
+  margin-top: 15px;
+}
+.exercise-help-actions + .exercise-overview {
+  margin-top: 16px;
+}
+.modal > .tutorial-action {
+  margin: 18px 0;
+}
+/* Water logging and optional, foreground-only prompts. */
+.water-card {
+  padding: 24px;
+  margin-bottom: 24px;
+}
+.water-card > header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+}
+.water-card-title {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.water-card-title > svg {
+  color: #5986ba;
+}
+.water-card h2 {
+  font-size: 20px;
+  font-weight: 600;
+}
+.water-card .text-link {
+  font-size: 12px;
+}
+.water-total {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 15px;
+  margin: 22px 0;
+}
+.water-total strong {
+  font-size: 30px;
+  font-weight: 600;
+}
+.water-total small {
+  font-size: 14px;
+  font-weight: 400;
+}
+.water-total > span {
+  font-size: 12px;
+  color: var(--muted);
+}
+.water-quick-add {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+  margin: 20px 0 15px;
+}
+.water-quick-add button {
+  flex: 1;
+}
+.water-custom {
+  display: flex;
+  align-items: flex-end;
+  gap: 12px;
+  max-width: 390px;
+  margin-bottom: 10px;
+}
+.water-custom label {
+  flex: 1;
+  margin: 0;
+}
+.water-custom button {
+  flex-shrink: 0;
+}
+.water-custom input {
+  margin-top: 6px;
+}
+.water-explanation {
+  font-size: 13px !important;
+  margin-top: 14px;
+}
+.hydration-preferences .check {
+  font-size: 14px;
+  gap: 12px;
+}
+.hydration-preferences input[type="checkbox"] {
+  width: 20px;
+  height: 20px;
+  min-height: 20px;
+}
+.nutrition-overview .water-card {
+  margin: 0;
+}
+.water-card .danger {
+  font-size: 14px;
+}
+.water-card .text-link {
+  min-height: 36px;
+}
+html[data-text-size="large"] {
+  font-size: 18px;
+}
+@media (max-width: 640px) {
+  html {
+    font-size: 16px;
+  }
+  html[data-text-size="large"] {
+    font-size: 18px;
+  }
+  body {
+    font-size: 1rem;
+    line-height: 1.65;
+  }
+  p,
+  .hint,
+  .notice,
+  .notice p,
+  .muted,
+  .modal p,
+  .modal li,
+  .instruction p,
+  .empty p,
+  .coaching,
+  .exercise-card p,
+  .exercise-card .hint,
+  .exercise-card .exercise-benefit p,
+  .exercise-benefit p,
+  .library-item .exercise-benefit p,
+  .food-card p,
+  .settings-card .muted,
+  .settings-card .hint,
+  .page-heading p,
+  .section-title p,
+  .today-workout p,
+  .today-macros p,
+  .simple-links p,
+  .water-explanation {
+    font-size: 1rem !important;
+    line-height: 1.75 !important;
+  }
+  label,
+  .check,
+  .hydration-preferences .check {
+    font-size: 1rem;
+    line-height: 1.7;
+  }
+  input,
+  select,
+  textarea {
+    font-size: 1rem;
+    min-height: 48px;
+    padding: 12px;
+  }
+  .button,
+  button.button,
+  .text-link,
+  .water-card .text-link,
+  .youtube-tutorial,
+  .exercise-help-actions .button,
+  .exercise-help-actions .youtube-tutorial,
+  .settings-card .button {
+    font-size: 0.95rem;
+    line-height: 1.5;
+    min-height: 46px;
+  }
+  h1,
+  .page-heading h1,
+  .wizard-title {
+    font-size: 1.8rem;
+    line-height: 1.3;
+  }
+  h2,
+  .section-title h2,
+  .water-card h2 {
+    font-size: 1.25rem;
+  }
+  h3,
+  .exercise-card h3,
+  .food-card h3,
+  .library-item h3,
+  .library-item .exercise-library-open h3,
+  .settings-card > h3,
+  .today-plan h3 {
+    font-size: 1.15rem;
+    line-height: 1.45;
+  }
+  .eyebrow,
+  .exercise-card .eyebrow,
+  .library-item .eyebrow,
+  .macro-card .eyebrow,
+  .stat .eyebrow {
+    font-size: 0.75rem !important;
+    letter-spacing: 0.7px;
+    line-height: 1.6;
+  }
+  .mobile-nav a {
+    font-size: 0.75rem;
+    line-height: 1.5;
+    min-width: 0;
+    flex: 1;
+  }
+  .mobile-nav {
+    padding-top: 10px;
+    padding-bottom: calc(10px + env(safe-area-inset-bottom));
+  }
+  .mobile-nav a span {
+    overflow-wrap: anywhere;
+    text-align: center;
+  }
+  .page-heading > .button,
+  .page-heading > .inline-form .button {
+    font-size: 0.9rem;
+    gap: 7px;
+    padding: 10px;
+    white-space: normal;
+  }
+  .page-heading > .button {
+    min-width: 46px;
+  }
+  .page-heading > .button svg {
+    flex-shrink: 0;
+  }
+  .page-heading {
+    flex-wrap: wrap;
+  }
+  .page-heading > div:first-child {
+    flex: 1;
+    min-width: 200px;
+  }
+  .page-heading p {
+    max-width: none;
+  }
+  .tabs {
+    overflow-x: auto;
+  }
+  .tabs button {
+    font-size: 0.95rem;
+    padding: 13px 15px;
+    min-height: 48px;
+  }
+  .food-filters button {
+    min-width: max-content;
+  }
+  .day-picker button {
+    font-size: 0.85rem;
+    min-height: 46px;
+    min-width: 38px;
+  }
+  .day-picker {
+    gap: 5px;
+  }
+  .week-item {
+    grid-template-columns: 85px 1fr;
+    gap: 9px;
+  }
+  .week-item > span {
+    font-size: 0.9rem;
+  }
+  .week-item > strong {
+    font-size: 1rem;
+  }
+  .week-item > small {
+    grid-column: 2;
+    text-align: left;
+    max-width: none;
+    font-size: 0.8rem;
+  }
+  .week-item > span small {
+    font-size: 0.75rem;
+  }
+  .training-day-list span {
+    font-size: 1rem;
+  }
+  .training-day-list strong {
+    font-size: 0.95rem;
+  }
+  .training-day-list small {
+    font-size: 0.8rem;
+  }
+  .plan-explanation .section-title h2 {
+    font-size: 1.15rem;
+  }
+  .plan-preview > div {
+    font-size: 0.95rem;
+    flex-direction: column;
+    gap: 5px;
+  }
+  .review-grid strong {
+    font-size: 1rem;
+  }
+  .review-grid small {
+    font-size: 0.85rem;
+  }
+  .library-grid {
+    grid-template-columns: 1fr;
+  }
+  .library-item {
+    padding: 20px;
+  }
+  .library-item .exercise-glyph {
+    height: 48px;
+    display: none;
+  }
+  .library-item .exercise-library-open {
+    padding: 3px 0;
+  }
+  .library-item .muted {
+    font-size: 0.95rem;
+  }
+  .library-item .youtube-tutorial {
+    font-size: 0.95rem;
+    padding: 12px 15px;
+    width: auto;
+  }
+  .library-item .tutorial-action > small,
+  .tutorial-action > small,
+  .exercise-help-actions .tutorial-action > small {
+    font-size: 0.8rem;
+    line-height: 1.7;
+  }
+  .library-item .muscle-details > div {
+    flex-direction: row;
+  }
+  .library-item .muscle-details dt,
+  .muscle-details dt {
+    font-size: 0.85rem;
+    line-height: 1.6;
+    width: 90px;
+  }
+  .library-item .muscle-chip,
+  .muscle-chip,
+  .session-muscles .muscle-chip {
+    font-size: 0.85rem;
+    line-height: 1.5;
+  }
+  .exercise-benefit > strong {
+    font-size: 1rem;
+  }
+  .session-muscles > span:first-child {
+    font-size: 0.85rem;
+  }
+  .exercise-help-actions {
+    gap: 12px;
+  }
+  .exercise-help-actions > .button,
+  .exercise-help-actions > .tutorial-action {
+    flex: none;
+    width: 100%;
+  }
+  .exercise-help-actions .youtube-tutorial {
+    width: 100%;
+  }
+  .exercise-help-actions .button {
+    width: 100%;
+  }
+  .exercise-overview {
+    margin-bottom: 20px;
+  }
+  .set-heading {
+    font-size: 0.7rem;
+    letter-spacing: 0;
+  }
+  .set-row {
+    grid-template-columns: 20px repeat(3, minmax(0, 1fr)) 36px 20px;
+    gap: 6px;
+  }
+  .set-row input {
+    font-size: 1rem;
+    min-height: 46px;
+    padding: 8px 2px;
+  }
+  .set-row > span:first-child {
+    font-size: 0.9rem;
+  }
+  .set-check {
+    width: 36px;
+    height: 44px;
+  }
+  .set-feedback {
+    gap: 8px;
+    flex-wrap: wrap;
+  }
+  .set-feedback label {
+    font-size: 0.85rem;
+  }
+  .set-feedback input {
+    width: 18px;
+    height: 18px;
+  }
+  .exercise-controls {
+    flex-wrap: wrap;
+  }
+  .exercise-controls label {
+    font-size: 0.9rem;
+  }
+  .exercise-controls input {
+    font-size: 1rem;
+    width: 85px;
+  }
+  .history-set > span {
+    font-size: 0.8rem;
+  }
+  .instruction summary {
+    font-size: 1rem;
+  }
+  .list-row strong {
+    font-size: 0.95rem;
+  }
+  .list-row small {
+    font-size: 0.85rem;
+  }
+  .legal-link {
+    font-size: 0.95rem;
+    min-height: 48px;
+  }
+  .food-card small,
+  .food-kind,
+  .recipe-ingredients p {
+    font-size: 0.85rem;
+    line-height: 1.7;
+  }
+  .food-card > svg {
+    flex-shrink: 0;
+  }
+  .food-card {
+    align-items: flex-start;
+  }
+  .macro-card {
+    padding: 15px 11px;
+  }
+  .macro-card > strong {
+    font-size: 1.6rem;
+  }
+  .macro-card strong small {
+    font-size: 0.85rem;
+  }
+  .macro-card p {
+    font-size: 0.85rem !important;
+  }
+  .macro-grid {
+    gap: 8px;
+  }
+  .calorie-card {
+    flex-wrap: wrap;
+  }
+  .calorie-card p {
+    font-size: 0.95rem !important;
+  }
+  .calorie-card .tag {
+    font-size: 0.7rem;
+  }
+  .protein-card {
+    flex-wrap: wrap;
+  }
+  .meal-item {
+    flex-direction: column;
+    align-items: flex-start;
+    font-size: 1rem;
+  }
+  .meal-item > span:last-child {
+    font-size: 0.85rem;
+    max-width: none;
+  }
+  .meal-item small {
+    font-size: 0.85rem;
+  }
+  .meal-card .section-title h3 small {
+    font-size: 0.85rem;
+  }
+  .water-card {
+    padding: 20px;
+    margin-bottom: 22px;
+  }
+  .water-card > header {
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+  .water-card h2 {
+    font-size: 1.2rem;
+  }
+  .water-total {
+    flex-direction: column;
+    gap: 6px;
+    margin: 18px 0;
+  }
+  .water-total strong {
+    font-size: 1.8rem;
+  }
+  .water-total small {
+    font-size: 1rem;
+  }
+  .water-total > span {
+    font-size: 0.9rem;
+  }
+  .water-card .text-link {
+    font-size: 0.9rem;
+  }
+  .water-quick-add {
+    gap: 8px;
+  }
+  .water-quick-add button {
+    font-size: 0.9rem;
+    padding: 10px 8px;
+    gap: 5px;
+  }
+  .water-custom {
+    gap: 10px;
+    flex-wrap: wrap;
+  }
+  .water-custom label {
+    min-width: 150px;
+  }
+  .water-custom .button {
+    font-size: 0.9rem;
+  }
+  .water-card .water-explanation {
+    font-size: 0.95rem !important;
+  }
+  .hydration-preferences .form-grid {
+    grid-template-columns: 1fr;
+  }
+  .nutrition-overview {
+    grid-template-columns: 1fr;
+  }
+  .toast {
+    font-size: 0.95rem;
+    line-height: 1.65;
+    bottom: 95px;
+  }
+  .modal {
+    padding: 22px 18px;
+  }
+  .modal > header h2 {
+    font-size: 1.25rem;
+  }
+  .app-footer {
+    font-size: 0.75rem;
+    line-height: 1.6;
+    align-items: flex-start;
+  }
+  .app-footer > span:last-child {
+    flex-wrap: wrap;
+  }
+  .connection {
+    font-size: 0.7rem;
+  }
+  .breadcrumb {
+    font-size: 0.75rem;
+  }
+}
+.form-grid > * {
+  min-width: 0;
+}
+input,
+select,
+textarea {
+  min-width: 0;
+}
+[data-theme="light"] .brand-mark {
+  color: #fff;
+}
+html[data-text-size="large"]
+  main
+  :is(p, .hint, label, input, select, textarea, .button, .text-link) {
+  font-size: 1rem !important;
+}
+html[data-text-size="large"] :is(input, select, textarea, .button) {
+  min-height: 48px;
+}

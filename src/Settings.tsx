@@ -14,7 +14,8 @@ import {
   Upload,
 } from "lucide-react";
 import { appVersion } from "./version";
-import { db, repository } from "./data/db";
+import HydrationPreferences from "./features/hydration/HydrationPreferences";
+import { db, repository, saveSettings } from "./data/db";
 import type { Profile, Settings as Preferences } from "./domain/types";
 import { Heading, Modal } from "./components/ui";
 import { importBackup } from "./data/backup";
@@ -38,7 +39,7 @@ const policies: Record<string, string> = {
   "Third-party services":
     "React, Dexie, Workbox and other bundled open-source libraries run locally. There are no required external APIs, fonts or embedded video players. Explicit YouTube links require internet and leave this app. Hosting and manual service-worker updates use your network connection; normal browser service-worker lifecycle checks may also occur. There are no reliable closed-app scheduled alarms in this browser-only app.",
   "About & support":
-    "FORM 1.0.0 — Build your everyday strong. An offline-first fitness and nutrition companion. For support, contact the administrator of the deployment you are using or open an issue in msiend/GYM-App on GitHub. No support email or legal entity has been supplied. Legal documents are reviewable templates, not certified legal advice.",
+    `FORM ${appVersion} — Build your everyday strong. An offline-first fitness and nutrition companion. For support, contact the administrator of the deployment you are using or open an issue in msiend/GYM-App on GitHub. No support email or legal entity has been supplied. Legal documents are reviewable templates, not certified legal advice.`,
 };
 export default function Settings({
   profile,
@@ -61,7 +62,7 @@ export default function Settings({
     db.sessions.where("status").equals("active").count(),
   );
   async function save(patch: Partial<Preferences>) {
-    await db.settings.put({ ...s, ...patch });
+    await saveSettings(patch);
   }
   useEffect(() => {
     navigator.storage?.estimate().then(setStorage);
@@ -201,21 +202,13 @@ export default function Settings({
                 }
               />
             </label>
-            <label>
-              Personal hydration target (ml)
-              <input
-                type="number"
-                min="250"
-                max="6000"
-                step="250"
-                value={s.hydration}
-                onChange={(e) =>
-                  save({
-                    hydration: Math.min(6000, Math.max(250, +e.target.value)),
-                  })
-                }
-              />
-            </label>
+          </section>
+          <section className="card settings-card">
+            <h3>Water goal & reminders</h3>
+            <HydrationPreferences
+              settings={s}
+              onSaved={() => notify("Water preferences saved.")}
+            />
           </section>
           <section className="card settings-card">
             <h3>Appearance & language</h3>
@@ -227,6 +220,19 @@ export default function Settings({
               >
                 <option value="dark">Dark · Midnight</option>
                 <option value="light">Light · Daybreak</option>
+              </select>
+            </label>
+            <label>
+              Text size
+              <select
+                aria-label="Text size"
+                value={s.textSize || "normal"}
+                onChange={(e) =>
+                  save({ textSize: e.target.value as "normal" | "large" })
+                }
+              >
+                <option value="normal">Comfortable</option>
+                <option value="large">Extra large</option>
               </select>
             </label>
             <label>

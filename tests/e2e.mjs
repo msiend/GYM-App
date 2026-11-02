@@ -35,6 +35,13 @@ try {
   const context = await browser.newContext({
     viewport: { width: 1440, height: 1100 },
   });
+  // Match local-IP HTTP browsers where crypto.randomUUID is not exposed.
+  await context.addInitScript(() =>
+    Object.defineProperty(window.crypto, "randomUUID", {
+      value: undefined,
+      configurable: true,
+    }),
+  );
   // Simulate the existing v2 IndexedDB before the new app opens it.
   const legacyContext = await browser.newContext();
   const legacyPage = await legacyContext.newPage();
@@ -130,6 +137,96 @@ try {
     .getByRole("button", { name: "Create my plan", exact: true })
     .click();
   await page.getByRole("dialog").waitFor({ state: "hidden" });
+  if ((await page.evaluate(() => typeof crypto.randomUUID)) !== "undefined")
+    throw new Error("Missing-UUID regression context was not applied");
+  const waterCard = page.locator(".water-card");
+  await waterCard
+    .getByRole("button", { name: "Log 250 ml of water", exact: true })
+    .click();
+  await waterCard
+    .getByRole("progressbar")
+    .filter({ hasNotText: "unused" })
+    .waitFor();
+  await waterCard
+    .getByLabel("Custom water amount (ml)", { exact: true })
+    .fill("330");
+  await waterCard
+    .getByRole("button", { name: "Log water", exact: true })
+    .click();
+  await waterCard
+    .getByRole("button", { name: "Undo last 330 ml", exact: true })
+    .waitFor();
+  await waterCard
+    .getByRole("button", { name: "Undo last 330 ml", exact: true })
+    .click();
+  await waterCard
+    .getByRole("button", { name: "Water preferences", exact: true })
+    .click();
+  await page
+    .getByLabel("My daily water target (ml)", { exact: true })
+    .fill("2300");
+  await page.getByLabel("Remind me to drink water", { exact: true }).check();
+  const times = await page.evaluate(() => {
+    const h = new Date().getHours();
+    return [
+      String((h + 23) % 24).padStart(2, "0") + ":00",
+      String((h + 1) % 24).padStart(2, "0") + ":00",
+    ];
+  });
+  await page.getByLabel("Start time", { exact: true }).fill(times[0]);
+  await page.getByLabel("End time", { exact: true }).fill(times[1]);
+  await page
+    .getByLabel("Reminder message", { exact: true })
+    .fill("Take a gentle water break.");
+  await page
+    .getByRole("button", { name: "Save water preferences", exact: true })
+    .click();
+  await page.getByRole("dialog").waitFor({ state: "hidden" });
+  await page.evaluate(
+    () =>
+      new Promise((resolve, reject) => {
+        const request = indexedDB.open("form-fitness");
+        request.onsuccess = () => {
+          const database = request.result;
+          const tx = database.transaction("settings", "readwrite");
+          const table = tx.objectStore("settings");
+          const query = table.get("preferences");
+          query.onsuccess = () =>
+            table.put({
+              ...query.result,
+              hydrationEnabledAt: Date.now() - 61 * 60000,
+              hydrationLastReminderAt: 0,
+            });
+          tx.oncomplete = () => {
+            database.close();
+            resolve();
+          };
+          tx.onerror = reject;
+        };
+        request.onerror = reject;
+      }),
+  );
+  await page.reload();
+  await page
+    .getByRole("status")
+    .getByText("Take a gentle water break.", { exact: true })
+    .waitFor();
+  if (
+    (await page
+      .locator(".water-card")
+      .getByRole("progressbar")
+      .getAttribute("aria-valuenow")) !== "250"
+  )
+    throw new Error("Water undo did not preserve the prior glass");
+  await page
+    .locator(".water-card")
+    .getByRole("button", { name: "Water preferences", exact: true })
+    .click();
+  await page.getByLabel("Remind me to drink water", { exact: true }).uncheck();
+  await page
+    .getByRole("button", { name: "Save water preferences", exact: true })
+    .click();
+  await page.getByRole("dialog").waitFor({ state: "hidden" });
   await page.goto("http://localhost:4175/workout");
   await page
     .getByRole("button", { name: "Change plan", exact: true })
@@ -151,6 +248,66 @@ try {
   await page.getByRole("button", { name: "Save plan", exact: true }).click();
   await page.getByRole("dialog").waitFor({ state: "hidden" });
   await page.getByRole("button", { name: /Monday Chest & triceps/ }).waitFor();
+  const firstExercise = page.locator(".exercise-card").first();
+  const exerciseName = await firstExercise.locator("h3").innerText();
+  await firstExercise
+    .getByText("Why this exercise?", { exact: true })
+    .waitFor();
+  await firstExercise.getByText("Main muscles", { exact: true }).waitFor();
+  await firstExercise.getByText("Also works", { exact: true }).waitFor();
+  const tutorial = firstExercise.getByRole("link", {
+    name: /tutorial on YouTube/,
+  });
+  const tutorialAddress = new URL(await tutorial.getAttribute("href"));
+  if (
+    tutorialAddress.searchParams.get("search_query") !==
+    `${exerciseName} proper technique tutorial`
+  )
+    throw new Error("Wrong exercise tutorial query");
+  await context.route("https://www.youtube.com/**", (route) =>
+    route.fulfill({
+      status: 200,
+      contentType: "text/html",
+      body: "<title>Tutorial search test</title>",
+    }),
+  );
+  const tutorialPopup = page.waitForEvent("popup");
+  await tutorial.click();
+  const popup = await tutorialPopup;
+  await popup.waitForLoadState("domcontentloaded");
+  if (
+    new URL(popup.url()).searchParams.get("search_query") !==
+    `${exerciseName} proper technique tutorial`
+  )
+    throw new Error("Tutorial did not open the expected YouTube search");
+  await popup.close();
+  await page
+    .getByRole("button", { name: "Exercise library", exact: true })
+    .click();
+  await page
+    .getByLabel("Search exercise library", { exact: true })
+    .fill("Dead Bug");
+  await page
+    .locator(".library-item")
+    .getByRole("link", { name: /Watch Dead Bug tutorial/ })
+    .waitFor();
+  await page.getByLabel("Search exercise library", { exact: true }).fill("");
+  const libraryCard = page.locator(".library-item").first();
+  await libraryCard.getByText("Benefit", { exact: true }).waitFor();
+  await libraryCard
+    .getByRole("link", { name: /tutorial on YouTube/ })
+    .waitFor();
+  await libraryCard.getByRole("button", { name: /Instructions for/ }).click();
+  await page
+    .getByRole("dialog")
+    .getByText("Why this exercise?", { exact: true })
+    .waitFor();
+  await page
+    .getByRole("dialog")
+    .getByRole("link", { name: /tutorial on YouTube/ })
+    .waitFor();
+  await page.getByRole("button", { name: "Close dialog" }).click();
+  await page.getByRole("button", { name: "My workout", exact: true }).click();
   await page
     .getByRole("button", { name: "Start workout", exact: true })
     .click();
@@ -174,6 +331,14 @@ try {
   )
     throw new Error("Saved weight missing");
   await page.goto("http://localhost:4175/nutrition?tab=foods");
+  await page.getByLabel("Search foods", { exact: true }).fill("mango");
+  await page.getByRole("button", { name: /Mango \/ aam/ }).click();
+  await page
+    .getByRole("dialog")
+    .getByText(/NDB 09176/)
+    .waitFor();
+  await page.getByRole("button", { name: "Close dialog" }).click();
+  await page.getByLabel("Search foods", { exact: true }).fill("");
   await page.getByRole("button", { name: /White rice cooked/ }).click();
   await page.getByLabel("Portion in grams").fill("150");
   await page.getByRole("button", { name: "Log food", exact: true }).click();
@@ -228,6 +393,30 @@ try {
     await page.evaluate(() => document.documentElement.scrollWidth > innerWidth)
   )
     throw new Error("Mobile horizontal overflow");
+  await page.goto("http://localhost:4175/workout");
+  await page
+    .locator(".exercise-card")
+    .first()
+    .getByText("Why this exercise?", { exact: true })
+    .waitFor();
+  if (
+    await page.evaluate(() => document.documentElement.scrollWidth > innerWidth)
+  )
+    throw new Error("Workout guide overflows mobile viewport");
+  await page.screenshot({ path: "test-results/workout-mobile.png" });
+  await page
+    .getByRole("button", { name: "Exercise library", exact: true })
+    .click();
+  await page
+    .locator(".library-item")
+    .first()
+    .getByRole("link", { name: /tutorial on YouTube/ })
+    .waitFor();
+  if (
+    await page.evaluate(() => document.documentElement.scrollWidth > innerWidth)
+  )
+    throw new Error("Exercise library overflows mobile viewport");
+  await page.screenshot({ path: "test-results/exercise-library-mobile.png" });
   await page.goto("http://localhost:4175/nutrition");
   await page
     .getByRole("heading", { name: "Good food. Better energy." })
@@ -238,6 +427,24 @@ try {
   });
   await context.setOffline(false);
   await page.goto("http://localhost:4175/settings");
+  await page.getByLabel("Text size", { exact: true }).selectOption("large");
+  await page.waitForFunction(
+    () => document.documentElement.dataset.textSize === "large",
+  );
+  if (
+    (await page
+      .locator("main p")
+      .first()
+      .evaluate((el) => parseFloat(getComputedStyle(el).fontSize))) < 18
+  )
+    throw new Error("Large text preference was not applied");
+  await page.setViewportSize({ width: 360, height: 800 });
+  if (
+    await page.evaluate(() => document.documentElement.scrollWidth > innerWidth)
+  )
+    throw new Error("Large text overflows phone viewport");
+  await page.screenshot({ path: "test-results/settings-large-mobile.png" });
+  await page.getByLabel("Text size", { exact: true }).selectOption("normal");
   await page
     .getByRole("button", { name: "Check for updates", exact: true })
     .click();
@@ -282,6 +489,10 @@ try {
     JSON.stringify({
       passed: [
         "onboarding",
+        "expanded food and exercise search with source metadata",
+        "profile and all record creation without crypto.randomUUID",
+        "water custom amounts, undo, target and reminder delivery",
+        "large mobile text preference without horizontal overflow",
         "v2 database migration preserves existing records",
         "set write and reload",
         "food portion logging",
@@ -289,6 +500,9 @@ try {
         "mobile width",
         "real no-update check",
         "six-day plan selection with preview",
+        "exercise benefits and primary/secondary muscles",
+        "direct YouTube tutorial opens correct search in a new tab",
+        "exercise library and detail tutorial access",
         "custom food label normalization and logging",
         "controlled update detection",
         "active workout update guard",

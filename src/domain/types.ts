@@ -132,6 +132,7 @@ export interface Water {
   id: string;
   date: string;
   ml: number;
+  createdAt?: number;
 }
 export interface Cardio {
   id: string;
@@ -145,11 +146,20 @@ export interface Cardio {
 export interface Settings {
   id: string;
   theme: string;
+  textSize?: "normal" | "large";
   language: string;
   unit: string;
   rest: number;
   hydration: number;
   reminders: boolean;
+  hydrationReminders?: boolean;
+  hydrationNotifications?: boolean;
+  hydrationInterval?: number;
+  hydrationStart?: string;
+  hydrationEnd?: string;
+  hydrationMessage?: string;
+  hydrationEnabledAt?: number;
+  hydrationLastReminderAt?: number;
   reminderTime: string;
   reminderDays: number[];
   reminderMessage: string;
