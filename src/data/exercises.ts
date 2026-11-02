@@ -1,3 +1,4 @@
+import additional from "./expanded-exercises.json";
 import type { Exercise } from "../domain/types";
 type Row = [string, string, string, string, string, string, string, string];
 const rows: Row[] = [
@@ -222,7 +223,7 @@ const rows: Row[] = [
     "Keep the back heel down and lean gently forward. Hold comfortably without bouncing.",
   ],
 ];
-export const exercises: Exercise[] = rows.map(
+const starterExercises: Exercise[] = rows.map(
   ([id, name, muscle, secondary, equipment, pattern, start, execution]) => ({
     id,
     name,
@@ -253,4 +254,11 @@ export const exercises: Exercise[] = rows.map(
       .map((r) => r[0]),
   }),
 );
+export const exercises: Exercise[] = [
+  ...starterExercises.map((e) => ({
+    ...e,
+    tracking: e.id === "plank" ? ("seconds" as const) : ("reps" as const),
+  })),
+  ...(additional as Exercise[]),
+];
 export const exerciseById = (id: string) => exercises.find((e) => e.id === id)!;

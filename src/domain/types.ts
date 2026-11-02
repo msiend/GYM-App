@@ -29,6 +29,9 @@ export interface Profile {
   proteinMethod: string;
   nutritionGoal: string;
   budget: string;
+  preferredSplit?: string;
+  recovery?: string;
+  priorityMuscles?: string[];
   nutritionRisk: boolean;
 }
 export interface Exercise {
@@ -45,6 +48,9 @@ export interface Exercise {
   mistakes: string;
   safety: string;
   alternatives: string[];
+  source?: string;
+  sourceUrl?: string;
+  tracking?: "reps" | "seconds";
 }
 export interface PlanExercise {
   exerciseId: string;
@@ -62,6 +68,9 @@ export interface WorkoutPlan {
   created: string;
   split: string;
   days: PlanDay[];
+  rationale?: string;
+  warnings?: string[];
+  version?: number;
 }
 export interface SetLog {
   id: string;
@@ -105,6 +114,12 @@ export interface Food {
   diet: string;
   allergens: string[];
   source: string;
+  servingGrams?: number;
+  aliases?: string[];
+  sourceUrl?: string;
+  sourceId?: string;
+  verification?: string;
+  recipe?: { foodId: string; grams: number }[];
 }
 export interface Intake {
   id: string;

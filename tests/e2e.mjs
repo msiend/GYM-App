@@ -35,18 +35,87 @@ try {
   const context = await browser.newContext({
     viewport: { width: 1440, height: 1100 },
   });
+  // Simulate the existing v2 IndexedDB before the new app opens it.
+  const legacyContext = await browser.newContext();
+  const legacyPage = await legacyContext.newPage();
+  await legacyPage.goto("http://localhost:4175/icon.svg");
+  await legacyPage.evaluate(async () => {
+    await new Promise((resolve, reject) => {
+      const request = indexedDB.open("form-fitness", 20);
+      request.onupgradeneeded = () => {
+        const database = request.result;
+        for (const [name, indexes] of Object.entries({
+          profiles: [],
+          plans: [],
+          sessions: ["date", "status"],
+          sets: ["sessionId", "exerciseId"],
+          weights: ["date"],
+          cardio: ["date"],
+          settings: [],
+          intake: ["date", "foodId"],
+          water: ["date"],
+          meals: ["day", "slot"],
+        })) {
+          const table = database.createObjectStore(name, { keyPath: "id" });
+          for (const index of indexes) table.createIndex(index, index);
+        }
+      };
+      request.onsuccess = () => {
+        const database = request.result;
+        const tx = database.transaction("weights", "readwrite");
+        tx.objectStore("weights").put({
+          id: "legacy",
+          date: "2026-01-01",
+          weight: 71,
+          notes: "v2 record",
+        });
+        tx.oncomplete = () => {
+          database.close();
+          resolve();
+        };
+        tx.onerror = reject;
+      };
+      request.onerror = reject;
+    });
+  });
+  await legacyPage.goto("http://localhost:4175");
+  await legacyPage.getByRole("dialog").waitFor();
+  const migrated = await legacyPage.evaluate(
+    () =>
+      new Promise((resolve) => {
+        const request = indexedDB.open("form-fitness");
+        request.onsuccess = () => {
+          const database = request.result;
+          const tx = database.transaction("weights", "readonly");
+          const query = tx.objectStore("weights").get("legacy");
+          query.onsuccess = () =>
+            resolve(
+              query.result?.weight === 71 &&
+                database.objectStoreNames.contains("customFoods"),
+            );
+          tx.oncomplete = () => database.close();
+        };
+      }),
+  );
+  if (!migrated) throw new Error("v2 to v3 migration lost existing data");
+  await legacyContext.close();
   const page = await context.newPage();
   page.setDefaultTimeout(12000);
   const errors = [];
   page.on("pageerror", (e) => errors.push(e.message));
   await page.goto("http://localhost:4175");
   await page.getByRole("dialog").waitFor();
+  if (
+    (await page.evaluate(() => document.documentElement.dataset.theme)) !==
+    "light"
+  )
+    throw new Error("Light theme should be the default");
   await page.getByRole("button", { name: "Close dialog" }).click();
   await page.screenshot({
     path: "test-results/dashboard-desktop.png",
     fullPage: true,
   });
-  await page.getByRole("button", { name: "Build my personal plan" }).click();
+  await page.getByRole("button", { name: "Create my profile" }).click();
   await page.getByLabel("Full name").fill("Alex Morgan");
   await page.getByRole("button", { name: "Continue", exact: true }).click();
   await page.getByRole("button", { name: "Continue", exact: true }).click();
@@ -62,6 +131,26 @@ try {
     .click();
   await page.getByRole("dialog").waitFor({ state: "hidden" });
   await page.goto("http://localhost:4175/workout");
+  await page
+    .getByRole("button", { name: "Change plan", exact: true })
+    .first()
+    .click();
+  await page
+    .getByLabel("Training experience", { exact: true })
+    .selectOption("More than 1 year");
+  await page.getByLabel("Equipment", { exact: true }).selectOption("Full gym");
+  await page
+    .getByLabel("Plan style", { exact: true })
+    .selectOption("Body-part split (6 days)");
+  for (const day of ["Tue", "Thu", "Sat"])
+    await page
+      .getByRole("dialog")
+      .getByRole("button", { name: day, exact: true })
+      .click();
+  page.once("dialog", (d) => d.accept());
+  await page.getByRole("button", { name: "Save plan", exact: true }).click();
+  await page.getByRole("dialog").waitFor({ state: "hidden" });
+  await page.getByRole("button", { name: /Monday Chest & triceps/ }).waitFor();
   await page
     .getByRole("button", { name: "Start workout", exact: true })
     .click();
@@ -85,12 +174,37 @@ try {
   )
     throw new Error("Saved weight missing");
   await page.goto("http://localhost:4175/nutrition?tab=foods");
-  await page.getByRole("button", { name: /White rice/ }).click();
+  await page.getByRole("button", { name: /White rice cooked/ }).click();
   await page.getByLabel("Portion in grams").fill("150");
   await page.getByRole("button", { name: "Log food", exact: true }).click();
   await page.getByRole("dialog").waitFor({ state: "hidden" });
   await page.goto("http://localhost:4175/nutrition");
   await page.getByText("195", { exact: false }).first().waitFor();
+  await page.goto("http://localhost:4175/nutrition?tab=foods");
+  await page
+    .getByRole("button", { name: "Add your own food", exact: true })
+    .click();
+  await page.getByLabel("Food name", { exact: true }).fill("My Soya Chunks");
+  await page.getByLabel("Label serving weight (g)").fill("50");
+  for (const [label, value] of [
+    ["Calories (kcal) per label serving", "170"],
+    ["Protein (g) per label serving", "25"],
+    ["Carbs (g) per label serving", "15"],
+    ["Fat (g) per label serving", "0.5"],
+    ["Fiber (g) per label serving", "5"],
+  ])
+    await page.getByLabel(label, { exact: true }).fill(value);
+  await page.getByLabel("Dietary type").selectOption("Vegan");
+  await page.getByLabel("Allergens (comma separated)").fill("soy");
+  await page.getByRole("button", { name: "Save food", exact: true }).click();
+  await page.getByRole("dialog").waitFor({ state: "hidden" });
+  await page.getByRole("button", { name: /My Soya Chunks/ }).click();
+  await page.getByLabel("Portion in grams").fill("50");
+  await page.getByRole("button", { name: "Log food", exact: true }).click();
+  await page.getByRole("dialog").waitFor({ state: "hidden" });
+  await page.goto("http://localhost:4175/nutrition");
+  await page.getByText("365", { exact: false }).first().waitFor();
+
   await page.evaluate(async () => {
     await navigator.serviceWorker.ready;
   });
@@ -103,7 +217,8 @@ try {
     .first()
     .waitFor();
   await page.getByRole("link", { name: "Overview", exact: true }).click();
-  await page.getByRole("heading", { name: /Let’s make it count/ }).waitFor();
+  await page.getByRole("heading", { name: /Hello/ }).waitFor();
+  await page.getByText("365", { exact: false }).first().waitFor();
   await page.setViewportSize({ width: 390, height: 844 });
   await page.screenshot({
     path: "test-results/dashboard-mobile.png",
@@ -167,11 +282,14 @@ try {
     JSON.stringify({
       passed: [
         "onboarding",
+        "v2 database migration preserves existing records",
         "set write and reload",
         "food portion logging",
         "service worker offline deep route",
         "mobile width",
         "real no-update check",
+        "six-day plan selection with preview",
+        "custom food label normalization and logging",
         "controlled update detection",
         "active workout update guard",
         "approved activation and preserved history",
@@ -180,6 +298,13 @@ try {
     }),
   );
   if (errors.length) throw new Error("Browser errors");
+} catch (error) {
+  const page = browser?.contexts()[0]?.pages()[0];
+  if (page) {
+    console.error((await page.locator("body").innerText()).slice(-3000));
+    await page.screenshot({ path: "test-results/failure.png", fullPage: true });
+  }
+  throw error;
 } finally {
   await writeFile(swPath, originalSW);
   await browser?.close();

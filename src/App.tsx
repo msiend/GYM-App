@@ -2,36 +2,30 @@ import { useEffect, useState, lazy, Suspense } from "react";
 import { NavLink, Route, Routes, useNavigate } from "react-router-dom";
 import { useLiveQuery } from "dexie-react-hooks";
 import {
-  Activity,
-  ArrowDown,
   ArrowRight,
   ArrowUpRight,
   Bell,
   Check,
-  ChevronLeft,
   ChevronRight,
   Dumbbell,
-  Flame,
-  Heart,
   LayoutDashboard,
   Leaf,
   Plus,
   Settings as SettingsIcon,
   ShieldCheck,
-  Target,
   TrendingUp,
   Wifi,
   WifiOff,
-  Zap,
 } from "lucide-react";
 import { db, defaults } from "./data/db";
 import { useUI } from "./store";
 import { localDate, nutrition } from "./domain/engine";
-import { foods } from "./data/foods";
+import { foods as baseFoods } from "./data/foods";
+import { indianMeals } from "./data/recipes";
 import { days } from "./domain/calendar";
 const Onboarding = lazy(() => import("./components/Onboarding"));
-import { Empty, Heading, Ring, SectionTitle } from "./components/ui";
-import Workout from "./Workout";
+import { Empty, Heading, SectionTitle } from "./components/ui";
+const Workout = lazy(() => import("./Workout"));
 const Nutrition = lazy(() => import("./Nutrition"));
 const Progress = lazy(() => import("./Progress"));
 const Settings = lazy(() => import("./Settings"));
@@ -71,7 +65,7 @@ export default function App() {
     };
   }, [notify]);
   useEffect(() => {
-    document.documentElement.dataset.theme = settings?.theme || "dark";
+    document.documentElement.dataset.theme = settings?.theme || "light";
     document.documentElement.lang = settings?.language === "hi" ? "hi" : "en";
   }, [settings]);
   useEffect(() => {
@@ -289,357 +283,219 @@ function Home({
 }) {
   const navigate = useNavigate();
   const plan = useLiveQuery(() => db.plans.get("current"));
+  const custom = useLiveQuery(() => db.customFoods.toArray()) || [];
+  const foods = [...baseFoods, ...indianMeals, ...custom];
   const sessions = useLiveQuery(() => db.sessions.toArray()) || [];
-  const weights =
-    useLiveQuery(() => db.weights.orderBy("date").toArray()) || [];
   const intake =
     useLiveQuery(() => db.intake.where("date").equals(localDate()).toArray()) ||
     [];
   const water =
     useLiveQuery(() => db.water.where("date").equals(localDate()).toArray()) ||
     [];
-  const settings = useLiveQuery(() => db.settings.get("preferences"));
-  const complete = sessions.filter((s) => s.status === "complete");
-  const today = new Date();
-  const day = plan?.days.find((d) => d.day === today.getDay());
-  const next = day || plan?.days[0];
+  const settings =
+    useLiveQuery(() => db.settings.get("preferences")) || defaults;
   const n = p ? nutrition(p) : null;
-  const consumed = intake.reduce(
-    (a, l) =>
-      a + ((foods.find((f) => f.id === l.foodId)?.kcal || 0) * l.grams) / 100,
+  const day = plan?.days.find((d) => d.day === new Date().getDay());
+  const active = sessions.find((s) => s.status === "active");
+  const calories = intake.reduce(
+    (s, l) =>
+      s + ((foods.find((f) => f.id === l.foodId)?.kcal || 0) * l.grams) / 100,
     0,
   );
   const protein = intake.reduce(
-    (a, l) =>
-      a +
+    (s, l) =>
+      s +
       ((foods.find((f) => f.id === l.foodId)?.protein || 0) * l.grams) / 100,
     0,
   );
-  const hi = settings?.language === "hi";
-  const weekStart = new Date(today);
-  weekStart.setDate(today.getDate() - ((today.getDay() + 6) % 7));
-  weekStart.setHours(0, 0, 0, 0);
-  const weekCount = complete.filter(
-    (s) => s.date >= localDate(weekStart),
-  ).length;
+  const waterMl = water.reduce((s, w) => s + w.ml, 0);
   return (
     <>
       <Heading
-        eyebrow={today
-          .toLocaleDateString(hi ? "hi-IN" : "en-IN", {
-            weekday: "long",
-            day: "numeric",
-            month: "long",
-            year: "numeric",
-          })
-          .toUpperCase()}
+        eyebrow={new Date().toLocaleDateString(
+          settings.language === "hi" ? "hi-IN" : "en-IN",
+          { weekday: "long", day: "numeric", month: "long" },
+        )}
         title={
-          hi
+          settings.language === "hi"
             ? `नमस्ते${p ? ", " + p.name.split(" ")[0] : ""}`
-            : `Let’s make it count${p ? ", " + p.name.split(" ")[0] : ""}`
+            : `Hello${p ? ", " + p.name.split(" ")[0] : ""}`
         }
-        description={
-          hi
-            ? "आपकी यात्रा। आपकी गति। हर दिन थोड़ा बेहतर।"
-            : "Your pace. Your progress. A little stronger, every day."
-        }
+        description="Your workout, meals and progress in one place."
         action={
           <button
             className="button secondary"
             onClick={() => navigate("/progress")}
           >
             <Plus size={16} />
-            {hi ? "प्रगति दर्ज करें" : "Log progress"}
+            Log progress
           </button>
         }
       />
-      <div className="dashboard-top">
-        <section className="hero">
-          <div className="hero-copy">
-            <span className="pill">
-              <span className="pulse" /> YOUR NEXT CHAPTER STARTS HERE
-            </span>
-            <h2>
-              Build your
-              <br />
-              everyday <em>strong.</em>
-            </h2>
-            <p>
-              A plan that moves with you.
-              <br />
-              One workout, one good habit at a time.
-            </p>
-            <button
-              className="button"
-              onClick={() => (p ? navigate("/workout") : onSetup())}
-            >
-              {p ? "Let’s get moving" : "Build my personal plan"}
-              <ArrowUpRight size={18} />
-            </button>
-            <div className="hero-caption">
-              <ShieldCheck size={13} /> 100% on-device. Always yours.
-            </div>
-          </div>
-          <div className="hero-art" aria-hidden="true">
-            <div className="art-orbit o1" />
-            <div className="art-orbit o2" />
-            <div className="art-orbit o3" />
-            <div className="dumbbell-art">
-              <div className="bar" />
-              <div className="plate p1" />
-              <div className="plate p2" />
-              <div className="plate p3" />
-              <div className="plate p4" />
-            </div>
-            <span className="art-label">
-              <Zap size={13} /> MADE FOR THE LONG RUN
-            </span>
-            <span className="art-cross c1">+</span>
-            <span className="art-cross c2">+</span>
-          </div>
+      {!p && (
+        <Empty
+          title="Let’s set up your plan"
+          description="Tell us your goal, experience, schedule and equipment. You can change everything later."
+        >
+          <button className="button" onClick={onSetup}>
+            Create my profile
+            <ArrowRight size={16} />
+          </button>
+        </Empty>
+      )}
+      <div className="simple-today-grid">
+        <section className="card today-workout">
+          <span className="eyebrow">TODAY’S WORKOUT</span>
+          <h2>{active ? active.focus : day ? day.focus : "Rest & recovery"}</h2>
+          <p>
+            {active
+              ? "Your last saved session is ready to continue."
+              : day
+                ? `${day.exercises.length} exercises · about ${p?.duration} min`
+                : "No resistance workout scheduled today. Gentle movement is optional."}
+          </p>
+          <button
+            className="button"
+            onClick={() => (p ? navigate("/workout") : onSetup())}
+          >
+            <Dumbbell size={17} />
+            {active
+              ? "Continue workout"
+              : day
+                ? "Open today’s workout"
+                : "View my weekly plan"}
+          </button>
         </section>
-        <section className="card weekly-card">
-          <div className="card-top">
-            <span className="eyebrow">THIS WEEK</span>
-            <Activity size={18} className="lime" />
-          </div>
-          <h3>Show up for yourself.</h3>
-          <p className="muted">Consistency is your superpower.</p>
-          <div className="weekly-ring">
-            <Ring value={weekCount} total={plan?.days.length || 3} size={132}>
-              <strong>
-                {weekCount}
-                <span> / {plan?.days.length || "—"}</span>
-              </strong>
-              <small>workouts complete</small>
-            </Ring>
-          </div>
-          <div className="mini-days">
-            {Array.from({ length: 7 }, (_, i) => {
-              const d = new Date(weekStart);
-              d.setDate(d.getDate() + i);
-              const done = complete.some((s) => s.date === localDate(d));
-              return (
-                <div key={i}>
-                  <span>{["M", "T", "W", "T", "F", "S", "S"][i]}</span>
-                  <i
-                    className={
-                      done
-                        ? "done"
-                        : localDate(d) === localDate()
-                          ? "today"
-                          : ""
-                    }
-                  >
-                    {done ? <Check size={13} /> : <span />}
-                  </i>
-                </div>
-              );
-            })}
-          </div>
-          <div className="card-bottom">
-            <span>A fresh week. New possibilities.</span>
-            <TrendingUp size={16} />
-          </div>
-        </section>
-      </div>
-      <div className="stat-grid">
-        {[
-          {
-            label: "WORKOUTS COMPLETED",
-            value: String(complete.length),
-            unit: "sessions",
-            icon: Dumbbell,
-            detail: complete.length
-              ? "Every session adds up"
-              : "Your first rep starts a habit",
-          },
-          {
-            label: "CURRENT WEIGHT",
-            value: String(weights.at(-1)?.weight || p?.weight || "—"),
-            unit: "kg",
-            icon: Activity,
-            detail: p
-              ? `Starting weight: ${weights[0]?.weight || p.weight} kg`
-              : "Track your personal trend",
-          },
-          {
-            label: "TODAY’S ENERGY",
-            value: String(Math.round(consumed)),
-            unit: "kcal",
-            icon: Flame,
-            detail:
-              n && !n.blocked
-                ? `of ~${n.kcal.toLocaleString()} kcal estimated target`
-                : "Fuel your day, your way",
-          },
-          {
-            label: "TODAY’S PROTEIN",
-            value: String(Math.round(protein)),
-            unit: "g",
-            icon: Target,
-            detail:
-              n && !n.blocked
-                ? `of ~${n.protein} g reference target`
-                : "Small habits. Better recovery.",
-          },
-        ].map(({ label, value, unit, icon: Icon, detail }) => (
-          <section className="card stat" key={label}>
+        <section className="card today-food">
+          <span className="eyebrow">TODAY’S FOOD</span>
+          <div className="today-macros">
             <div>
-              <span className="eyebrow">{label}</span>
-              <span className="stat-icon">
-                <Icon size={17} />
-              </span>
-            </div>
-            <strong>
-              {value}
-              <small>{unit}</small>
-            </strong>
-            <p>
-              <span className="tiny-dot" />
-              {detail}
-            </p>
-          </section>
-        ))}
-      </div>
-      <div className="dashboard-bottom">
-        <div>
-          <SectionTitle
-            title="Your training week"
-            detail="A little structure. Room for real life."
-            action={
-              <button
-                className="text-link"
-                onClick={() => navigate("/workout")}
-              >
-                View plan <ArrowUpRight size={15} />
-              </button>
-            }
-          />
-          <section className="card schedule">
-            <div className="schedule-week">
-              <button className="icon-button" aria-label="Current week">
-                <ChevronLeft size={16} />
-              </button>
               <strong>
-                {weekStart.toLocaleDateString("en-IN", {
-                  day: "numeric",
-                  month: "short",
-                })}{" "}
-                –{" "}
-                {new Date(
-                  weekStart.getFullYear(),
-                  weekStart.getMonth(),
-                  weekStart.getDate() + 6,
-                ).toLocaleDateString("en-IN", {
-                  day: "numeric",
-                  month: "short",
-                })}
+                {Math.round(calories)}
+                <small> kcal</small>
               </strong>
-              <span className="tag">THIS WEEK</span>
+              <p>
+                {n && !n.blocked
+                  ? `~${n.kcal} estimated target`
+                  : "Energy logged"}
+              </p>
             </div>
-            <div className="week-strip">
-              {Array.from({ length: 7 }, (_, i) => {
-                const d = new Date(weekStart);
-                d.setDate(d.getDate() + i);
-                const scheduled = plan?.days.some((x) => x.day === d.getDay());
-                return (
-                  <button
-                    key={i}
-                    className={localDate(d) === localDate() ? "current" : ""}
-                    onClick={() => navigate("/workout")}
-                  >
-                    <small>{days[d.getDay()].slice(0, 3)}</small>
-                    <strong>{d.getDate()}</strong>
-                    <i className={scheduled ? "scheduled" : ""} />
-                  </button>
-                );
-              })}
+            <div>
+              <strong>
+                {Math.round(protein)}
+                <small> g</small>
+              </strong>
+              <p>
+                {n && !n.blocked
+                  ? `~${n.protein} g protein reference`
+                  : "Protein logged"}
+              </p>
             </div>
-            <div className="today-plan">
-              <span className="workout-symbol">
-                <Dumbbell size={23} />
-              </span>
-              <div>
-                <span className="eyebrow">
-                  {day
-                    ? "TODAY’S WORKOUT"
-                    : next
-                      ? "NEXT IN YOUR PLAN"
-                      : "YOUR PERSONAL PLAN"}
-                </span>
-                <h3>{next?.focus || "Your starting line"}</h3>
-                <p>
-                  {next
-                    ? `${next.exercises.length} exercises · ${p?.duration} min · ${plan?.split}`
-                    : "Tell us about you. We’ll take it from there."}
-                </p>
-              </div>
-              <button
-                className="round-button"
-                aria-label="Open workout"
-                onClick={() => (p ? navigate("/workout") : onSetup())}
-              >
-                <ArrowUpRight size={21} />
-              </button>
-            </div>
-          </section>
-        </div>
-        <div>
-          <SectionTitle
-            title="Fuel & recover"
-            detail="Good training starts with taking care of you."
-          />
-          <section className="card fuel">
-            <div className="fuel-row">
-              <div>
-                <span className="tag green">NUTRITION</span>
-                <h3>Make every bite count.</h3>
-                <p>Balanced meals. No complicated rules.</p>
-                <button
-                  className="text-link"
-                  onClick={() => navigate("/nutrition")}
-                >
-                  Your nutrition space <ArrowRight size={15} />
-                </button>
-              </div>
-              <div className="nutrition-art">
-                <Leaf size={42} strokeWidth={1} />
-              </div>
-            </div>
-            <div className="hydration">
-              <div>
-                <span className="water-icon">◒</span>
-                <strong>Stay hydrated</strong>
-                <small>
-                  {water.reduce((s, w) => s + w.ml, 0)} /{" "}
-                  {settings?.hydration || 2000} ml
-                </small>
-              </div>
-              <div className="progress-track">
-                <span
-                  style={{
-                    width: `${Math.min(100, (water.reduce((s, w) => s + w.ml, 0) / (settings?.hydration || 2000)) * 100)}%`,
-                  }}
-                />
-              </div>
-              <button
-                className="text-link"
-                onClick={() => navigate("/nutrition?tab=dashboard")}
-              >
-                Log water <Plus size={14} />
-              </button>
-            </div>
-          </section>
-        </div>
+          </div>
+          <button
+            className="button secondary"
+            onClick={() => navigate("/nutrition?tab=foods")}
+          >
+            <Plus size={16} />
+            Add food or Indian meal
+          </button>
+        </section>
       </div>
-      <div className="quote-strip">
-        <span>
-          <Heart size={17} /> A reminder for your journey
-        </span>
-        <p>“You don’t have to be perfect. You just have to keep going.”</p>
-        <ArrowDown size={17} />
+      <section className="card simple-hydration">
+        <div>
+          <DropletIcon />
+          <strong>Water today</strong>
+          <span>
+            {waterMl} / {settings.hydration} ml
+          </span>
+        </div>
+        <div className="progress-track">
+          <span
+            style={{
+              width: `${Math.min(100, (waterMl / settings.hydration) * 100)}%`,
+            }}
+          />
+        </div>
+        <button
+          className="button secondary"
+          onClick={() =>
+            db.water.add({
+              id: crypto.randomUUID(),
+              date: localDate(),
+              ml: 250,
+            })
+          }
+        >
+          <Plus size={15} />
+          250 ml
+        </button>
+      </section>
+      <SectionTitle
+        title="Your week"
+        detail={plan?.split || "Set up a profile to create your weekly plan."}
+        action={
+          <button className="text-link" onClick={() => navigate("/workout")}>
+            View or change plan <ArrowRight size={15} />
+          </button>
+        }
+      />
+      <div className="home-week-list">
+        {Array.from({ length: 7 }, (_, i) => {
+          const d = (i + 1) % 7;
+          const training = plan?.days.find((x) => x.day === d);
+          return (
+            <button
+              className={`card week-item ${d === new Date().getDay() ? "is-today" : ""}`}
+              key={d}
+              onClick={() => navigate("/workout")}
+            >
+              <span>
+                {days[d]}
+                {d === new Date().getDay() && <small>Today</small>}
+              </span>
+              <strong>{training?.focus || "Rest day"}</strong>
+              <small>
+                {training
+                  ? `${training.exercises.length} exercises`
+                  : "Recover / gentle movement"}
+              </small>
+            </button>
+          );
+        })}
+      </div>
+      {plan?.rationale && (
+        <details className="card instruction">
+          <summary>Why this plan?</summary>
+          <p>{plan.rationale}</p>
+        </details>
+      )}
+      <div className="simple-links">
+        <button
+          className="card"
+          onClick={() => navigate("/nutrition?tab=foods")}
+        >
+          <Leaf size={22} />
+          <strong>Indian foods & your own labels</strong>
+          <p>Moong, dal, roti, peanut butter and more.</p>
+          <ArrowUpRight size={17} />
+        </button>
+        <button className="card" onClick={() => navigate("/progress")}>
+          <TrendingUp size={22} />
+          <strong>Your progress</strong>
+          <p>
+            {sessions.filter((s) => s.status === "complete").length} workouts
+            completed. Log weight and measurements.
+          </p>
+          <ArrowUpRight size={17} />
+        </button>
       </div>
     </>
+  );
+}
+function DropletIcon() {
+  return (
+    <span className="water-icon" aria-hidden="true">
+      ◒
+    </span>
   );
 }

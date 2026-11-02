@@ -11,7 +11,35 @@ const planExercise = z.object({
   reps: num.min(0).max(999),
   rest: num.min(0).max(3600),
 });
+const foodSchema = z
+  .object({
+    id: z.string().startsWith("custom-"),
+    name: id,
+    kcal: num.min(0).max(1000),
+    protein: num.min(0).max(100),
+    carbs: num.min(0).max(100),
+    fat: num.min(0).max(100),
+    fiber: num.min(0).max(100),
+    state: id,
+    diet: z.enum([
+      "Vegan",
+      "Vegetarian",
+      "Eggetarian",
+      "Pescatarian",
+      "Non-vegetarian",
+    ]),
+    allergens: z.array(z.string()),
+    source: id,
+    verification: z.literal("user-entered"),
+    aliases: z.array(z.string()).optional(),
+    servingGrams: num.positive().max(2000).optional(),
+  })
+  .refine(
+    (f) => f.protein + f.carbs + f.fat <= 105,
+    "Macronutrients exceed plausible serving mass",
+  );
 const schemas: Record<string, z.ZodType> = {
+  customFoods: foodSchema,
   profiles: z
     .object({
       id: z.literal("me"),
@@ -23,6 +51,16 @@ const schemas: Record<string, z.ZodType> = {
       target: num.min(25).max(350).optional(),
       bodyFat: num.min(3).max(65).optional(),
       referenceWeight: num.min(25).max(350).optional(),
+      preferredSplit: z
+        .enum([
+          "Automatic",
+          "Full body",
+          "Upper / lower",
+          "Push / pull / legs",
+          "Body-part split (6 days)",
+        ])
+        .optional(),
+      recovery: z.enum(["Normal recovery", "Limited recovery"]).optional(),
       experience: id,
       goal: z.enum([
         "General fitness",
@@ -50,6 +88,9 @@ const schemas: Record<string, z.ZodType> = {
   plans: z.object({
     id,
     created: date,
+    rationale: z.string().optional(),
+    warnings: z.array(z.string()).optional(),
+    version: num.optional(),
     split: id,
     days: z.array(
       z.object({
@@ -128,18 +169,33 @@ export async function importBackup(text: string) {
   const parsed = z
     .object({
       format: z.literal("form-fitness"),
-      version: z.literal(2),
+      version: z.union([z.literal(2), z.literal(3)]),
       data: z.record(z.string(), z.array(z.unknown())),
     })
     .parse(JSON.parse(text));
   const data: Record<string, unknown[]> = {};
   for (const t of db.tables) {
+    if (
+      t.name === "customFoods" &&
+      parsed.version === 2 &&
+      !parsed.data.customFoods
+    ) {
+      data.customFoods = [];
+      continue;
+    }
     if (!Array.isArray(parsed.data[t.name]))
       throw new Error("Missing backup table");
     data[t.name] = z.array(schemas[t.name]).parse(parsed.data[t.name]);
   }
   const exIds = new Set(exercises.map((e) => e.id));
-  const foodIds = new Set(foods.map((f) => f.id));
+  const { indianMeals } = await import("./recipes");
+  const foodIds = new Set(
+    [
+      ...foods,
+      ...indianMeals,
+      ...(data.customFoods as import("../domain/types").Food[]),
+    ].map((f) => f.id),
+  );
   for (const row of [
     ...data.sets,
     ...data.sessions.flatMap((s: any) => s.exercises),

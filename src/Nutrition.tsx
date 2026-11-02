@@ -20,7 +20,9 @@ import {
   Trash2,
 } from "lucide-react";
 import { db, defaults } from "./data/db";
-import { foods, allowedFoods } from "./data/foods";
+import { foods as baseFoods, allowedFoods } from "./data/foods";
+import { indianMeals, labelTemplates } from "./data/recipes";
+import CustomFood from "./components/CustomFood";
 import { localDate, nutrition, uid } from "./domain/engine";
 import type { Profile, Food, MealPlan } from "./domain/types";
 import { Empty, Heading, Modal, Ring } from "./components/ui";
@@ -54,6 +56,13 @@ export default function Nutrition({
   const [params, setParams] = useSearchParams();
   const tab = params.get("tab") || "dashboard";
   const [search, setSearch] = useState("");
+  const customFoods = useLiveQuery(() => db.customFoods.toArray()) || [];
+  const foods = [...baseFoods, ...indianMeals, ...customFoods];
+  const [customOpen, setCustomOpen] = useState(false);
+  const [customTemplate, setCustomTemplate] =
+    useState<(typeof labelTemplates)[number]>();
+  const [customEdit, setCustomEdit] = useState<Food>();
+  const [foodFilter, setFoodFilter] = useState("all");
   const [food, setFood] = useState<Food>();
   const [grams, setGrams] = useState(100);
   const [meal, setMeal] = useState("Breakfast");
@@ -83,7 +92,7 @@ export default function Nutrition({
   const waterToday = water
     .filter((w) => w.date === localDate())
     .reduce((s, w) => s + w.ml, 0);
-  const safe = p ? allowedFoods(p.diet, p.allergies, p.dislikes) : foods;
+  const safe = p ? allowedFoods(p.diet, p.allergies, p.dislikes, foods) : foods;
   async function generate() {
     if (!p || !n || n.blocked) return;
     if (
@@ -93,8 +102,23 @@ export default function Nutrition({
       )
     )
       return;
-    const protein = safe.filter((f) => f.protein >= 8);
-    const carb = safe.filter((f) => f.carbs >= 15 && f.fat < 10);
+    const protein = safe.filter((f) =>
+      [
+        "tofu",
+        "lentils",
+        "rajma",
+        "chana",
+        "moong-cooked",
+        "toor-cooked",
+        "urad-cooked",
+        "egg",
+        "chicken",
+        "fish",
+      ].includes(f.id),
+    );
+    const carb = safe.filter((f) =>
+      ["rice", "brown", "roti", "potato", "millet"].includes(f.id),
+    );
     const veg = safe.filter((f) =>
       ["spinach", "carrot", "apple", "banana"].includes(f.id),
     );
@@ -165,15 +189,55 @@ export default function Nutrition({
     };
   });
   function foodList() {
-    const list = safe.filter((f) =>
-      f.name.toLowerCase().includes(search.toLowerCase()),
+    const list = safe.filter(
+      (f) =>
+        `${f.name} ${f.aliases?.join(" ") || ""} ${f.state}`
+          .toLowerCase()
+          .includes(search.toLowerCase()) &&
+        (foodFilter === "all" ||
+          (foodFilter === "meals" && f.recipe) ||
+          (foodFilter === "mine" && f.verification === "user-entered") ||
+          (foodFilter === "ingredients" && !f.recipe)),
     );
     return (
       <>
+        <div className="section-title">
+          <div>
+            <h2>Find a food or Indian meal</h2>
+            <p>Weigh the food in the preparation state shown below.</p>
+          </div>
+          <button
+            className="button secondary"
+            onClick={() => {
+              setCustomEdit(undefined);
+              setCustomTemplate(undefined);
+              setCustomOpen(true);
+            }}
+          >
+            <Plus size={15} />
+            Add your own food
+          </button>
+        </div>
+        <div className="tabs food-filters">
+          {[
+            ["all", "All foods"],
+            ["ingredients", "Ingredients"],
+            ["meals", "Indian meals"],
+            ["mine", "My foods"],
+          ].map(([id, label]) => (
+            <button
+              key={id}
+              className={foodFilter === id ? "active" : ""}
+              onClick={() => setFoodFilter(id)}
+            >
+              {label}
+            </button>
+          ))}
+        </div>
         <div className="search-bar">
           <input
             aria-label="Search foods"
-            placeholder="Search rice, dal, tofu, eggs…"
+            placeholder="Search moong, sprouts, dal, roti, peanut butter…"
             value={search}
             onChange={(e) => setSearch(e.target.value)}
           />
@@ -186,7 +250,7 @@ export default function Nutrition({
               key={f.id}
               onClick={() => {
                 setFood(f);
-                setGrams(100);
+                setGrams(f.servingGrams || 100);
               }}
             >
               <span className="food-icon">
@@ -195,6 +259,13 @@ export default function Nutrition({
               <div>
                 <h3>{f.name}</h3>
                 <small>{f.state} · per 100 g</small>
+                <span className="food-kind">
+                  {f.verification === "user-entered"
+                    ? "Your label"
+                    : f.recipe
+                      ? "Recipe estimate"
+                      : "Food reference"}
+                </span>
                 <p>
                   <strong>{f.kcal}</strong> kcal <span>·</span>{" "}
                   <strong>{f.protein}</strong> g protein
@@ -204,6 +275,37 @@ export default function Nutrition({
             </button>
           ))}
         </div>
+        {(foodFilter === "all" || foodFilter === "mine") && (
+          <section className="card label-shortcuts">
+            <h3>Use your brand’s label</h3>
+            <p>
+              Soya chunks, paneer and poha vary by brand and preparation. Add
+              the packet values once, then log them offline.
+            </p>
+            {labelTemplates
+              .filter(
+                (t) =>
+                  !search ||
+                  `${t.name} ${t.aliases}`
+                    .toLowerCase()
+                    .includes(search.toLowerCase()),
+              )
+              .map((t) => (
+                <button
+                  key={t.name}
+                  className="button secondary"
+                  onClick={() => {
+                    setCustomEdit(undefined);
+                    setCustomTemplate(t);
+                    setCustomOpen(true);
+                  }}
+                >
+                  <Plus size={14} />
+                  {t.name}
+                </button>
+              ))}
+          </section>
+        )}
         {!list.length && (
           <Empty
             title="No matching foods"
@@ -211,10 +313,11 @@ export default function Nutrition({
           />
         )}
         <p className="hint">
-          Generic reference values per 100 g from USDA FoodData Central SR
-          Legacy. Recipes, brands and preparation change values. Verify labels
-          and ingredients, especially for allergies. Prices and unverified
-          Indian mixed dishes are not estimated.
+          Values are per 100 g, from USDA SR references or your saved label.
+          Indian meal estimates are calculated from listed ingredients, not
+          presented as measured restaurant nutrition. Recipes, cooking water and
+          added oil change values. Check ingredients for allergies; raw sprouts
+          need careful food-safety handling.
         </p>
       </>
     );
@@ -777,6 +880,38 @@ export default function Nutrition({
           <p className="hint">
             {food.state} · {food.source}
           </p>
+          {food.recipe && (
+            <details className="recipe-ingredients">
+              <summary>See ingredients and portions</summary>
+              {food.recipe.map((i) => (
+                <p key={i.foodId}>
+                  {foods.find((f) => f.id === i.foodId)?.name}: {i.grams} g
+                </p>
+              ))}
+            </details>
+          )}
+          {food.sourceUrl && (
+            <a
+              className="text-link"
+              target="_blank"
+              rel="noreferrer"
+              href={food.sourceUrl}
+            >
+              View source (internet required)
+            </a>
+          )}
+          {food.verification === "user-entered" && (
+            <button
+              className="text-link"
+              onClick={() => {
+                setCustomEdit(food);
+                setFood(undefined);
+                setCustomOpen(true);
+              }}
+            >
+              Edit your saved label values
+            </button>
+          )}
           <label>
             Portion in grams
             <input
@@ -840,6 +975,18 @@ export default function Nutrition({
             Log food
           </button>
         </Modal>
+      )}
+      {customOpen && (
+        <CustomFood
+          food={customEdit}
+          template={customTemplate}
+          onClose={() => setCustomOpen(false)}
+          onSaved={() =>
+            notify(
+              "Your food is saved. Search it in My foods and log any portion.",
+            )
+          }
+        />
       )}
       {editMeal && (
         <Modal title="Edit your meal" onClose={() => setEditMeal(undefined)}>

@@ -10,6 +10,7 @@ import type {
   Cardio,
   Settings,
   MealPlan,
+  Food,
 } from "../domain/types";
 export const db = new Dexie("form-fitness") as Dexie & {
   profiles: EntityTable<Profile, "id">;
@@ -22,6 +23,7 @@ export const db = new Dexie("form-fitness") as Dexie & {
   cardio: EntityTable<Cardio, "id">;
   settings: EntityTable<Settings, "id">;
   meals: EntityTable<MealPlan, "id">;
+  customFoods: EntityTable<Food, "id">;
 };
 db.version(1).stores({
   profiles: "id",
@@ -37,9 +39,10 @@ db.version(2).stores({
   water: "id,date",
   meals: "id,day,slot",
 });
+db.version(3).stores({ customFoods: "id,name" });
 export const defaults: Settings = {
   id: "preferences",
-  theme: "dark",
+  theme: "light",
   language: "en",
   unit: "kg",
   rest: 75,
@@ -56,7 +59,7 @@ export const repository = {
     for (const t of db.tables) data[t.name] = await t.toArray();
     return {
       format: "form-fitness",
-      version: 2,
+      version: 3,
       exported: new Date().toISOString(),
       data,
     };

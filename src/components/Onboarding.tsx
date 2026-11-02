@@ -5,7 +5,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { ArrowRight, Check, ChevronLeft, ShieldCheck } from "lucide-react";
 import type { Profile } from "../domain/types";
 import { db } from "../data/db";
-import { generatePlan, localDate, uid } from "../domain/engine";
+import { generatePlan, localDate, uid, splitOptions } from "../domain/engine";
 import { Modal } from "./ui";
 import { days } from "../domain/calendar";
 const schema = z.object({
@@ -114,7 +114,14 @@ export default function Onboarding({
     <label>
       {label}
       <select
-        value={String(p[key] ?? "")}
+        value={String(
+          p[key] ??
+            (key === "preferredSplit"
+              ? "Automatic"
+              : key === "recovery"
+                ? "Normal recovery"
+                : ""),
+        )}
         onChange={(e) => update(key, e.target.value)}
       >
         {options.map((x) => (
@@ -238,6 +245,15 @@ export default function Onboarding({
       )}
       {step === 3 && (
         <>
+          {select(
+            "Plan style (you can change this later)",
+            "preferredSplit",
+            splitOptions,
+          )}
+          {select("Recovery capacity", "recovery", [
+            "Normal recovery",
+            "Limited recovery",
+          ])}
           <label>Available days (choose 2–6)</label>
           <div className="day-picker">
             {days.map((d, i) => (

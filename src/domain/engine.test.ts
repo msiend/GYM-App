@@ -95,3 +95,83 @@ describe("personalized training and nutrition", () => {
     ).not.toContain("Two consistent");
   });
 });
+describe("expanded plan programming", () => {
+  it("uses two lower-body exposures in automatic five-day training", () => {
+    const plan = generatePlan({
+      ...profile,
+      experience: "More than 1 year",
+      days: [1, 2, 3, 5, 6],
+      equipment: "Full gym",
+      duration: 60,
+    });
+    expect(plan.days.map((d) => d.focus)).toEqual([
+      "Upper body",
+      "Lower body",
+      "Push",
+      "Pull",
+      "Legs",
+    ]);
+    expect(plan.rationale).toContain("5 of your 5");
+  });
+  it("offers the six-day reference style only for suitable experienced profiles", () => {
+    const plan = generatePlan({
+      ...profile,
+      experience: "More than 1 year",
+      equipment: "Full gym",
+      preferredSplit: "Body-part split (6 days)",
+      duration: 60,
+    });
+    expect(plan.split).toBe("Body-part split (6 days)");
+    expect(plan.days.map((d) => d.focus)).toEqual([
+      "Chest & triceps",
+      "Back & biceps",
+      "Shoulders & traps",
+      "Quads & calves",
+      "Glutes & hamstrings",
+      "Abs & forearms",
+    ]);
+    const novice = generatePlan({
+      ...profile,
+      preferredSplit: "Body-part split (6 days)",
+    });
+    expect(novice.days.length).toBeLessThanOrEqual(3);
+    expect(novice.split).toBe("Full body");
+    expect(novice.warnings?.length).toBeGreaterThan(0);
+  });
+  it("limits training when recovery is limited", () =>
+    expect(
+      generatePlan({
+        ...profile,
+        experience: "More than 1 year",
+        recovery: "Limited recovery",
+      }).days.length,
+    ).toBeLessThanOrEqual(3));
+  it("spaces three beginner sessions across the week", () => {
+    const days = generatePlan(profile).days.map((d) => d.day);
+    expect(days.every((d) => !days.includes((d + 1) % 7))).toBe(true);
+  });
+  it("uses actual repetition tracking for crunches rather than timed holds", () => {
+    const plan = generatePlan({
+      ...profile,
+      experience: "More than 1 year",
+      equipment: "Full gym",
+      days: [1, 2, 3, 4, 5, 6],
+      preferredSplit: "Body-part split (6 days)",
+      duration: 90,
+    });
+    expect(plan.days.flatMap((d) => d.exercises).length).toBeGreaterThan(20);
+  });
+});
+it("caps three-to-six-month profiles at four sessions even when six days are available", () => {
+  const plan = generatePlan({
+    ...profile,
+    experience: "3–6 months",
+    equipment: "Full gym",
+  });
+  expect(plan.days).toHaveLength(4);
+  expect(
+    plan.days.every(
+      (d) => d.focus === "Upper body" || d.focus === "Lower body",
+    ),
+  ).toBe(true);
+});

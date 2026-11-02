@@ -13,6 +13,7 @@ import {
   Trash2,
   Upload,
 } from "lucide-react";
+import { appVersion } from "./version";
 import { db, repository } from "./data/db";
 import type { Profile, Settings as Preferences } from "./domain/types";
 import { Heading, Modal } from "./components/ui";
@@ -318,7 +319,7 @@ export default function Settings({
             </h3>
             <div className="list-row">
               <span className="grow">Installed version</span>
-              <span className="tag green">1.0.0</span>
+              <span className="tag green">{appVersion}</span>
             </div>
             <p className="muted">
               Last check:{" "}
@@ -491,7 +492,7 @@ export default function Settings({
         <Modal title={legal} onClose={() => setLegal("")}>
           <p>{policies[legal]}</p>
           <p className="hint">
-            Version 1.0.0 · Review before production deployment.
+            Version {appVersion} · Review before production deployment.
           </p>
           <button className="button secondary" onClick={() => setLegal("")}>
             <Check size={15} />

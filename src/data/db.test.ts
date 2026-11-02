@@ -59,3 +59,52 @@ describe("local data and backups", () => {
     ).toBe(true);
   });
 });
+describe("custom foods and versioned backups", () => {
+  const custom = {
+    id: "custom-soya",
+    name: "My soya chunks",
+    kcal: 340,
+    protein: 50,
+    carbs: 30,
+    fat: 1,
+    fiber: 10,
+    state: "dry, as sold",
+    diet: "Vegan",
+    allergens: ["soy"],
+    source: "User-entered product label",
+    verification: "user-entered",
+  };
+  it("roundtrips custom foods and their intake references in v3", async () => {
+    await db.customFoods.put(custom);
+    await db.intake.put({
+      id: "i",
+      date: "2026-11-02",
+      foodId: custom.id,
+      grams: 50,
+      meal: "Lunch",
+    });
+    const backup = await repository.export();
+    expect(backup.version).toBe(3);
+    await repository.clear();
+    await importBackup(JSON.stringify(backup));
+    expect((await db.customFoods.get(custom.id))?.protein).toBe(50);
+    expect((await db.intake.get("i"))?.foodId).toBe(custom.id);
+  });
+  it("accepts existing v2 backups without a customFoods table", async () => {
+    await db.profiles.put(profile);
+    const backup = await repository.export();
+    const legacy = { ...backup, version: 2 };
+    delete legacy.data.customFoods;
+    await db.customFoods.put(custom);
+    await importBackup(JSON.stringify(legacy));
+    expect(await db.customFoods.count()).toBe(0);
+    expect((await db.profiles.get("me"))?.name).toBe("Test");
+  });
+  it("rejects invalid custom nutrient values without changing data", async () => {
+    await db.profiles.put(profile);
+    const backup = await repository.export();
+    backup.data.customFoods = [{ ...custom, protein: 500 }];
+    await expect(importBackup(JSON.stringify(backup))).rejects.toThrow();
+    expect(await db.profiles.count()).toBe(1);
+  });
+});

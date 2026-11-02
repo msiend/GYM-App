@@ -81,7 +81,9 @@ export function Empty({
 }) {
   return (
     <div className="empty">
-      <span className="empty-icon">↗</span>
+      <span className="empty-icon">
+        <ArrowUpRight size={22} />
+      </span>
       <h3>{title}</h3>
       <p>{description}</p>
       {children}

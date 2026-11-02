@@ -1,3 +1,4 @@
+import additional from "./indian-foods.json";
 import type { Food } from "../domain/types";
 // Rounded reference values per 100 g from USDA FoodData Central SR Legacy generic food entries.
 const rows: [
@@ -187,7 +188,7 @@ const rows: [
   ["carrot", "Carrot", 41, 0.93, 9.58, 0.24, 2.8, "raw", "Vegan", []],
   ["oil", "Olive oil", 884, 0, 0, 100, 0, "as sold", "Vegan", []],
 ];
-export const foods: Food[] = rows.map(
+const starterFoods: Food[] = rows.map(
   ([id, name, kcal, protein, carbs, fat, fiber, state, diet, allergens]) => ({
     id,
     name,
@@ -203,16 +204,30 @@ export const foods: Food[] = rows.map(
       "USDA FoodData Central, SR Legacy; rounded generic reference. Recipe and brand values vary.",
   }),
 );
-export function allowedFoods(diet: string, allergies: string, dislikes = "") {
+export const foods: Food[] = [...starterFoods, ...(additional as Food[])];
+export function allowedFoods(
+  diet: string,
+  allergies: string,
+  dislikes = "",
+  library: Food[] = foods,
+) {
   const excluded = (allergies + "," + dislikes)
     .toLowerCase()
     .split(",")
     .map((s) => s.trim())
     .filter(Boolean);
-  return foods.filter(
+  return library.filter(
     (f) =>
       !excluded.some((s) =>
-        (f.name + " " + f.allergens.join(" ")).toLowerCase().includes(s),
+        (
+          f.name +
+          " " +
+          (f.aliases || []).join(" ") +
+          " " +
+          f.allergens.join(" ")
+        )
+          .toLowerCase()
+          .includes(s),
       ) &&
       (f.diet === "Vegan" ||
         diet === "Non-vegetarian" ||

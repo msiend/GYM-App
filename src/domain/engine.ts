@@ -3,122 +3,330 @@ import { exercises } from "../data/exercises";
 export const uid = () => crypto.randomUUID();
 export const localDate = (date = new Date()) =>
   `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, "0")}-${String(date.getDate()).padStart(2, "0")}`;
+export const splitOptions = [
+  "Automatic",
+  "Full body",
+  "Upper / lower",
+  "Push / pull / legs",
+  "Body-part split (6 days)",
+];
 export function eligible(p: Profile) {
+  const excluded = p.restrictions
+    .toLowerCase()
+    .split(",")
+    .map((s) => s.trim())
+    .filter(Boolean);
   return exercises.filter(
     (e) =>
       (e.equipment === "Bodyweight" ||
         p.equipment === "Full gym" ||
-        (p.equipment === "Dumbbells" && e.equipment === "Dumbbells") ||
-        (p.equipment === "Bands" && e.equipment === "Bands")) &&
-      !p.restrictions
-        .toLowerCase()
-        .split(",")
-        .map((s) => s.trim())
-        .filter(Boolean)
-        .some((s) =>
-          `${e.name} ${e.muscle} ${e.pattern}`.toLowerCase().includes(s),
-        ),
+        p.equipment === e.equipment) &&
+      !excluded.some((s) =>
+        `${e.name} ${e.muscle} ${e.secondary.join(" ")} ${e.pattern}`
+          .toLowerCase()
+          .includes(s),
+      ) &&
+      (!["Complete beginner", "Less than 3 months"].includes(p.experience) ||
+        e.difficulty === "Beginner"),
   );
 }
+/** Pick the best-spaced available days, including the Sunday/Monday boundary. */
+function spacedDays(available: number[], count: number) {
+  let best = available.slice(0, count),
+    score = -Infinity;
+  for (let bits = 0; bits < 1 << available.length; bits++) {
+    const subset = available.filter((_, i) => bits & (1 << i));
+    if (subset.length !== count) continue;
+    const sorted = [...subset].sort((a, b) => a - b);
+    const gaps = sorted.map(
+      (d, i) => (sorted[(i + 1) % sorted.length] - d + 7) % 7 || 7,
+    );
+    const value = Math.min(...gaps) * 100 - gaps.reduce((s, g) => s + g * g, 0);
+    if (value > score) {
+      score = value;
+      best = subset;
+    }
+  }
+  return best;
+}
+type Slot = { pattern?: string; muscles: string[] };
+const slot = (muscles: string[], pattern?: string): Slot => ({
+  muscles,
+  pattern,
+});
 export function generatePlan(p: Profile): WorkoutPlan {
   const beginner = ["Complete beginner", "Less than 3 months"].includes(
     p.experience,
   );
-  const count = beginner ? Math.min(3, p.days.length) : p.days.length;
-  const split =
+  const early = p.experience === "3–6 months";
+  const lowRecovery = p.recovery === "Limited recovery";
+  let count = Math.min(
+    p.days.length,
+    beginner || lowRecovery ? 3 : early ? 4 : 6,
+  );
+  const warnings: string[] = [];
+  if (count < p.days.length)
+    warnings.push(
+      `${p.days.length} days are available, but ${count} resistance sessions are used for experience/recovery. Other days can be rest or gentle activity.`,
+    );
+  let split =
     count <= 3
       ? "Full body"
       : count === 4
         ? "Upper / lower"
-        : "Push / pull / legs";
-  const available = eligible(p).filter(
+        : count === 5
+          ? "Upper / lower + push / pull / legs"
+          : "Push / pull / legs";
+  const preference = p.preferredSplit || "Automatic";
+  if (preference === "Full body") {
+    count = Math.min(count, 3);
+    split = "Full body";
+  } else if (preference === "Upper / lower" && count >= 4)
+    split = "Upper / lower";
+  else if (preference === "Push / pull / legs" && count >= 5)
+    split =
+      count === 5 ? "Upper / lower + push / pull / legs" : "Push / pull / legs";
+  else if (
+    preference === "Body-part split (6 days)" &&
+    count === 6 &&
+    p.experience === "More than 1 year" &&
+    !lowRecovery
+  ) {
+    split = preference;
+    warnings.push(
+      "This six-day body-part option follows your preference. Chest, shoulder and triceps sessions overlap; monitor recovery and add rest when needed. It is not inherently better than full-body or upper/lower training.",
+    );
+  } else if (preference !== "Automatic" && preference !== "Full body")
+    warnings.push(
+      `The requested ${preference.toLowerCase()} does not fit the current experience, days or recovery. A suitable ${split.toLowerCase()} plan is used instead.`,
+    );
+  const chosen =
+    count <= 3
+      ? spacedDays(p.days, count)
+      : [...p.days]
+          .sort((a, b) => ((a + 6) % 7) - ((b + 6) % 7))
+          .slice(0, count);
+  if (
+    chosen.some((d, i) =>
+      chosen.some((other, j) => i !== j && (other - d + 7) % 7 === 1),
+    ) &&
+    split === "Full body"
+  )
+    warnings.push(
+      "Some available days are consecutive. Space resistance sessions out where possible, or reduce effort when recovery is incomplete.",
+    );
+  const pool = eligible(p).filter(
     (e) => !["Cardio", "Mobility", "Stretching"].includes(e.category),
   );
-  const selectedDays = beginner
-    ? Array.from(
-        { length: count },
-        (_, i) => p.days[Math.floor((i * p.days.length) / count)],
-      )
-    : p.days;
+  const chest = slot(["Chest"], "Push"),
+    back = slot(["Back"], "Pull"),
+    shoulder = slot(["Shoulders"], "Push"),
+    quad = slot(["Quadriceps"], "Squat"),
+    hinge = slot(["Hamstrings", "Glutes"], "Hinge"),
+    core = slot(["Abs"], "Core");
+  const isolate = (muscles: string[]) => slot(muscles, "Isolation");
+  const focuses =
+    split === "Full body"
+      ? Array(count).fill("Full body")
+      : split === "Body-part split (6 days)"
+        ? [
+            "Chest & triceps",
+            "Back & biceps",
+            "Shoulders & traps",
+            "Quads & calves",
+            "Glutes & hamstrings",
+            "Abs & forearms",
+          ]
+        : split === "Upper / lower + push / pull / legs"
+          ? ["Upper body", "Lower body", "Push", "Pull", "Legs"]
+          : split === "Upper / lower"
+            ? Array.from({ length: count }, (_, i) =>
+                i % 2 ? "Lower body" : "Upper body",
+              )
+            : Array.from(
+                { length: count },
+                (_, i) => ["Push", "Pull", "Legs"][i % 3],
+              );
+  const missing = new Set<string>();
   const days = p.medical
     ? []
-    : selectedDays.map((day, i) => {
-        const focus =
-          split === "Full body"
-            ? "Full body"
-            : split === "Upper / lower"
-              ? i % 2
-                ? "Lower body"
-                : "Upper body"
-              : ["Push", "Pull", "Legs"][i % 3];
-        const patterns =
-          focus === "Full body"
-            ? ["Squat", "Push", "Pull", "Hinge", "Core"]
-            : focus === "Upper body"
-              ? ["Push", "Pull", "Push", "Isolation", "Core"]
-              : focus === "Lower body"
-                ? ["Squat", "Hinge", "Squat", "Isolation", "Core"]
-                : focus === "Push"
-                  ? ["Push", "Push", "Isolation", "Core"]
-                  : focus === "Pull"
-                    ? ["Pull", "Pull", "Isolation", "Core"]
-                    : ["Squat", "Hinge", "Squat", "Core"];
-        const seen = new Set<string>();
-        const picked = patterns
-          .map((pattern, j) => {
-            const focusMuscles =
-              focus === "Lower body" || focus === "Legs"
-                ? ["Quadriceps", "Hamstrings", "Glutes", "Calves", "Abs"]
-                : focus === "Push"
-                  ? ["Chest", "Shoulders", "Triceps", "Abs"]
-                  : focus === "Pull"
-                    ? ["Back", "Biceps", "Forearms", "Abs"]
-                    : focus === "Upper body"
+    : chosen
+        .map((day, i) => {
+          const focus = focuses[i];
+          const fullSlots =
+            i % 2
+              ? [
+                  hinge,
+                  back,
+                  chest,
+                  quad,
+                  core,
+                  isolate(["Shoulders", "Calves"]),
+                ]
+              : [
+                  quad,
+                  chest,
+                  back,
+                  hinge,
+                  core,
+                  isolate(["Biceps", "Triceps"]),
+                ];
+          const slots: Slot[] =
+            focus === "Full body"
+              ? fullSlots
+              : focus === "Upper body"
+                ? [
+                    chest,
+                    back,
+                    shoulder,
+                    isolate(["Biceps"]),
+                    isolate(["Triceps"]),
+                    core,
+                  ]
+                : focus === "Lower body" || focus === "Legs"
+                  ? [
+                      quad,
+                      hinge,
+                      isolate(["Quadriceps"]),
+                      isolate(["Hamstrings"]),
+                      isolate(["Calves"]),
+                      core,
+                    ]
+                  : focus === "Push"
+                    ? [
+                        chest,
+                        shoulder,
+                        isolate(["Chest"]),
+                        isolate(["Shoulders"]),
+                        isolate(["Triceps"]),
+                        core,
+                      ]
+                    : focus === "Pull"
                       ? [
-                          "Chest",
-                          "Back",
-                          "Shoulders",
-                          "Biceps",
-                          "Triceps",
-                          "Forearms",
-                          "Abs",
+                          back,
+                          back,
+                          isolate(["Shoulders"]),
+                          isolate(["Biceps"]),
+                          isolate(["Traps"]),
+                          isolate(["Forearms"]),
                         ]
-                      : null;
-            const candidates = available.filter(
+                      : focus === "Chest & triceps"
+                        ? [
+                            chest,
+                            chest,
+                            isolate(["Chest"]),
+                            isolate(["Triceps"]),
+                            core,
+                          ]
+                        : focus === "Back & biceps"
+                          ? [
+                              back,
+                              back,
+                              isolate(["Biceps"]),
+                              isolate(["Forearms"]),
+                              core,
+                            ]
+                          : focus === "Shoulders & traps"
+                            ? [
+                                shoulder,
+                                isolate(["Shoulders"]),
+                                isolate(["Shoulders"]),
+                                isolate(["Traps"]),
+                                core,
+                              ]
+                            : focus === "Quads & calves"
+                              ? [
+                                  quad,
+                                  quad,
+                                  isolate(["Quadriceps"]),
+                                  isolate(["Calves"]),
+                                  core,
+                                ]
+                              : focus === "Glutes & hamstrings"
+                                ? [
+                                    hinge,
+                                    hinge,
+                                    isolate(["Hamstrings"]),
+                                    isolate(["Glutes"]),
+                                    isolate(["Calves"]),
+                                  ]
+                                : [
+                                    core,
+                                    core,
+                                    isolate(["Forearms"]),
+                                    isolate(["Biceps"]),
+                                    isolate(["Calves"]),
+                                  ];
+          const sets =
+            beginner ||
+            lowRecovery ||
+            p.age >= 65 ||
+            p.goal === "Flexibility & endurance"
+              ? 2
+              : 3;
+          const rest = p.goal === "Strength building" ? 120 : 75;
+          const minutesPerExercise = (sets * 40 + (sets - 1) * rest + 30) / 60;
+          const capacity = Math.max(
+            2,
+            Math.floor((p.duration - 8) / minutesPerExercise),
+          );
+          const picked: typeof exercises = [];
+          for (const request of slots) {
+            if (picked.length >= capacity) break;
+            const candidates = pool.filter(
               (e) =>
-                e.pattern === pattern &&
-                !seen.has(e.id) &&
-                (!focusMuscles || focusMuscles.includes(e.muscle)),
+                request.muscles.includes(e.muscle) &&
+                (!request.pattern || e.pattern === request.pattern) &&
+                !picked.some((x) => x.id === e.id),
             );
-            const exercise =
-              candidates[(i + j) % Math.max(1, candidates.length)];
-            if (exercise) seen.add(exercise.id);
-            return exercise;
-          })
-          .filter((e) => !!e)
-          .slice(0, Math.max(2, Math.floor((p.duration - 10) / 7)));
-        return {
-          day,
-          focus,
-          exercises: picked.map((e) => ({
-            exerciseId: e.id,
-            sets:
-              beginner || p.age >= 65
-                ? 2
-                : p.goal === "Flexibility & endurance"
-                  ? 2
-                  : 3,
-            reps:
-              p.goal === "Strength building" && !beginner
-                ? 6
-                : e.pattern === "Core"
+            if (!candidates.length) {
+              missing.add(request.muscles.join("/"));
+              continue;
+            }
+            const priorities = p.priorityMuscles || [];
+            candidates.sort(
+              (a, b) =>
+                Number(priorities.includes(b.muscle)) -
+                Number(priorities.includes(a.muscle)),
+            );
+            picked.push(candidates[(i + picked.length) % candidates.length]);
+          }
+          return {
+            day,
+            focus,
+            exercises: picked.map((e) => ({
+              exerciseId: e.id,
+              sets,
+              reps:
+                e.tracking === "seconds"
                   ? 20
-                  : 12,
-            rest: p.goal === "Strength building" ? 120 : 75,
-          })),
-        };
-      });
-  return { id: "current", created: localDate(), split, days };
+                  : p.goal === "Strength building" &&
+                      !beginner &&
+                      e.category === "Compound"
+                    ? 6
+                    : e.category === "Isolation"
+                      ? 15
+                      : 12,
+              rest: e.category === "Isolation" ? 60 : rest,
+            })),
+          };
+        })
+        .filter((d) => d.exercises.length);
+  if (missing.size)
+    warnings.push(
+      `Equipment or exclusions limit options for: ${[...missing].join(", ")}. Do not improvise unsafe equipment; add suitable equipment or seek guidance for substitutions.`,
+    );
+  return {
+    id: "current",
+    created: localDate(),
+    version: 2,
+    split,
+    days,
+    rationale: p.medical
+      ? "Unrestricted training is withheld due to the health screening."
+      : `${split} uses ${days.length} of your ${p.days.length} available days, ${p.duration}-minute sessions and ${p.equipment.toLowerCase()} equipment. ${beginner ? "Beginner volume starts at two sets per exercise." : "Volume and rep targets reflect your goal and recovery."} Different valid plans can look different; consistency, manageable volume and recovery matter more than matching one diagram.`,
+    warnings,
+  };
 }
 export function nutrition(p: Profile) {
   const blocked = p.age < 18 || p.nutritionRisk || p.medical;

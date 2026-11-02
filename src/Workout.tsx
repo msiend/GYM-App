@@ -13,6 +13,7 @@ import {
   Trash2,
   X,
 } from "lucide-react";
+import PlanSettings from "./components/PlanSettings";
 import { db, defaults } from "./data/db";
 import { exercises, exerciseById } from "./data/exercises";
 import { eligible, localDate, progression, uid } from "./domain/engine";
@@ -32,6 +33,9 @@ export default function Workout({
   const logs = useLiveQuery(() => db.sets.toArray()) || [];
   const settings =
     useLiveQuery(() => db.settings.get("preferences")) || defaults;
+  const [planSettings, setPlanSettings] = useState(false);
+  const [muscleFilter, setMuscleFilter] = useState("All muscles");
+  const [equipmentFilter, setEquipmentFilter] = useState("All equipment");
   const [tab, setTab] = useState("plan");
   const [selected, setSelected] = useState(new Date().getDay());
   const [info, setInfo] = useState("");
@@ -174,6 +178,13 @@ export default function Workout({
               <Check size={17} />
               Finish workout
             </button>
+          ) : p ? (
+            <button
+              className="button secondary"
+              onClick={() => setPlanSettings(true)}
+            >
+              Change plan
+            </button>
           ) : undefined
         }
       />
@@ -210,6 +221,50 @@ export default function Workout({
           />
         ) : (
           <>
+            {plan && (
+              <section className="card plan-explanation">
+                <div className="section-title">
+                  <div>
+                    <h2>{plan.split}</h2>
+                    <p>{plan.days.length} training days · your weekly plan</p>
+                  </div>
+                  <button
+                    className="text-link"
+                    onClick={() => setPlanSettings(true)}
+                  >
+                    Change plan
+                  </button>
+                </div>
+                {plan.rationale ? (
+                  <p>{plan.rationale}</p>
+                ) : (
+                  <p>
+                    Your plan was made with an earlier version. Use Change plan
+                    to preview the expanded exercise library and improved
+                    programming.
+                  </p>
+                )}
+                {plan.warnings?.map((w) => (
+                  <p key={w} className="hint">
+                    {w}
+                  </p>
+                ))}
+                <div className="training-day-list">
+                  {plan.days.map((d) => (
+                    <button
+                      key={d.day}
+                      disabled={!!active}
+                      className={selected === d.day ? "selected" : ""}
+                      onClick={() => setSelected(d.day)}
+                    >
+                      <strong>{days[d.day]}</strong>
+                      <span>{d.focus}</span>
+                      <small>{d.exercises.length} exercises</small>
+                    </button>
+                  ))}
+                </div>
+              </section>
+            )}
             <div className="day-picker">
               {days.map((d, i) => (
                 <button
@@ -304,7 +359,7 @@ export default function Workout({
                           <h3>{ex.name}</h3>
                           <p>
                             {item.sets} sets ·{" "}
-                            {ex.pattern === "Core"
+                            {ex.tracking === "seconds"
                               ? `${item.reps} sec hold`
                               : `${Math.max(5, item.reps - 4)}–${item.reps} reps`}{" "}
                             · {item.rest}s rest
@@ -339,7 +394,7 @@ export default function Workout({
                               <span>SET</span>
                               <span>{settings.unit.toUpperCase()}</span>
                               <span>
-                                {ex.pattern === "Core" ? "SECONDS" : "REPS"}
+                                {ex.tracking === "seconds" ? "SECONDS" : "REPS"}
                               </span>
                               <span>RPE /10</span>
                               <span>DONE</span>
@@ -536,6 +591,36 @@ export default function Workout({
         ))}
       {tab === "library" && (
         <>
+          <div className="library-filters">
+            <label>
+              Muscle
+              <select
+                value={muscleFilter}
+                onChange={(e) => setMuscleFilter(e.target.value)}
+              >
+                {[
+                  "All muscles",
+                  ...new Set(exercises.map((e) => e.muscle)),
+                ].map((x) => (
+                  <option key={x}>{x}</option>
+                ))}
+              </select>
+            </label>
+            <label>
+              Equipment
+              <select
+                value={equipmentFilter}
+                onChange={(e) => setEquipmentFilter(e.target.value)}
+              >
+                {[
+                  "All equipment",
+                  ...new Set(exercises.map((e) => e.equipment)),
+                ].map((x) => (
+                  <option key={x}>{x}</option>
+                ))}
+              </select>
+            </label>
+          </div>
           <div className="search-bar">
             <input
               placeholder="Search muscles, movements or exercises…"
@@ -547,10 +632,15 @@ export default function Workout({
           </div>
           <div className="library-grid">
             {exercises
-              .filter((e) =>
-                (e.name + " " + e.muscle + " " + e.category)
-                  .toLowerCase()
-                  .includes(search.toLowerCase()),
+              .filter(
+                (e) =>
+                  (e.name + " " + e.muscle + " " + e.category)
+                    .toLowerCase()
+                    .includes(search.toLowerCase()) &&
+                  (muscleFilter === "All muscles" ||
+                    e.muscle === muscleFilter) &&
+                  (equipmentFilter === "All equipment" ||
+                    e.equipment === equipmentFilter),
               )
               .map((e) => (
                 <button
@@ -573,9 +663,9 @@ export default function Workout({
               ))}
           </div>
           <p className="hint">
-            Technique reference: NHS Strength and Flex exercise guidance and ACE
-            Exercise Library. Written instructions are general references, not a
-            substitute for in-person technique assessment.
+            The expanded descriptions come from Free Exercise DB (public-domain
+            catalog). Each exercise includes its source where available. These
+            are reference instructions, not a professional technique assessment.
           </p>
         </>
       )}
@@ -669,11 +759,27 @@ export default function Workout({
             description="Completed workouts and saved sets will appear here."
           />
         ))}
+      {planSettings && p && (
+        <PlanSettings profile={p} onClose={() => setPlanSettings(false)} />
+      )}
       {info && (
         <Modal title={exerciseById(info).name} onClose={() => setInfo("")}>
           <span className="tag green">
             {exerciseById(info).muscle} · {exerciseById(info).equipment}
           </span>
+          {exerciseById(info).source && (
+            <p className="hint">{exerciseById(info).source}</p>
+          )}
+          {exerciseById(info).sourceUrl && (
+            <a
+              className="text-link"
+              href={exerciseById(info).sourceUrl}
+              target="_blank"
+              rel="noreferrer"
+            >
+              Read the exercise source (internet required)
+            </a>
+          )}
           <h3>How to move</h3>
           <ol>
             {exerciseById(info).instructions.map((t) => (
