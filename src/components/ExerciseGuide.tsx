@@ -1,10 +1,6 @@
 import { ExternalLink, Play } from "lucide-react";
 import type { Exercise } from "../domain/types";
-import {
-  bodyPartLabel,
-  exerciseBenefits,
-  tutorialUrl,
-} from "../domain/exercise-guide";
+import { bodyPartLabel, tutorialUrl } from "../domain/exercise-guide";
 export function ExerciseOverview({
   exercise,
   compact = false,
@@ -17,14 +13,6 @@ export function ExerciseOverview({
   );
   return (
     <div className={`exercise-overview ${compact ? "compact" : ""}`}>
-      <div className="exercise-benefit">
-        <strong>{compact ? "Benefit" : "Why this exercise?"}</strong>
-        {exerciseBenefits(exercise)
-          .slice(0, compact ? 1 : 2)
-          .map((benefit) => (
-            <p key={benefit}>{benefit}</p>
-          ))}
-      </div>
       <dl className="muscle-details">
         <div>
           <dt>Main muscles</dt>

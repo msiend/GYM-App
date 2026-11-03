@@ -250,9 +250,6 @@ try {
   await page.getByRole("button", { name: /Monday Chest & triceps/ }).waitFor();
   const firstExercise = page.locator(".exercise-card").first();
   const exerciseName = await firstExercise.locator("h3").innerText();
-  await firstExercise
-    .getByText("Why this exercise?", { exact: true })
-    .waitFor();
   await firstExercise.getByText("Main muscles", { exact: true }).waitFor();
   await firstExercise.getByText("Also works", { exact: true }).waitFor();
   const tutorial = firstExercise.getByRole("link", {
@@ -293,14 +290,14 @@ try {
     .waitFor();
   await page.getByLabel("Search exercise library", { exact: true }).fill("");
   const libraryCard = page.locator(".library-item").first();
-  await libraryCard.getByText("Benefit", { exact: true }).waitFor();
+  await libraryCard.getByText("Main muscles", { exact: true }).waitFor();
   await libraryCard
     .getByRole("link", { name: /tutorial on YouTube/ })
     .waitFor();
   await libraryCard.getByRole("button", { name: /Instructions for/ }).click();
   await page
     .getByRole("dialog")
-    .getByText("Why this exercise?", { exact: true })
+    .getByText("Main muscles", { exact: true })
     .waitFor();
   await page
     .getByRole("dialog")
@@ -397,7 +394,7 @@ try {
   await page
     .locator(".exercise-card")
     .first()
-    .getByText("Why this exercise?", { exact: true })
+    .getByText("Main muscles", { exact: true })
     .waitFor();
   if (
     await page.evaluate(() => document.documentElement.scrollWidth > innerWidth)
@@ -500,7 +497,7 @@ try {
         "mobile width",
         "real no-update check",
         "six-day plan selection with preview",
-        "exercise benefits and primary/secondary muscles",
+        "primary and secondary muscle information",
         "direct YouTube tutorial opens correct search in a new tab",
         "exercise library and detail tutorial access",
         "custom food label normalization and logging",

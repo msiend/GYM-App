@@ -64,9 +64,9 @@ The web app now defaults to a simpler light interface. Home focuses on today's w
 
 Nutrition → Food database provides ingredients, Indian meal ideas and My foods filters. Add your own food converts nutrition-panel servings to per-100 g values and stores the food in IndexedDB. Soya chunks, paneer and poha have brand-label entry shortcuts. Backup format v3 includes custom foods and remains able to import v2 backups. See [the source/provenance notes](docs/WEB-DATA-SOURCES.md) for NDB identifiers, recipe calculation limits and exercise licensing.
 
-## Exercise benefits and tutorials
+## Muscle targets and tutorials
 
-Each exercise now shows its general training benefit, primary muscle group and supporting body parts. Session summaries show the main muscles covered by that workout. The workout cards, exercise library and instruction dialog each provide a visible **Watch on YouTube** action that opens an encoded technique search in a new tab without leaving the active workout. No videos or external requests are needed to read the offline guidance; the tutorial link explicitly requires internet. Benefits describe general movement/training purposes, not guaranteed results or injury prevention.
+Each exercise shows its primary muscle group and supporting body parts. The explanatory “Why this exercise?” benefit section has been removed to keep the view concise. Session summaries show the main muscles covered by that workout. The workout cards, exercise library and instruction dialog each provide a visible **Watch on YouTube** action that opens an encoded technique search in a new tab without leaving the active workout. No videos or external requests are needed to read the offline guidance; the tutorial link explicitly requires internet.
 
 ## Web 1.1.1 · local-IP save fix and readability
 
@@ -80,4 +80,4 @@ On phone-width screens, reading text and inputs use a 16 px baseline with larger
 
 ## Expanded offline libraries
 
-The web library now includes 120 exercises, 100 food references and 12 ingredient-calculated Indian meal ideas. New foods include mango, guava, papaya, pomegranate, nuts/seeds, sweet potato, cooked vegetables, quinoa, barley, buckwheat, low-fat dairy and additional protein sources. Preparation state, allergens and USDA SR28 source IDs are retained. New exercise records include equipment, difficulty, instructions, benefits/muscle information and the YouTube search action. Existing catalog IDs and user records are preserved. Community exercise content and historical generic food references remain subject to the limitations in the source notes.
+The web library now includes 120 exercises, 100 food references and 12 ingredient-calculated Indian meal ideas. New foods include mango, guava, papaya, pomegranate, nuts/seeds, sweet potato, cooked vegetables, quinoa, barley, buckwheat, low-fat dairy and additional protein sources. Preparation state, allergens and USDA SR28 source IDs are retained. New exercise records include equipment, difficulty, instructions, muscle information and the YouTube search action. Existing catalog IDs and user records are preserved. Community exercise content and historical generic food references remain subject to the limitations in the source notes.
