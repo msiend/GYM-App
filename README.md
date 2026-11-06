@@ -2,7 +2,7 @@
 
 Mobile-first, offline-first personal fitness and nutrition PWA. React, TypeScript, Vite, Tailwind, React Router, Dexie, Zustand, Recharts, React Hook Form, Zod and Workbox. No backend, login, analytics, remote fonts or health-data uploads.
 
-**Web 1.3.1:** a consistent light-first interface, refreshed FORM logo, four-step setup and an explicit preview of every selected training day. Workout contains My workout, Exercise library, Yoga and History; the library and yoga are available without a profile, including offline after caching. A shared device-install flow is available from Home, the header and Settings. See [release and validation notes](docs/WEB-RELEASE-1.3.md).
+**Web 1.3.2:** a consistent light-first interface, refreshed FORM logo, four-step setup and an explicit preview of every selected training day. Workout contains My workout, Exercise library, Yoga and History; the library and yoga are available without a profile, including offline after caching. A shared device-install flow is available from Home, the header and Settings. Nutrition meal rows and ordering have been corrected, with an audit of all 100 food references. See the [nutrition audit](docs/NUTRITION-AUDIT.md) and [redesign notes](docs/WEB-RELEASE-1.3.md).
 
 ## Run
 

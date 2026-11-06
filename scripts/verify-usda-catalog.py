@@ -23,9 +23,11 @@ with (root / "NUT_DATA.txt").open(encoding="latin1") as handle:
     for row in csv.reader(handle, delimiter="^", quotechar="~"):
         if row[1] in {"208", "203", "205", "204", "291"}:
             nutrients.setdefault(row[0], {})[row[1]] = float(row[2])
-foods = json.loads((Path(__file__).resolve().parents[1] / "src/data/indian-foods.json").read_text())
+catalog = Path(__file__).resolve().parents[1] / "src/data"
+foods = [food for filename in ["starter-foods.json", "indian-foods.json"]
+         for food in json.loads((catalog / filename).read_text())]
 for food in foods:
     for field, nutrient in {"kcal": "208", "protein": "203", "carbs": "205", "fat": "204", "fiber": "291"}.items():
         if food[field] != nutrients[food["sourceId"]][nutrient]:
             raise ValueError(f"{food['id']}: {field} differs from the source")
-print(f"Verified {len(foods)} additional food entries against checksum-verified USDA SR28 files.")
+print(f"Verified {len(foods)} food entries against checksum-verified USDA SR28 files.")

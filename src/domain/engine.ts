@@ -482,61 +482,7 @@ export function generatePlan(p: Profile): WorkoutPlan {
     warnings,
   };
 }
-export function nutrition(p: Profile) {
-  const blocked = p.age < 18 || p.nutritionRisk || p.medical;
-  const bmr =
-    10 * p.weight +
-    6.25 * p.height -
-    5 * p.age +
-    (p.gender === "Male" ? 5 : p.gender === "Female" ? -161 : -78);
-  const maintenance = Math.round(bmr * p.activity);
-  const kcal = Math.round(
-    maintenance *
-      (p.nutritionGoal === "Fat loss"
-        ? 0.9
-        : p.nutritionGoal === "Muscle building"
-          ? 1.05
-          : 1),
-  );
-  const lean = p.bodyFat
-    ? Math.round(p.weight * (1 - p.bodyFat / 100) * 10) / 10
-    : null;
-  const reference =
-    p.proteinMethod === "Lean mass" && lean
-      ? lean
-      : p.proteinMethod === "Reference weight" && p.referenceWeight
-        ? p.referenceWeight
-        : p.weight;
-  const factor = ["Muscle building", "Lean muscle building"].includes(
-    p.nutritionGoal,
-  )
-    ? 1.6
-    : 1.2;
-  const protein = Math.round(reference * factor);
-  const fat = Math.round((kcal * 0.3) / 9);
-  return {
-    blocked,
-    bmr: Math.round(bmr),
-    maintenance,
-    kcal,
-    lean,
-    fatMass: lean ? p.weight - lean : null,
-    protein,
-    min: Math.round(reference * 1.2),
-    max: Math.round(reference * 2),
-    perMeal: Math.round(protein / p.meals),
-    carbs: Math.round((kcal - protein * 4 - fat * 9) / 4),
-    fat,
-    reference,
-    factor,
-    method:
-      p.proteinMethod === "Lean mass" && lean
-        ? "Estimated lean mass"
-        : p.proteinMethod === "Reference weight" && p.referenceWeight
-          ? "Clinician-provided reference weight"
-          : "Total body weight",
-  };
-}
+export { nutrition } from "./nutrition";
 export function progression(
   sessions: Session[],
   logs: SetLog[],

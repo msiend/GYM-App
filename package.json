@@ -1,7 +1,7 @@
 {
   "name": "form-fitness",
   "private": true,
-  "version": "1.3.1",
+  "version": "1.3.2",
   "type": "module",
   "scripts": {
     "dev": "vite --host 0.0.0.0",
@@ -9,10 +9,11 @@
     "preview": "vite preview --host 0.0.0.0",
     "test": "vitest run",
     "test:e2e": "npm run build && node tests/e2e.mjs",
+    "test:nutrition": "npm run build && node tests/nutrition.mjs",
     "test:install": "npm run build && node tests/install.mjs",
     "test:redesign": "npm run build && node tests/redesign.mjs",
     "test:ux": "npm run build && node tests/ui-ux.mjs",
-    "check": "npm test && npm run build && node tests/e2e.mjs && node tests/ui-ux.mjs && node tests/redesign.mjs && node tests/install.mjs"
+    "check": "npm test && npm run build && node tests/e2e.mjs && node tests/ui-ux.mjs && node tests/redesign.mjs && node tests/install.mjs && node tests/nutrition.mjs"
   },
   "dependencies": {
     "@hookform/resolvers": "latest",

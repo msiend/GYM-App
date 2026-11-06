@@ -1,238 +1,78 @@
 import additional from "./indian-foods.json";
+import starter from "./starter-foods.json";
 import type { Food } from "../domain/types";
-// Rounded reference values per 100 g from USDA FoodData Central SR Legacy generic food entries.
-const rows: [
-  string,
-  string,
-  number,
-  number,
-  number,
-  number,
-  number,
-  string,
-  string,
-  string[],
-][] = [
-  ["rice", "White rice", 130, 2.69, 28.17, 0.28, 0.4, "cooked", "Vegan", []],
-  ["brown", "Brown rice", 123, 2.74, 25.58, 0.97, 1.6, "cooked", "Vegan", []],
-  [
-    "oats",
-    "Rolled oats",
-    379,
-    13.15,
-    67.7,
-    6.52,
-    10.1,
-    "dry",
-    "Vegan",
-    ["gluten"],
-  ],
-  [
-    "lentils",
-    "Lentils / dal",
-    116,
-    9.02,
-    20.13,
-    0.38,
-    7.9,
-    "boiled, no added oil",
-    "Vegan",
-    [],
-  ],
-  [
-    "rajma",
-    "Kidney beans / rajma",
-    127,
-    8.67,
-    22.8,
-    0.5,
-    6.4,
-    "boiled, no added oil",
-    "Vegan",
-    [],
-  ],
-  [
-    "chana",
-    "Chickpeas / chana",
-    164,
-    8.86,
-    27.42,
-    2.59,
-    7.6,
-    "boiled",
-    "Vegan",
-    [],
-  ],
-  [
-    "tofu",
-    "Firm tofu",
-    144,
-    17.3,
-    2.78,
-    8.72,
-    2.3,
-    "raw, calcium-set",
-    "Vegan",
-    ["soy"],
-  ],
-  [
-    "milk",
-    "Whole milk",
-    61,
-    3.15,
-    4.8,
-    3.25,
-    0,
-    "as sold",
-    "Vegetarian",
-    ["milk"],
-  ],
-  [
-    "curd",
-    "Plain whole-milk yogurt",
-    61,
-    3.47,
-    4.66,
-    3.25,
-    0,
-    "as sold",
-    "Vegetarian",
-    ["milk"],
-  ],
-  [
-    "egg",
-    "Whole egg",
-    155,
-    12.58,
-    1.12,
-    10.61,
-    0,
-    "hard-boiled, peeled",
-    "Eggetarian",
-    ["egg"],
-  ],
-  [
-    "chicken",
-    "Chicken breast",
-    165,
-    31.02,
-    0,
-    3.57,
-    0,
-    "roasted, skinless",
-    "Non-vegetarian",
-    [],
-  ],
-  [
-    "fish",
-    "Atlantic salmon",
-    206,
-    22.1,
-    0,
-    12.35,
-    0,
-    "cooked, dry heat",
-    "Pescatarian",
-    ["fish"],
-  ],
-  ["banana", "Banana", 89, 1.09, 22.84, 0.33, 2.6, "raw, peeled", "Vegan", []],
-  ["apple", "Apple", 52, 0.26, 13.81, 0.17, 2.4, "raw, with skin", "Vegan", []],
-  [
-    "potato",
-    "Potato",
-    87,
-    1.87,
-    20.13,
-    0.1,
-    1.8,
-    "boiled, no skin",
-    "Vegan",
-    [],
-  ],
-  [
-    "almond",
-    "Almonds",
-    579,
-    21.15,
-    21.55,
-    49.93,
-    12.5,
-    "raw",
-    "Vegan",
-    ["nuts"],
-  ],
-  [
-    "peanut",
-    "Peanuts",
-    567,
-    25.8,
-    16.13,
-    49.24,
-    8.5,
-    "raw",
-    "Vegan",
-    ["peanuts"],
-  ],
-  [
-    "spinach",
-    "Spinach / palak",
-    23,
-    2.97,
-    3.75,
-    0.26,
-    2.4,
-    "boiled, drained",
-    "Vegan",
-    [],
-  ],
-  ["carrot", "Carrot", 41, 0.93, 9.58, 0.24, 2.8, "raw", "Vegan", []],
-  ["oil", "Olive oil", 884, 0, 0, 100, 0, "as sold", "Vegan", []],
+
+export const foods: Food[] = [
+  ...(starter as Food[]),
+  ...(additional as Food[]),
 ];
-const starterFoods: Food[] = rows.map(
-  ([id, name, kcal, protein, carbs, fat, fiber, state, diet, allergens]) => ({
-    id,
-    name,
-    kcal,
-    protein,
-    carbs,
-    fat,
-    fiber,
-    state,
-    diet,
-    allergens,
-    source:
-      "USDA FoodData Central, SR Legacy; rounded generic reference. Recipe and brand values vary.",
-  }),
-);
-export const foods: Food[] = [...starterFoods, ...(additional as Food[])];
+const allergenNames = [
+  ["milk", "dairy", "lactose", "दूध"],
+  ["peanut", "peanuts", "groundnut", "groundnuts", "मूंगफली"],
+  ["soy", "soya", "soybean", "soybeans", "सोया"],
+  [
+    "nuts",
+    "tree nuts",
+    "almond",
+    "almonds",
+    "cashew",
+    "cashews",
+    "walnut",
+    "walnuts",
+  ],
+  ["egg", "eggs", "अंडा"],
+  ["gluten", "wheat", "गेहूं"],
+  ["fish", "salmon", "tuna", "tilapia"],
+  ["shellfish", "shrimp", "prawn", "prawns"],
+];
+const tokens = (value: string) =>
+  value
+    .toLowerCase()
+    .split(/[,;\n]/)
+    .map((s) => s.trim())
+    .filter(Boolean);
 export function allowedFoods(
   diet: string,
   allergies: string,
   dislikes = "",
   library: Food[] = foods,
 ) {
-  const excluded = (allergies + "," + dislikes)
-    .toLowerCase()
-    .split(",")
-    .map((s) => s.trim())
-    .filter(Boolean);
-  return library.filter(
-    (f) =>
-      !excluded.some((s) =>
-        (
-          f.name +
-          " " +
-          (f.aliases || []).join(" ") +
-          " " +
-          f.allergens.join(" ")
-        )
-          .toLowerCase()
-          .includes(s),
-      ) &&
-      (f.diet === "Vegan" ||
+  const allergyTokens = tokens(allergies);
+  const exclusions = [
+    ...new Set([
+      ...allergyTokens.flatMap(
+        (token) =>
+          allergenNames.find((names) => names.includes(token)) || [token],
+      ),
+      ...tokens(dislikes),
+    ]),
+  ];
+  const byId = new Map(library.map((food) => [food.id, food]));
+  function allowed(food: Food, seen = new Set<string>()): boolean {
+    if (seen.has(food.id)) return false;
+    const text = [food.name, ...(food.aliases || []), ...food.allergens]
+      .join(" ")
+      .toLowerCase();
+    if (exclusions.some((token) => text.includes(token))) return false;
+    if (
+      !(
+        food.diet === "Vegan" ||
         diet === "Non-vegetarian" ||
-        diet === f.diet ||
-        (diet === "Eggetarian" && f.diet === "Vegetarian") ||
-        (diet === "Pescatarian" && f.diet === "Vegetarian")),
-  );
+        diet === food.diet ||
+        (["Eggetarian", "Pescatarian"].includes(diet) &&
+          food.diet === "Vegetarian") ||
+        (diet === "Pescatarian" && food.diet === "Eggetarian")
+      )
+    )
+      return false;
+    const next = new Set(seen).add(food.id);
+    return (
+      !food.recipe ||
+      food.recipe.every((item) => {
+        const ingredient = byId.get(item.foodId);
+        return !!ingredient && allowed(ingredient, next);
+      })
+    );
+  }
+  return library.filter((food) => allowed(food));
 }

@@ -12,7 +12,7 @@
     "allergens": [],
     "aliases": ["mung beans", "green moong", "sabut moong", "मूंग"],
     "source": "USDA SR28 (2015), NDB 16080: Mung beans, mature seeds, raw. Published SR28 files; generic reference, not brand-specific.",
-    "sourceUrl": "https://github.com/alyssaq/usda-sqlite/tree/master/data",
+    "sourceUrl": "https://github.com/alyssaq/usda-sqlite/tree/1e457b599af101ce463a195867574eba16c81acb/data",
     "verification": "reference",
     "sourceId": "16080"
   },
@@ -29,7 +29,7 @@
     "allergens": [],
     "aliases": ["mung beans", "moong dal", "मूंग दाल"],
     "source": "USDA SR28 (2015), NDB 16081: Mung beans, mature seeds, cooked, boiled, without salt. Published SR28 files; generic reference, not brand-specific.",
-    "sourceUrl": "https://github.com/alyssaq/usda-sqlite/tree/master/data",
+    "sourceUrl": "https://github.com/alyssaq/usda-sqlite/tree/1e457b599af101ce463a195867574eba16c81acb/data",
     "verification": "reference",
     "sourceId": "16081"
   },
@@ -46,7 +46,7 @@
     "allergens": [],
     "aliases": ["mung bean sprouts", "ankurit moong", "अंकुरित मूंग"],
     "source": "USDA SR28 (2015), NDB 11043: Mung beans, mature seeds, sprouted, raw. Published SR28 files; generic reference, not brand-specific.",
-    "sourceUrl": "https://github.com/alyssaq/usda-sqlite/tree/master/data",
+    "sourceUrl": "https://github.com/alyssaq/usda-sqlite/tree/1e457b599af101ce463a195867574eba16c81acb/data",
     "verification": "reference",
     "sourceId": "11043"
   },
@@ -63,7 +63,7 @@
     "allergens": [],
     "aliases": ["mung sprouts", "steamed sprouts"],
     "source": "USDA SR28 (2015), NDB 11044: Mung beans, mature seeds, sprouted, cooked, boiled, drained, without salt. Published SR28 files; generic reference, not brand-specific.",
-    "sourceUrl": "https://github.com/alyssaq/usda-sqlite/tree/master/data",
+    "sourceUrl": "https://github.com/alyssaq/usda-sqlite/tree/1e457b599af101ce463a195867574eba16c81acb/data",
     "verification": "reference",
     "sourceId": "11044"
   },
@@ -80,7 +80,7 @@
     "allergens": [],
     "aliases": ["mungo beans", "urad dal", "उड़द"],
     "source": "USDA SR28 (2015), NDB 16083: Mungo beans, mature seeds, raw. Published SR28 files; generic reference, not brand-specific.",
-    "sourceUrl": "https://github.com/alyssaq/usda-sqlite/tree/master/data",
+    "sourceUrl": "https://github.com/alyssaq/usda-sqlite/tree/1e457b599af101ce463a195867574eba16c81acb/data",
     "verification": "reference",
     "sourceId": "16083"
   },
@@ -97,7 +97,7 @@
     "allergens": [],
     "aliases": ["urad dal"],
     "source": "USDA SR28 (2015), NDB 16084: Mungo beans, mature seeds, cooked, boiled, without salt. Published SR28 files; generic reference, not brand-specific.",
-    "sourceUrl": "https://github.com/alyssaq/usda-sqlite/tree/master/data",
+    "sourceUrl": "https://github.com/alyssaq/usda-sqlite/tree/1e457b599af101ce463a195867574eba16c81acb/data",
     "verification": "reference",
     "sourceId": "16084"
   },
@@ -114,7 +114,7 @@
     "allergens": [],
     "aliases": ["pigeon peas", "red gram", "तूर"],
     "source": "USDA SR28 (2015), NDB 16101: Pigeon peas (red gram), mature seeds, raw. Published SR28 files; generic reference, not brand-specific.",
-    "sourceUrl": "https://github.com/alyssaq/usda-sqlite/tree/master/data",
+    "sourceUrl": "https://github.com/alyssaq/usda-sqlite/tree/1e457b599af101ce463a195867574eba16c81acb/data",
     "verification": "reference",
     "sourceId": "16101"
   },
@@ -131,7 +131,7 @@
     "allergens": [],
     "aliases": ["arhar dal", "pigeon peas"],
     "source": "USDA SR28 (2015), NDB 16102: Pigeon peas (red gram), mature seeds, cooked, boiled, without salt. Published SR28 files; generic reference, not brand-specific.",
-    "sourceUrl": "https://github.com/alyssaq/usda-sqlite/tree/master/data",
+    "sourceUrl": "https://github.com/alyssaq/usda-sqlite/tree/1e457b599af101ce463a195867574eba16c81acb/data",
     "verification": "reference",
     "sourceId": "16102"
   },
@@ -148,7 +148,7 @@
     "allergens": [],
     "aliases": ["red lentils", "मसूर"],
     "source": "USDA SR28 (2015), NDB 16144: Lentils, pink or red, raw. Published SR28 files; generic reference, not brand-specific.",
-    "sourceUrl": "https://github.com/alyssaq/usda-sqlite/tree/master/data",
+    "sourceUrl": "https://github.com/alyssaq/usda-sqlite/tree/1e457b599af101ce463a195867574eba16c81acb/data",
     "verification": "reference",
     "sourceId": "16144"
   },
@@ -165,7 +165,7 @@
     "allergens": [],
     "aliases": ["dal", "lentils"],
     "source": "USDA SR28 (2015), NDB 16069: Lentils, raw. Published SR28 files; generic reference, not brand-specific.",
-    "sourceUrl": "https://github.com/alyssaq/usda-sqlite/tree/master/data",
+    "sourceUrl": "https://github.com/alyssaq/usda-sqlite/tree/1e457b599af101ce463a195867574eba16c81acb/data",
     "verification": "reference",
     "sourceId": "16069"
   },
@@ -182,7 +182,7 @@
     "allergens": [],
     "aliases": ["bengal gram"],
     "source": "USDA SR28 (2015), NDB 16056: Chickpeas (garbanzo beans, bengal gram), mature seeds, raw. Published SR28 files; generic reference, not brand-specific.",
-    "sourceUrl": "https://github.com/alyssaq/usda-sqlite/tree/master/data",
+    "sourceUrl": "https://github.com/alyssaq/usda-sqlite/tree/1e457b599af101ce463a195867574eba16c81acb/data",
     "verification": "reference",
     "sourceId": "16056"
   },
@@ -199,7 +199,7 @@
     "allergens": [],
     "aliases": ["cowpeas", "black eyed beans"],
     "source": "USDA SR28 (2015), NDB 16063: Cowpeas, common (blackeyes, crowder, southern), mature seeds, cooked, boiled, without salt. Published SR28 files; generic reference, not brand-specific.",
-    "sourceUrl": "https://github.com/alyssaq/usda-sqlite/tree/master/data",
+    "sourceUrl": "https://github.com/alyssaq/usda-sqlite/tree/1e457b599af101ce463a195867574eba16c81acb/data",
     "verification": "reference",
     "sourceId": "16063"
   },
@@ -216,7 +216,7 @@
     "allergens": [],
     "aliases": ["gram flour", "बेसन"],
     "source": "USDA SR28 (2015), NDB 16157: Chickpea flour (besan). Published SR28 files; generic reference, not brand-specific.",
-    "sourceUrl": "https://github.com/alyssaq/usda-sqlite/tree/master/data",
+    "sourceUrl": "https://github.com/alyssaq/usda-sqlite/tree/1e457b599af101ce463a195867574eba16c81acb/data",
     "verification": "reference",
     "sourceId": "16157"
   },
@@ -233,7 +233,7 @@
     "allergens": ["gluten"],
     "aliases": ["wheat flour", "आटा"],
     "source": "USDA SR28 (2015), NDB 20080: Wheat flour, whole-grain. Published SR28 files; generic reference, not brand-specific.",
-    "sourceUrl": "https://github.com/alyssaq/usda-sqlite/tree/master/data",
+    "sourceUrl": "https://github.com/alyssaq/usda-sqlite/tree/1e457b599af101ce463a195867574eba16c81acb/data",
     "verification": "reference",
     "sourceId": "20080"
   },
@@ -250,7 +250,7 @@
     "allergens": ["gluten"],
     "aliases": ["chapati", "रोटी"],
     "source": "USDA SR28 (2015), NDB 28306: Bread, chapati or roti, plain, commercially prepared. Published SR28 files; generic reference, not brand-specific.",
-    "sourceUrl": "https://github.com/alyssaq/usda-sqlite/tree/master/data",
+    "sourceUrl": "https://github.com/alyssaq/usda-sqlite/tree/1e457b599af101ce463a195867574eba16c81acb/data",
     "verification": "reference",
     "sourceId": "28306"
   },
@@ -267,7 +267,7 @@
     "allergens": ["gluten"],
     "aliases": ["पराठा"],
     "source": "USDA SR28 (2015), NDB 28286: Bread, paratha, whole wheat, commercially prepared, frozen. Published SR28 files; generic reference, not brand-specific.",
-    "sourceUrl": "https://github.com/alyssaq/usda-sqlite/tree/master/data",
+    "sourceUrl": "https://github.com/alyssaq/usda-sqlite/tree/1e457b599af101ce463a195867574eba16c81acb/data",
     "verification": "reference",
     "sourceId": "28286"
   },
@@ -284,7 +284,7 @@
     "allergens": ["gluten", "milk"],
     "aliases": ["नान"],
     "source": "USDA SR28 (2015), NDB 28307: Bread, naan, plain, commercially prepared, refrigerated. Published SR28 files; generic reference, not brand-specific.",
-    "sourceUrl": "https://github.com/alyssaq/usda-sqlite/tree/master/data",
+    "sourceUrl": "https://github.com/alyssaq/usda-sqlite/tree/1e457b599af101ce463a195867574eba16c81acb/data",
     "verification": "reference",
     "sourceId": "28307"
   },
@@ -301,7 +301,7 @@
     "allergens": ["peanuts"],
     "aliases": ["groundnut butter"],
     "source": "USDA SR28 (2015), NDB 16398: Peanut butter, smooth style, without salt. Published SR28 files; generic reference, not brand-specific.",
-    "sourceUrl": "https://github.com/alyssaq/usda-sqlite/tree/master/data",
+    "sourceUrl": "https://github.com/alyssaq/usda-sqlite/tree/1e457b599af101ce463a195867574eba16c81acb/data",
     "verification": "reference",
     "sourceId": "16398"
   },
@@ -318,7 +318,7 @@
     "allergens": ["gluten"],
     "aliases": ["dalia", "दलिया"],
     "source": "USDA SR28 (2015), NDB 20013: Bulgur, cooked. Published SR28 files; generic reference, not brand-specific.",
-    "sourceUrl": "https://github.com/alyssaq/usda-sqlite/tree/master/data",
+    "sourceUrl": "https://github.com/alyssaq/usda-sqlite/tree/1e457b599af101ce463a195867574eba16c81acb/data",
     "verification": "reference",
     "sourceId": "20013"
   },
@@ -335,7 +335,7 @@
     "allergens": [],
     "aliases": ["millets"],
     "source": "USDA SR28 (2015), NDB 20032: Millet, cooked. Published SR28 files; generic reference, not brand-specific.",
-    "sourceUrl": "https://github.com/alyssaq/usda-sqlite/tree/master/data",
+    "sourceUrl": "https://github.com/alyssaq/usda-sqlite/tree/1e457b599af101ce463a195867574eba16c81acb/data",
     "verification": "reference",
     "sourceId": "20032"
   },
@@ -352,7 +352,7 @@
     "allergens": ["gluten"],
     "aliases": ["rava", "sooji"],
     "source": "USDA SR28 (2015), NDB 20466: Semolina, unenriched. Published SR28 files; generic reference, not brand-specific.",
-    "sourceUrl": "https://github.com/alyssaq/usda-sqlite/tree/master/data",
+    "sourceUrl": "https://github.com/alyssaq/usda-sqlite/tree/1e457b599af101ce463a195867574eba16c81acb/data",
     "verification": "reference",
     "sourceId": "20466"
   },
@@ -369,7 +369,7 @@
     "allergens": [],
     "aliases": ["chawal", "चावल"],
     "source": "USDA SR28 (2015), NDB 20444: Rice, white, long-grain, regular, raw, unenriched. Published SR28 files; generic reference, not brand-specific.",
-    "sourceUrl": "https://github.com/alyssaq/usda-sqlite/tree/master/data",
+    "sourceUrl": "https://github.com/alyssaq/usda-sqlite/tree/1e457b599af101ce463a195867574eba16c81acb/data",
     "verification": "reference",
     "sourceId": "20444"
   },
@@ -386,7 +386,7 @@
     "allergens": ["milk"],
     "aliases": ["hung curd reference"],
     "source": "USDA SR28 (2015), NDB 01256: Yogurt, Greek, plain, nonfat. Published SR28 files; generic reference, not brand-specific.",
-    "sourceUrl": "https://github.com/alyssaq/usda-sqlite/tree/master/data",
+    "sourceUrl": "https://github.com/alyssaq/usda-sqlite/tree/1e457b599af101ce463a195867574eba16c81acb/data",
     "verification": "reference",
     "sourceId": "01256"
   },
@@ -403,7 +403,7 @@
     "allergens": [],
     "aliases": ["kheera"],
     "source": "USDA SR28 (2015), NDB 11205: Cucumber, with peel, raw. Published SR28 files; generic reference, not brand-specific.",
-    "sourceUrl": "https://github.com/alyssaq/usda-sqlite/tree/master/data",
+    "sourceUrl": "https://github.com/alyssaq/usda-sqlite/tree/1e457b599af101ce463a195867574eba16c81acb/data",
     "verification": "reference",
     "sourceId": "11205"
   },
@@ -420,7 +420,7 @@
     "allergens": [],
     "aliases": ["tamatar"],
     "source": "USDA SR28 (2015), NDB 11529: Tomatoes, red, ripe, raw, year round average. Published SR28 files; generic reference, not brand-specific.",
-    "sourceUrl": "https://github.com/alyssaq/usda-sqlite/tree/master/data",
+    "sourceUrl": "https://github.com/alyssaq/usda-sqlite/tree/1e457b599af101ce463a195867574eba16c81acb/data",
     "verification": "reference",
     "sourceId": "11529"
   },
@@ -437,7 +437,7 @@
     "allergens": [],
     "aliases": ["pyaz"],
     "source": "USDA SR28 (2015), NDB 11282: Onions, raw. Published SR28 files; generic reference, not brand-specific.",
-    "sourceUrl": "https://github.com/alyssaq/usda-sqlite/tree/master/data",
+    "sourceUrl": "https://github.com/alyssaq/usda-sqlite/tree/1e457b599af101ce463a195867574eba16c81acb/data",
     "verification": "reference",
     "sourceId": "11282"
   },
@@ -454,7 +454,7 @@
     "allergens": [],
     "aliases": ["matar"],
     "source": "USDA SR28 (2015), NDB 11305: Peas, green, cooked, boiled, drained, without salt. Published SR28 files; generic reference, not brand-specific.",
-    "sourceUrl": "https://github.com/alyssaq/usda-sqlite/tree/master/data",
+    "sourceUrl": "https://github.com/alyssaq/usda-sqlite/tree/1e457b599af101ce463a195867574eba16c81acb/data",
     "verification": "reference",
     "sourceId": "11305"
   },
@@ -471,7 +471,7 @@
     "allergens": [],
     "aliases": ["gobhi"],
     "source": "USDA SR28 (2015), NDB 11136: Cauliflower, cooked, boiled, drained, without salt. Published SR28 files; generic reference, not brand-specific.",
-    "sourceUrl": "https://github.com/alyssaq/usda-sqlite/tree/master/data",
+    "sourceUrl": "https://github.com/alyssaq/usda-sqlite/tree/1e457b599af101ce463a195867574eba16c81acb/data",
     "verification": "reference",
     "sourceId": "11136"
   },
@@ -488,7 +488,7 @@
     "allergens": [],
     "aliases": ["bhindi"],
     "source": "USDA SR28 (2015), NDB 11279: Okra, cooked, boiled, drained, without salt. Published SR28 files; generic reference, not brand-specific.",
-    "sourceUrl": "https://github.com/alyssaq/usda-sqlite/tree/master/data",
+    "sourceUrl": "https://github.com/alyssaq/usda-sqlite/tree/1e457b599af101ce463a195867574eba16c81acb/data",
     "verification": "reference",
     "sourceId": "11279"
   },

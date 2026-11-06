@@ -197,6 +197,7 @@ const schemas: Record<string, z.ZodType> = {
     lastUpdate: z.string(),
   }),
   meals: z.object({
+    position: num.int().min(0).optional(),
     id,
     day: num.int().min(0).max(6),
     slot: num.int().min(0).max(5),

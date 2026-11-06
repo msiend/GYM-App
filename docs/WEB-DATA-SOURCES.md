@@ -42,3 +42,7 @@ USDA's own download page, NHS Strength and Flex, and PubMed's ACSM progression p
 A further 57 exercise descriptions and 51 USDA SR28 foods were selected from the same downloaded, provenance-recorded datasets above. The totals are 120 exercises and 100 food references. All new food entries carry their original NDB identifier and preparation state, and all five logged macro/energy/fiber fields were present in the source; entries with missing nutrient fields were not filled with invented values. New Indian meal ideas include chana salad, toor dal/roti/vegetables, quinoa/rajma, curd/papaya/chia and sweet-potato/peanut chaat. As before, recipe totals are calculated estimates, not laboratory measurements.
 
 Exercise instructions are adapted reference material. Cardio setup descriptions were shortened to omit generic calorie-burning claims and paired with gradual, capacity-based effort guidance. Mobility and stretching are categorized separately from resistance exercises; no empty-instruction records were included.
+
+## Nutrition audit · 1.3.2
+
+The [nutrition audit](NUTRITION-AUDIT.md) verifies all 100 food references (including the original 20 starter foods) against the checksum-pinned SR28 files. Each now has its original NDB identifier, precise dataset provenance and a pinned source link. This is a historical dataset check, not verification against current branded-product labels or a clinical review.

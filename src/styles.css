@@ -1943,22 +1943,74 @@ fieldset p.hint {
   margin-bottom: 18px;
 }
 .meal-item {
-  display: flex;
-  justify-content: space-between;
-  gap: 20px;
-  align-items: flex-start;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto 20px;
+  gap: 16px;
+  align-items: center;
+  width: 100%;
+  min-height: 76px;
   padding: 18px 0;
+  border: 0;
   border-bottom: 1px solid var(--border);
+  border-radius: 0;
+  background: transparent;
+  color: var(--text);
+  text-align: left;
+  line-height: 1.5;
 }
 .meal-item:last-child {
   border-bottom: 0;
-  padding-bottom: 0;
 }
-.meal-item h4 {
-  margin-bottom: 5px;
+.meal-item:hover {
+  background: var(--surface-2);
 }
-.meal-item .hint {
-  margin: 7px 0;
+.meal-item-info {
+  display: grid;
+  gap: 5px;
+  min-width: 0;
+}
+.meal-item-info strong {
+  font-size: 1rem;
+  font-weight: 600;
+  overflow-wrap: anywhere;
+}
+.meal-item-info small,
+.meal-item-nutrients small {
+  display: block;
+  font-size: 0.8125rem;
+  color: var(--muted);
+}
+.meal-item-nutrients {
+  display: grid;
+  gap: 4px;
+  text-align: right;
+  font-size: 0.9375rem;
+  font-variant-numeric: tabular-nums;
+}
+.meal-item-arrow {
+  color: var(--muted);
+}
+.meal-total {
+  margin-top: 12px;
+}
+.meal-plan-heading {
+  flex-wrap: wrap;
+}
+.meal-plan-heading > div {
+  flex: 1 1 260px;
+  min-width: 0;
+}
+.meal-plan-heading > .button {
+  flex: 0 0 auto;
+}
+.plan-day-summary {
+  margin-top: 20px;
+}
+.plan-day-summary > p {
+  margin-top: 8px;
+}
+.plan-day-summary > p > span {
+  color: var(--muted);
 }
 .food-grid {
   display: grid;
@@ -2662,11 +2714,11 @@ fieldset p.hint {
     grid-template-columns: minmax(0, 1fr);
   }
   .meal-item {
-    flex-direction: column;
-    gap: 12px;
+    grid-template-columns: minmax(0, 1fr) auto 16px;
+    gap: 10px;
   }
-  .meal-item > .button {
-    width: 100%;
+  .meal-item-nutrients {
+    font-size: 0.875rem;
   }
   .stat-grid {
     gap: 10px;

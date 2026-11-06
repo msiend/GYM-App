@@ -45,7 +45,11 @@ describe("personalized training and nutrition", () => {
     });
     expect(n.bmr).toBe(1780);
     expect(n.lean).toBe(60);
-    expect(n.protein).toBe(96);
+    expect(n.protein).toBe(128);
+    expect(n.method).toBe("Total body weight");
+    expect(n.warnings.some((w) => w.includes("not interchangeable"))).toBe(
+      true,
+    );
     expect(n.kcal).toBe(Math.round(Math.round(1780 * 1.375) * 1.05));
   });
   it.each([{ age: 16 }, { nutritionRisk: true }, { medical: true }])(

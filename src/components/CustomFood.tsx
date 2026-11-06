@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { Modal } from "./ui";
 import { db } from "../data/db";
+import { saveErrorMessage } from "../data/errors";
 import { uid } from "../domain/engine";
 import type { Food } from "../domain/types";
 type Template = {
@@ -23,6 +24,7 @@ export default function CustomFood({
 }) {
   const [error, setError] = useState("");
   const [busy, setBusy] = useState(false);
+  const labelServing = food?.servingGrams || 100;
   async function save(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
     setBusy(true);
@@ -72,8 +74,8 @@ export default function CustomFood({
       await db.customFoods.put(item);
       onSaved(item);
       onClose();
-    } catch {
-      setError("Food could not be saved. Check available device storage.");
+    } catch (error) {
+      setError(saveErrorMessage(error, "your food"));
     } finally {
       setBusy(false);
     }
@@ -103,7 +105,9 @@ export default function CustomFood({
             <input
               name="source"
               placeholder="e.g. brand and product name"
-              defaultValue={food?.source}
+              defaultValue={food?.source
+                .replace(/^User-entered label: /, "")
+                .replace(/\. Not independently verified\.$/, "")}
             />
           </label>
           <label>
@@ -115,7 +119,7 @@ export default function CustomFood({
               min="1"
               max="2000"
               step="any"
-              defaultValue={100}
+              defaultValue={labelServing}
             />
           </label>
           <label>
@@ -140,7 +144,11 @@ export default function CustomFood({
                 min="0"
                 max={k === "kcal" ? 10000 : 2000}
                 step="any"
-                defaultValue={food?.[k as "kcal"] ?? undefined}
+                defaultValue={
+                  food
+                    ? Math.round(food[k as "kcal"] * labelServing) / 100
+                    : undefined
+                }
               />
             </label>
           ))}

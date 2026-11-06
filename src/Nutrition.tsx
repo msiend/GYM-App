@@ -25,6 +25,15 @@ import { indianMeals, labelTemplates } from "./data/recipes";
 import HydrationCard from "./features/hydration/HydrationCard";
 import CustomFood from "./components/CustomFood";
 import FitnessDisclaimer from "./components/FitnessDisclaimer";
+import { buildMealIdeas } from "./features/nutrition/meal-ideas";
+import { saveMealItem, validPortion } from "./features/nutrition/repository";
+import {
+  groupMealItems,
+  proteinByMeal,
+  totalNutrients,
+  nutritionSeries,
+} from "./domain/nutrition";
+import { saveErrorMessage } from "./data/errors";
 import { localDate, nutrition, uid } from "./domain/engine";
 import type { Profile, Food, MealPlan } from "./domain/types";
 import { Empty, Heading, Modal, Ring } from "./components/ui";
@@ -41,7 +50,7 @@ const tabs = [
 ];
 const names = [
   "Overview",
-  "My diet plan",
+  "Meal ideas",
   "Food database",
   "Protein tracker",
   "Analytics",
@@ -56,11 +65,16 @@ export default function Nutrition({
   onSetup: () => void;
 }) {
   const [params, setParams] = useSearchParams();
-  const tab = params.get("tab") || "dashboard";
+  const tab = tabs.includes(params.get("tab") || "")
+    ? params.get("tab")!
+    : "dashboard";
   const [search, setSearch] = useState("");
   const customFoods = useLiveQuery(() => db.customFoods.toArray()) || [];
   const foods = [...baseFoods, ...indianMeals, ...customFoods];
   const [customOpen, setCustomOpen] = useState(false);
+  const [busy, setBusy] = useState(false);
+  const [error, setError] = useState("");
+  const [loggingMeal, setLoggingMeal] = useState<number>();
   const [customTemplate, setCustomTemplate] =
     useState<(typeof labelTemplates)[number]>();
   const [customEdit, setCustomEdit] = useState<Food>();
@@ -80,19 +94,10 @@ export default function Nutrition({
   const { notify } = useUI();
   const n = p ? nutrition(p) : null;
   const todayLogs = logs.filter((l) => l.date === localDate());
-  const totals = todayLogs.reduce(
-    (s, l) => {
-      const f = foods.find((f) => f.id === l.foodId);
-      if (f)
-        for (const key of ["kcal", "protein", "carbs", "fat", "fiber"] as const)
-          s[key] += (f[key] * l.grams) / 100;
-      return s;
-    },
-    { kcal: 0, protein: 0, carbs: 0, fat: 0, fiber: 0 },
-  );
+  const totals = totalNutrients(todayLogs, foods);
   const safe = p ? allowedFoods(p.diet, p.allergies, p.dislikes, foods) : foods;
   async function generate() {
-    if (!p || !n || n.blocked) return;
+    if (!p || !n || n.blocked || busy) return;
     if (
       plans.length &&
       !confirm(
@@ -100,92 +105,80 @@ export default function Nutrition({
       )
     )
       return;
-    const protein = safe.filter((f) =>
-      [
-        "tofu",
-        "lentils",
-        "rajma",
-        "chana",
-        "moong-cooked",
-        "toor-cooked",
-        "urad-cooked",
-        "egg",
-        "chicken",
-        "fish",
-      ].includes(f.id),
-    );
-    const carb = safe.filter((f) =>
-      ["rice", "brown", "roti", "potato", "millet"].includes(f.id),
-    );
-    const veg = safe.filter((f) =>
-      ["spinach", "carrot", "apple", "banana"].includes(f.id),
-    );
-    if (!protein.length || !carb.length || !veg.length) {
-      notify(
-        "Your exclusions leave too few foods for a varied plan. Add foods manually or review your preferences.",
-      );
-      return;
-    }
-    const suggestions: MealPlan[] = [];
-    for (let d = 0; d < 7; d++)
-      for (let slot = 0; slot < p.meals; slot++) {
-        const pool = [protein, carb, veg];
-        pool.forEach((list, j) => {
-          const f = list[(d + slot) % list.length];
-          suggestions.push({
-            id: uid(),
-            day: d,
-            slot,
-            title:
-              p.meals === 3
-                ? ["Breakfast", "Lunch", "Dinner"][slot]
-                : `Meal ${slot + 1}`,
-            foodId: f.id,
-            grams: j === 0 ? 150 : j === 1 ? 180 : 100,
-            notes:
-              "Starter portions, not a nutritionally complete prescription. Adjust for your appetite and needs.",
-            time: `${String(8 + slot * Math.floor(12 / p.meals)).padStart(2, "0")}:00`,
-          });
-        });
+    setBusy(true);
+    try {
+      const suggestions = buildMealIdeas(p, safe, uid);
+      if (!suggestions.length) {
+        notify(
+          "Your exclusions leave too few options. Add foods manually or review preferences.",
+        );
+        return;
       }
-    await db.transaction("rw", db.meals, async () => {
-      await db.meals.clear();
-      await db.meals.bulkAdd(suggestions);
-    });
-    notify(
-      "Seven-day starter meal suggestions saved. Review portions and nutritional balance.",
-    );
+      await db.transaction("rw", db.meals, async () => {
+        await db.meals.clear();
+        await db.meals.bulkAdd(suggestions);
+      });
+      notify(
+        "Meal ideas saved. Review portions and add foods to suit your needs.",
+      );
+    } finally {
+      setBusy(false);
+    }
   }
-  const chart = Array.from({ length: range }, (_, i) => {
-    const d = new Date();
-    d.setDate(d.getDate() - range + 1 + i);
-    const key = localDate(d);
-    return {
-      date: key.slice(5),
-      protein: Math.round(
-        logs
-          .filter((l) => l.date === key)
-          .reduce(
-            (s, l) =>
-              s +
-              ((foods.find((f) => f.id === l.foodId)?.protein || 0) * l.grams) /
-                100,
-            0,
-          ),
-      ),
-      calories: Math.round(
-        logs
-          .filter((l) => l.date === key)
-          .reduce(
-            (s, l) =>
-              s +
-              ((foods.find((f) => f.id === l.foodId)?.kcal || 0) * l.grams) /
-                100,
-            0,
-          ),
-      ),
-    };
-  });
+  const mealGroups = groupMealItems(plans, selectedDay);
+  const dayPlanTotals = totalNutrients(
+    mealGroups.flatMap((group) => group.items),
+    foods,
+  );
+  const safeIds = new Set(safe.map((food) => food.id));
+  const mealNames = [
+    ...new Set([
+      "Breakfast",
+      "Lunch",
+      "Dinner",
+      "Snack",
+      "Pre-workout",
+      "Post-workout",
+      ...plans.map((item) => item.title),
+      ...todayLogs.map((item) => item.meal),
+    ]),
+  ];
+  const mealProtein = proteinByMeal(todayLogs, foods);
+  async function logMeal(items: MealPlan[], slot: number) {
+    if (
+      loggingMeal !== undefined ||
+      items.some((item) => !safeIds.has(item.foodId))
+    )
+      return;
+    if (!confirm("Log every food in this meal for today?")) return;
+    setLoggingMeal(slot);
+    try {
+      await db.intake.bulkAdd(
+        items.map((item) => ({
+          id: uid(),
+          date: localDate(),
+          foodId: item.foodId,
+          grams: item.grams,
+          meal: item.title,
+        })),
+      );
+      notify("Meal logged for today.");
+    } catch (error) {
+      notify(saveErrorMessage(error, "this meal"));
+    } finally {
+      setLoggingMeal(undefined);
+    }
+  }
+  const chart = nutritionSeries(
+    Array.from({ length: range }, (_, i) => {
+      const day = new Date();
+      day.setDate(day.getDate() - range + 1 + i);
+      return localDate(day);
+    }),
+    logs,
+    foods,
+  );
+  const loggedDays = chart.filter((day) => day.logged);
   function foodList() {
     const list = safe.filter(
       (f) =>
@@ -247,6 +240,7 @@ export default function Nutrition({
               className="card food-card"
               key={f.id}
               onClick={() => {
+                setError("");
                 setFood(f);
                 setGrams(f.servingGrams || 100);
               }}
@@ -315,7 +309,8 @@ export default function Nutrition({
           Indian meal estimates are calculated from listed ingredients, not
           presented as measured restaurant nutrition. Recipes, cooking water and
           added oil change values. Check ingredients for allergies; raw sprouts
-          need careful food-safety handling.
+          can carry harmful bacteria. Cook sprouts thoroughly, especially for
+          higher-risk people.
         </p>
       </>
     );
@@ -346,7 +341,7 @@ export default function Nutrition({
           </button>
         ))}
       </div>
-      {!p ? (
+      {!p && !["foods", "learn"].includes(tab) ? (
         <Empty
           title="Nutrition that fits you"
           description="Set up your profile and dietary preferences for personalized estimates."
@@ -360,9 +355,9 @@ export default function Nutrition({
         <>
           {n?.blocked && (
             <div className="notice">
-              Personal calorie and protein targets are withheld based on your
-              screening. A qualified dietitian or clinician can help you choose
-              suitable targets. Food and hydration logging remain available.
+              {n.blockReason} A qualified dietitian or clinician can help you
+              choose suitable targets. Food and hydration logging remain
+              available.
             </div>
           )}
           {tab === "dashboard" && (
@@ -427,20 +422,20 @@ export default function Nutrition({
               {todayLogs.length ? (
                 <div className="card">
                   {todayLogs.map((l) => {
-                    const f = foods.find((f) => f.id === l.foodId)!;
+                    const f = foods.find((f) => f.id === l.foodId);
                     return (
                       <div className="list-row" key={l.id}>
                         <span className="food-icon">
                           <Leaf size={19} />
                         </span>
                         <div className="grow">
-                          <strong>{f.name}</strong>
+                          <strong>{f?.name || "Food unavailable"}</strong>
                           <small>
-                            {l.meal} · {l.grams} g · {f.state}
+                            {l.meal} · {l.grams} g · {f?.state}
                           </small>
                         </div>
                         <strong>
-                          {Math.round((f.kcal * l.grams) / 100)}{" "}
+                          {Math.round(((f?.kcal || 0) * l.grams) / 100)}{" "}
                           <small>kcal</small>
                         </strong>
                         <button
@@ -468,125 +463,165 @@ export default function Nutrition({
                   </button>
                 </Empty>
               )}
-              <p className="hint">
-                Targets use a Mifflin–St Jeor estimate and a self-selected
-                activity multiplier. If gender is omitted, the midpoint of
-                equation constants is used; uncertainty is greater. Estimates
-                are not metabolic measurements.
-              </p>
+              <details className="card instruction">
+                <summary>About these estimates</summary>
+                <p>
+                  Targets use a Mifflin–St Jeor estimate and a self-selected
+                  activity multiplier. If gender is omitted, the midpoint of
+                  equation constants is used; uncertainty is greater. Estimates
+                  are not metabolic measurements. Carbohydrate and fat amounts
+                  are an illustrative split, not independently measured needs.
+                </p>
+                {n && n.energyRange && (
+                  <p>
+                    Illustrative energy range: {n.energyRange.min}–
+                    {n.energyRange.max} kcal/day.
+                  </p>
+                )}
+                {n?.warnings.map((warning) => (
+                  <p key={warning}>{warning}</p>
+                ))}
+              </details>
             </>
           )}
           {tab === "foods" && foodList()}
           {tab === "plan" && (
             <>
-              <div className="section-title">
+              <div className="section-title meal-plan-heading">
                 <div>
-                  <h2>Your seven-day meal inspiration</h2>
-                  <p>
-                    Simple starter portions. Review balance and suitability.
-                  </p>
+                  <h2>Your meal ideas</h2>
+                  <p>Editable portions, not a complete diet prescription.</p>
                 </div>
                 <button
                   className="button secondary"
-                  disabled={n?.blocked}
-                  onClick={generate}
+                  disabled={n?.blocked || busy}
+                  onClick={() =>
+                    void generate().catch((error) =>
+                      notify(saveErrorMessage(error, "your meal ideas")),
+                    )
+                  }
                 >
                   <RefreshCw size={16} />
-                  {plans.length ? "Regenerate" : "Generate suggestions"}
+                  {busy
+                    ? "Saving…"
+                    : plans.length
+                      ? "Regenerate"
+                      : "Generate suggestions"}
                 </button>
               </div>
-              <div className="day-picker">
-                {days.map((d, i) => (
-                  <button
-                    key={d}
-                    className={selectedDay === i ? "selected" : ""}
-                    onClick={() => setSelectedDay(i)}
-                  >
-                    {d.slice(0, 3)}
-                  </button>
-                ))}
+              <div className="day-picker" role="group" aria-label="Meal day">
+                {[1, 2, 3, 4, 5, 6, 0].map((i) => {
+                  const d = days[i];
+                  return (
+                    <button
+                      key={d}
+                      className={selectedDay === i ? "selected" : ""}
+                      aria-pressed={selectedDay === i}
+                      onClick={() => setSelectedDay(i)}
+                    >
+                      <span aria-hidden="true">{d.slice(0, 3)}</span>
+                      <span className="sr-only">{d}</span>
+                    </button>
+                  );
+                })}
               </div>
+              {mealGroups.length > 0 && (
+                <section
+                  className="card plan-day-summary"
+                  aria-label="Daily meal estimate"
+                >
+                  <h3>{days[selectedDay]} · suggested portions</h3>
+                  <p>
+                    <strong>{Math.round(dayPlanTotals.kcal)} kcal</strong>
+                    <span>
+                      {" "}
+                      · {Math.round(dayPlanTotals.protein)} g protein ·{" "}
+                      {mealGroups.length} meals
+                    </span>
+                  </p>
+                  <p className="hint">
+                    {n && !n.blocked
+                      ? `Estimated energy reference: ~${n.kcal} kcal/day. `
+                      : ""}
+                    Example portions are not matched to your individual needs.
+                  </p>
+                </section>
+              )}
               {!plans.length ? (
                 <Empty
                   title="Make room for good food"
                   description="Generate meal inspiration using your dietary preferences and exclusions. This starter planner is not a complete, target-optimized diet prescription."
                 />
               ) : (
-                Array.from(
-                  new Set(
-                    plans
-                      .filter((m) => m.day === selectedDay)
-                      .map((m) => m.slot),
-                  ),
-                ).map((slot) => {
-                  const items = plans.filter(
-                    (m) => m.day === selectedDay && m.slot === slot,
+                mealGroups.map(({ slot, items }) => {
+                  const reviewNeeded = items.some(
+                    (item) => !safeIds.has(item.foodId),
                   );
                   return (
                     <section className="card meal-card" key={slot}>
                       <div className="section-title">
                         <h3>
                           {items[0]?.title}
-                          <small> · {items[0]?.time}</small>
+                          {items[0]?.time && <small> · {items[0].time}</small>}
                         </h3>
                         <button
                           className="text-link"
-                          onClick={async () => {
-                            if (
-                              !confirm("Log every food in this meal for today?")
-                            )
-                              return;
-                            await db.intake.bulkAdd(
-                              items.map((m) => ({
-                                id: uid(),
-                                date: localDate(),
-                                foodId: m.foodId,
-                                grams: m.grams,
-                                meal: m.title,
-                              })),
-                            );
-                            notify("Meal logged for today.");
-                          }}
+                          disabled={reviewNeeded || loggingMeal !== undefined}
+                          onClick={() => void logMeal(items, slot)}
                         >
                           <Plus size={15} />
-                          Log meal
+                          {loggingMeal === slot ? "Saving…" : "Log for today"}
                         </button>
                       </div>
-                      {items.map((m) => {
-                        const f = foods.find((f) => f.id === m.foodId)!;
-                        return (
-                          <button
-                            className="meal-item"
-                            key={m.id}
-                            onClick={() => setEditMeal(m)}
-                          >
-                            <span>
-                              {f.name}
-                              <small>
-                                {m.grams} g · {f.state}
-                              </small>
-                            </span>
-                            <span>
-                              {Math.round((f.kcal * m.grams) / 100)} kcal ·{" "}
-                              {Math.round((f.protein * m.grams) / 100)} g
-                              protein
-                              <ArrowRight size={14} />
-                            </span>
-                          </button>
-                        );
-                      })}
-                      <p className="hint">
-                        {Math.round(
-                          items.reduce(
-                            (s, m) =>
-                              s +
-                              (foods.find((f) => f.id === m.foodId)!.kcal *
-                                m.grams) /
-                                100,
-                            0,
-                          ),
-                        )}{" "}
-                        kcal · Tap a food to edit portions, time or notes.
+                      {reviewNeeded && (
+                        <p className="notice">
+                          Review this meal: a food is unavailable or outside
+                          your current dietary preferences. Edit it before
+                          logging.
+                        </p>
+                      )}
+                      <div className="meal-items">
+                        {items.map((m) => {
+                          const f = foods.find((f) => f.id === m.foodId);
+                          return (
+                            <button
+                              className="meal-item"
+                              key={m.id}
+                              onClick={() => {
+                                setError("");
+                                setEditMeal(m);
+                              }}
+                            >
+                              <span className="meal-item-info">
+                                <strong>{f?.name || "Food unavailable"}</strong>
+                                <small>
+                                  {m.grams} g · {f?.state}
+                                </small>
+                              </span>
+                              <span className="meal-item-nutrients">
+                                <span>
+                                  {Math.round(((f?.kcal || 0) * m.grams) / 100)}{" "}
+                                  kcal
+                                </span>
+                                <small>
+                                  {Math.round(
+                                    ((f?.protein || 0) * m.grams) / 100,
+                                  )}{" "}
+                                  g protein
+                                </small>
+                              </span>
+                              <ArrowRight
+                                className="meal-item-arrow"
+                                size={17}
+                                aria-hidden="true"
+                              />
+                            </button>
+                          );
+                        })}
+                      </div>
+                      <p className="hint meal-total">
+                        {Math.round(totalNutrients(items, foods).kcal)} kcal
+                        estimated
                       </p>
                     </section>
                   );
@@ -604,7 +639,7 @@ export default function Nutrition({
                   </h2>
                   <p>
                     {n && !n.blocked
-                      ? `~${n.protein} g reference · ~${n.perMeal} g per meal across ${p.meals} meals`
+                      ? `~${n.protein} g reference · ~${n.perMeal} g per meal across ${p?.meals || 3} meals`
                       : "Your clinician can help set a suitable personal target."}
                   </p>
                 </div>
@@ -619,43 +654,41 @@ export default function Nutrition({
                   <h3>Your calculation</h3>
                   <p>
                     {n.method}: {n.reference.toFixed(1)} kg. Current reference
-                    range {n.min}–{n.max} g/day. The selected goal uses{" "}
-                    {n.factor} g/kg as a starting reference. Discuss a suitable
-                    reference weight if you have substantial excess body fat.
+                    range for active adults: {n.min}–{n.max} g/day. The selected
+                    goal uses {n.factor} g/kg as a starting reference. Discuss a
+                    suitable reference weight if you have substantial excess
+                    body fat.
                   </p>
                   <p>
                     {n.lean
                       ? `Estimated lean mass: ${n.lean} kg · Estimated fat mass: ${n.fatMass?.toFixed(1)} kg. Consumer body-fat measurements may be inaccurate.`
                       : "No body-fat measurement provided. Lean body mass is not assumed."}
                   </p>
+                  {n.warnings.map((warning) => (
+                    <p className="hint" key={warning}>
+                      {warning}
+                    </p>
+                  ))}
                   <button className="text-link" onClick={onSetup}>
                     Review profile and estimates <ArrowRight size={14} />
                   </button>
                 </section>
               )}
-              <div className="macro-grid">
-                {["Breakfast", "Lunch", "Dinner"].map((m) => (
-                  <div className="card macro-card" key={m}>
-                    <span className="eyebrow">{m}</span>
-                    <strong>
-                      {Math.round(
-                        todayLogs
-                          .filter((l) => l.meal === m)
-                          .reduce(
-                            (s, l) =>
-                              s +
-                              ((foods.find((f) => f.id === l.foodId)?.protein ||
-                                0) *
-                                l.grams) /
-                                100,
-                            0,
-                          ),
-                      )}
-                      <small> g</small>
-                    </strong>
-                  </div>
-                ))}
-              </div>
+              {mealProtein.length > 0 ? (
+                <div className="macro-grid">
+                  {mealProtein.map(({ meal, protein }) => (
+                    <section className="card macro-card" key={meal}>
+                      <span className="eyebrow">{meal}</span>
+                      <strong>
+                        {Math.round(protein)}
+                        <small> g</small>
+                      </strong>
+                    </section>
+                  ))}
+                </div>
+              ) : (
+                <p className="muted">Log foods to see protein by meal.</p>
+              )}
               <div className="notice">
                 <BookOpen />
                 <p>
@@ -721,12 +754,18 @@ export default function Nutrition({
                       </BarChart>
                     </ResponsiveContainer>
                     <p className="hint">
-                      Daily average across this period:{" "}
-                      {Math.round(
-                        chart.reduce((s, d) => s + d[key], 0) / range,
-                      )}{" "}
-                      {key === "protein" ? "g" : "kcal"}. Unlogged days count as
-                      zero, not as confirmed intake.
+                      Average on logged days:{" "}
+                      {loggedDays.length
+                        ? Math.round(
+                            loggedDays.reduce(
+                              (sum, day) => sum + (day[key] || 0),
+                              0,
+                            ) / loggedDays.length,
+                          )
+                        : "—"}{" "}
+                      {key === "protein" ? "g" : "kcal"}. {loggedDays.length} of{" "}
+                      {range} days logged. Missing days are not assumed to be
+                      zero intake.
                     </p>
                   </section>
                 ))}
@@ -817,12 +856,16 @@ export default function Nutrition({
                   "Before training, choose familiar carbohydrate foods and a protein-containing meal if comfortable: oats and curd, or rice and dal. Allow digestion time. After training, a normal balanced meal can support recovery. Shakes are convenient, never compulsory.",
                 ],
                 [
-                  "Your nutrition journey",
-                  "Month 1: establish regular meals, learn portions and record hydration. Month 2: review consistency and meal quality. Month 3: review performance and multiweek weight trends. Month 4 and beyond: revisit habits and targets as circumstances change. No compulsory supplement cycles or automatic monthly protein increases.",
+                  "Build sustainable habits",
+                  "Establish regular meals, learn portions and review meal quality, recovery and multiweek trends. Adjust habits as your circumstances change. There are no compulsory supplement cycles, automatic monthly protein increases or guaranteed transformation timelines.",
+                ],
+                [
+                  "Food safety",
+                  "Raw or lightly cooked sprouts can carry harmful bacteria. Cook sprouts thoroughly; pregnant people, older adults and people with weakened immunity should avoid raw sprouts. Cook dried kidney beans thoroughly. Check packaged-food ingredient and allergen labels; app filters cannot assess cross-contact or guarantee safety.",
                 ],
                 [
                   "Sources & limitations",
-                  "Energy: Mifflin et al., 1990, resting energy estimation. Protein: ACSM/Academy of Nutrition and Dietetics/Dietitians of Canada position statement, Nutrition and Athletic Performance (2016). Foods: USDA FoodData Central SR Legacy generic entries, per 100 g. These references do not replace individualized care.",
+                  "Energy: Mifflin et al., 1990, resting energy estimation. Protein: ACSM/Academy of Nutrition and Dietetics/Dietitians of Canada position statement, Nutrition and Athletic Performance (2016). Foods: the historical USDA SR28 (2015) dataset, per 100 g; 100 food references were checked against its published files. Recipe values are calculated estimates and product labels may differ. These references do not replace individualized care.",
                 ],
               ].map(([title, text]) => (
                 <details className="card instruction" key={title}>
@@ -884,14 +927,7 @@ export default function Nutrition({
           <label>
             Meal
             <select value={meal} onChange={(e) => setMeal(e.target.value)}>
-              {[
-                "Breakfast",
-                "Lunch",
-                "Dinner",
-                "Snack",
-                "Pre-workout",
-                "Post-workout",
-              ].map((m) => (
+              {mealNames.map((m) => (
                 <option key={m}>{m}</option>
               ))}
             </select>
@@ -915,23 +951,37 @@ export default function Nutrition({
               ingredients.
             </p>
           )}
+          {error && (
+            <p role="alert" className="danger">
+              {error}
+            </p>
+          )}
           <button
             className="button"
-            disabled={grams <= 0 || grams > 2000}
+            disabled={!validPortion(grams) || busy}
             onClick={async () => {
-              await db.intake.add({
-                id: uid(),
-                date: localDate(),
-                foodId: food.id,
-                grams,
-                meal,
-              });
-              setFood(undefined);
-              notify("Food saved to your day.");
+              if (!validPortion(grams) || busy) return;
+              setBusy(true);
+              setError("");
+              try {
+                await db.intake.add({
+                  id: uid(),
+                  date: localDate(),
+                  foodId: food.id,
+                  grams,
+                  meal,
+                });
+                setFood(undefined);
+                notify("Food saved to your day.");
+              } catch (error) {
+                setError(saveErrorMessage(error, "your food entry"));
+              } finally {
+                setBusy(false);
+              }
             }}
           >
             <Plus size={16} />
-            Log food
+            {busy ? "Saving…" : "Log food"}
           </button>
         </Modal>
       )}
@@ -995,22 +1045,60 @@ export default function Nutrition({
               }
             />
           </label>
+          {error && (
+            <p role="alert" className="danger">
+              {error}
+            </p>
+          )}
           <div className="inline-form">
             <button
               className="button"
-              disabled={editMeal.grams <= 0 || editMeal.grams > 2000}
+              disabled={!validPortion(editMeal.grams) || busy}
               onClick={async () => {
-                await db.meals.put(editMeal);
-                setEditMeal(undefined);
+                if (!validPortion(editMeal.grams) || busy) return;
+                setBusy(true);
+                setError("");
+                try {
+                  await saveMealItem(editMeal);
+                  setEditMeal(undefined);
+                } catch (error) {
+                  setError(saveErrorMessage(error, "this meal"));
+                } finally {
+                  setBusy(false);
+                }
               }}
             >
               Save changes
             </button>
             <button
               className="button secondary"
+              disabled={!validPortion(editMeal.grams) || busy}
               onClick={async () => {
-                await db.meals.add({ ...editMeal, id: uid() });
-                setEditMeal(undefined);
+                if (!validPortion(editMeal.grams) || busy) return;
+                setBusy(true);
+                setError("");
+                try {
+                  await saveMealItem({
+                    ...editMeal,
+                    id: uid(),
+                    position:
+                      Math.max(
+                        -1,
+                        ...plans
+                          .filter(
+                            (item) =>
+                              item.day === editMeal.day &&
+                              item.slot === editMeal.slot,
+                          )
+                          .map((item) => item.position || 0),
+                      ) + 1,
+                  });
+                  setEditMeal(undefined);
+                } catch (error) {
+                  setError(saveErrorMessage(error, "this meal"));
+                } finally {
+                  setBusy(false);
+                }
               }}
             >
               Duplicate

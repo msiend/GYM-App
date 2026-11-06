@@ -214,6 +214,7 @@ export interface Settings {
   lastUpdate: string;
 }
 export interface MealPlan {
+  position?: number;
   id: string;
   day: number;
   slot: number;
