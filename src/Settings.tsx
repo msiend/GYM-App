@@ -21,6 +21,7 @@ import { Heading, Modal } from "./components/ui";
 import { importBackup } from "./data/backup";
 import { useUI } from "./store";
 import { days } from "./domain/calendar";
+import { displayHeight } from "./domain/height";
 type InstallEvent = Event & {
   prompt: () => Promise<void>;
   userChoice: Promise<{ outcome: string }>;
@@ -38,8 +39,7 @@ const policies: Record<string, string> = {
     "Browser storage can be evicted, cleared, or lost when uninstalling, switching browsers or devices. Persistent-storage requests reduce some eviction risk but do not guarantee backup. Export JSON regularly and store it securely; exports contain personal health information and are not encrypted. Import validates the format and replaces existing records in one transaction after your confirmation. Updates preserve IndexedDB. Clear all data permanently removes local records.",
   "Third-party services":
     "React, Dexie, Workbox and other bundled open-source libraries run locally. There are no required external APIs, fonts or embedded video players. Explicit YouTube links require internet and leave this app. Hosting and manual service-worker updates use your network connection; normal browser service-worker lifecycle checks may also occur. There are no reliable closed-app scheduled alarms in this browser-only app.",
-  "About & support":
-    `FORM ${appVersion} — Build your everyday strong. An offline-first fitness and nutrition companion. For support, contact the administrator of the deployment you are using or open an issue in msiend/GYM-App on GitHub. No support email or legal entity has been supplied. Legal documents are reviewable templates, not certified legal advice.`,
+  "About & support": `FORM ${appVersion} — Build your everyday strong. An offline-first fitness and nutrition companion. For support, contact the administrator of the deployment you are using or open an issue in msiend/GYM-App on GitHub. No support email or legal entity has been supplied. Legal documents are reviewable templates, not certified legal advice.`,
 };
 export default function Settings({
   profile,
@@ -65,8 +65,14 @@ export default function Settings({
     await saveSettings(patch);
   }
   useEffect(() => {
-    navigator.storage?.estimate().then(setStorage);
-    navigator.storage?.persisted().then(setPersistent);
+    navigator.storage
+      ?.estimate?.()
+      .then(setStorage)
+      .catch(() => {});
+    navigator.storage
+      ?.persisted?.()
+      .then(setPersistent)
+      .catch(() => {});
     const handler = (e: Event) => {
       e.preventDefault();
       setInstall(e as InstallEvent);
@@ -172,7 +178,7 @@ export default function Settings({
                 <strong>{profile?.name || "Your profile"}</strong>
                 <small>
                   {profile
-                    ? `${profile.goal} · ${profile.equipment}`
+                    ? `${profile.goal} · ${profile.equipment} · ${displayHeight(profile.height, profile.heightUnit)}`
                     : "Start your personal plan"}
                 </small>
               </div>
@@ -183,6 +189,7 @@ export default function Settings({
             <label>
               Weight unit
               <select
+                aria-label="Weight unit"
                 value={s.unit}
                 onChange={(e) => save({ unit: e.target.value })}
               >
@@ -215,6 +222,7 @@ export default function Settings({
             <label>
               Theme
               <select
+                aria-label="Theme"
                 value={s.theme}
                 onChange={(e) => save({ theme: e.target.value })}
               >
@@ -238,6 +246,7 @@ export default function Settings({
             <label>
               Language / भाषा
               <select
+                aria-label="App language"
                 value={s.language}
                 onChange={(e) => save({ language: e.target.value })}
               >
@@ -384,7 +393,13 @@ export default function Settings({
             <button
               className="button secondary"
               onClick={async () => {
-                const granted = await navigator.storage?.persist();
+                if (!navigator.storage?.persist) {
+                  notify(
+                    "This browser does not support persistent-storage requests. Export regular backups.",
+                  );
+                  return;
+                }
+                const granted = await navigator.storage.persist();
                 setPersistent(!!granted);
                 notify(
                   granted

@@ -16,13 +16,14 @@ import {
   TrendingUp,
   Wifi,
   WifiOff,
+  UserRound,
 } from "lucide-react";
 import HydrationCard from "./features/hydration/HydrationCard";
 import { useHydrationReminders } from "./features/hydration/useHydrationReminders";
 import { saveErrorMessage } from "./data/errors";
 import { db, defaults } from "./data/db";
 import { useUI } from "./store";
-import { localDate, nutrition } from "./domain/engine";
+import { localDate, nutrition, needsTrainingGuidance } from "./domain/engine";
 import { foods as baseFoods } from "./data/foods";
 import { indianMeals } from "./data/recipes";
 import { days } from "./domain/calendar";
@@ -143,7 +144,7 @@ export default function App() {
           </div>
           <button className="profile-button" onClick={() => setWizard(true)}>
             <span className="avatar">
-              {profile?.name[0]?.toUpperCase() || "Y"}
+              <UserRound size={18} aria-hidden="true" />
             </span>
             <span>
               <strong>{profile?.name || "Your profile"}</strong>
@@ -302,7 +303,10 @@ function Home({
   const settings =
     useLiveQuery(() => db.settings.get("preferences")) || defaults;
   const n = p ? nutrition(p) : null;
-  const day = plan?.days.find((d) => d.day === new Date().getDay());
+  const trainingGuidance = p ? needsTrainingGuidance(p) : false;
+  const day = trainingGuidance
+    ? undefined
+    : plan?.days.find((d) => d.day === new Date().getDay());
   const active = sessions.find((s) => s.status === "active");
   const calories = intake.reduce(
     (s, l) =>
@@ -352,13 +356,23 @@ function Home({
       <div className="simple-today-grid">
         <section className="card today-workout">
           <span className="eyebrow">TODAY’S WORKOUT</span>
-          <h2>{active ? active.focus : day ? day.focus : "Rest & recovery"}</h2>
+          <h2>
+            {trainingGuidance
+              ? "Professional guidance first"
+              : active
+                ? active.focus
+                : day
+                  ? day.focus
+                  : "Rest & recovery"}
+          </h2>
           <p>
-            {active
-              ? "Your last saved session is ready to continue."
-              : day
-                ? `${day.exercises.length} exercises · about ${p?.duration} min`
-                : "No resistance workout scheduled today. Gentle movement is optional."}
+            {trainingGuidance
+              ? "Your age or reported restrictions need qualified guidance before using an automatic adult workout plan."
+              : active
+                ? "Your last saved session is ready to continue."
+                : day
+                  ? `${day.exercises.length} exercises · up to ${p?.duration} min`
+                  : "No resistance workout scheduled today. Gentle movement is optional."}
           </p>
           <button
             className="button"

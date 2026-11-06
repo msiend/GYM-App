@@ -2,6 +2,8 @@
 
 Mobile-first, offline-first personal fitness and nutrition PWA. React, TypeScript, Vite, Tailwind, React Router, Dexie, Zustand, Recharts, React Hook Form, Zod and Workbox. No backend, login, analytics, remote fonts or health-data uploads.
 
+**Web 1.2:** partial/half-gym inventory, body-part workout/library filters, fat-loss guidance, eight gentle yoga guides and visible disclaimers. The catalog contains 132 entries. See the [release and validation notes](docs/WEB-RELEASE-1.2.md), including the still-blocked official-source Internet verification. No independent clinical certification is claimed.
+
 ## Run
 
 Validated with Node 24.19.0 / npm 11.9.0.
@@ -11,6 +13,9 @@ npm ci
 npm run dev
 npm test
 npm run test:e2e
+npm run test:ux
+# All validation, including production browser checks:
+npm run check
 npm run build
 npm run preview -- --port 4173
 ```
@@ -66,7 +71,7 @@ Nutrition → Food database provides ingredients, Indian meal ideas and My foods
 
 ## Muscle targets and tutorials
 
-Each exercise shows its primary muscle group and supporting body parts. The explanatory “Why this exercise?” benefit section has been removed to keep the view concise. Session summaries show the main muscles covered by that workout. The workout cards, exercise library and instruction dialog each provide a visible **Watch on YouTube** action that opens an encoded technique search in a new tab without leaving the active workout. No videos or external requests are needed to read the offline guidance; the tutorial link explicitly requires internet.
+The set-tracking cards keep muscle detail blocks out of the space above the set table. “About the exercise” contains the benefit explanation, primary muscle group, supporting body parts and guidance. Session summaries show the main muscles covered by that workout. The workout cards, exercise library and instruction dialog each provide a visible **Watch on YouTube** action that opens an encoded technique search in a new tab without leaving the active workout. No videos or external requests are needed to read the offline guidance; the tutorial link explicitly requires internet.
 
 ## Web 1.1.1 · local-IP save fix and readability
 
@@ -81,3 +86,19 @@ On phone-width screens, reading text and inputs use a 16 px baseline with larger
 ## Expanded offline libraries
 
 The web library now includes 120 exercises, 100 food references and 12 ingredient-calculated Indian meal ideas. New foods include mango, guava, papaya, pomegranate, nuts/seeds, sweet potato, cooked vegetables, quinoa, barley, buckwheat, low-fat dairy and additional protein sources. Preparation state, allergens and USDA SR28 source IDs are retained. New exercise records include equipment, difficulty, instructions, muscle information and the YouTube search action. Existing catalog IDs and user records are preserved. Community exercise content and historical generic food references remain subject to the limitations in the source notes.
+
+## About the exercise · language selection
+
+“How to do it” is now **About the exercise**. The dialog includes “Why this exercise?”, muscle details and practice tips; the extra Main muscles/Also works blocks have been removed from workout and library cards.
+
+The dialog offers English, Hindi, Marathi, Gujarati, Bengali, Tamil, Telugu, Kannada, Malayalam and Punjabi. Benefit explanations, muscle labels, practice tips and dialog labels are bundled locally and work offline. The selected exercise-explanation language is saved separately from the app UI language and is included in JSON backups. Tutorial links inside the dialog add the selected language to the YouTube search. Detailed exercise-specific instructions remain in English and are explicitly labeled. These educational translations have not received independent specialist language/clinical review.
+
+## Height units and workout weekdays
+
+Profile entry and editing support feet/inches (the default) or centimetres. Feet and inches have separate fields to avoid confusing 5 ft 8 in with 5.8 ft. Height remains stored in centimetres for nutrition calculations; switching the input unit alone preserves its exact value. The chosen unit is included in backups, and older profiles remain compatible.
+
+Workout weekday selection now shows only that day's scheduled session. Recovery days have their own view and an explicit button to view the next scheduled workout; they no longer substitute the first workout in the plan. The weekday picker is hidden while a saved workout is active, with a message to finish it before browsing another day. Full-body plans explain why several training days can have the same focus. Existing plans and workout history are preserved.
+
+## Exercise and programming audit
+
+The [exercise audit](docs/EXERCISE-AUDIT.md) records corrections across the 120-exercise catalog, explicit bench/anchor/platform requirements, conservative difficulty and prescription rules, compatible replacements and stricter progression checks. Older saved templates must be reviewed using Change plan before starting another session; existing active workouts and history remain saved. The audit documents source-access limitations and does not claim clinical certification or a live review of the latest literature.

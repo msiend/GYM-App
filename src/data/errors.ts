@@ -1,6 +1,7 @@
 export function saveErrorMessage(
   error: unknown,
   subject = "your changes",
+  { savedValueRestored = false }: { savedValueRestored?: boolean } = {},
 ): string {
   const err = error as {
     name?: string;
@@ -28,5 +29,5 @@ export function saveErrorMessage(
     return "The local database could not be opened. Allow browser site storage and reopen FORM. Existing records were not cleared.";
   if (err?.message === "SecureRandomUnavailable")
     return "This browser cannot create record identifiers. Use an updated browser or HTTPS. Your form has been kept.";
-  return `Could not save ${subject}. Your form has been kept; please retry. If this continues, report error code: ${err?.name || "UnknownError"}.`;
+  return `Could not save ${subject}. ${savedValueRestored ? "The previous saved value has been restored; please retry this change." : "Your form has been kept; please retry."} If this continues, report error code: ${err?.name || "UnknownError"}.`;
 }

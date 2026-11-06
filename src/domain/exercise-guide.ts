@@ -30,6 +30,11 @@ const strengthBenefits: Record<string, string> = {
 export function exerciseBenefits(
   exercise: Pick<Exercise, "category" | "pattern" | "muscle" | "tracking">,
 ): string[] {
+  if (exercise.category === "Yoga")
+    return [
+      "Practices comfortable movement, balance or relaxed breathing depending on the pose.",
+      "Adapt to your ability; yoga does not selectively reduce fat or replace medical care.",
+    ];
   if (exercise.category === "Cardio" || exercise.pattern === "Cardio")
     return [
       "Supports cardiovascular fitness and the ability to sustain activity when practiced regularly.",
@@ -49,7 +54,7 @@ export function exerciseBenefits(
     strengthBenefits[exercise.muscle] ||
     "Builds strength and control in the muscles involved in this movement.";
   const practice =
-    exercise.tracking === "seconds"
+    exercise.tracking === "seconds" && exercise.pattern === "Core"
       ? "Practices maintaining trunk position while breathing through a controlled hold."
       : exercise.pattern === "Hinge"
         ? "Practices a controlled hip hinge, useful for bending and lifting tasks."
@@ -62,8 +67,11 @@ export function exerciseBenefits(
               : "Practices coordinated movement and control across the working joints.";
   return [primary, practice];
 }
-export function tutorialUrl(exercise: Pick<Exercise, "name">): string {
-  return `https://www.youtube.com/results?search_query=${encodeURIComponent(`${exercise.name} proper technique tutorial`)}`;
+export function tutorialUrl(
+  exercise: Pick<Exercise, "name">,
+  language?: string,
+): string {
+  return `https://www.youtube.com/results?search_query=${encodeURIComponent(`${exercise.name} proper technique tutorial${language ? ` in ${language}` : ""}`)}`;
 }
 export const bodyPartLabel = (muscle: string) =>
   ({

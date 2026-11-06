@@ -1,14 +1,16 @@
 {
   "name": "form-fitness",
   "private": true,
-  "version": "1.1.1",
+  "version": "1.2.0",
   "type": "module",
   "scripts": {
     "dev": "vite --host 0.0.0.0",
     "build": "tsc -b && vite build",
     "preview": "vite preview --host 0.0.0.0",
     "test": "vitest run",
-    "test:e2e": "npm run build && node tests/e2e.mjs"
+    "test:e2e": "npm run build && node tests/e2e.mjs",
+    "test:ux": "npm run build && node tests/ui-ux.mjs",
+    "check": "npm test && npm run build && node tests/e2e.mjs && node tests/ui-ux.mjs"
   },
   "dependencies": {
     "@hookform/resolvers": "latest",
@@ -24,6 +26,7 @@
     "zustand": "latest"
   },
   "devDependencies": {
+    "@axe-core/playwright": "^4.14.0",
     "@tailwindcss/vite": "latest",
     "@types/react": "latest",
     "@types/react-dom": "latest",

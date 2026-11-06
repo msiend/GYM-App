@@ -124,6 +124,34 @@ try {
   });
   await page.getByRole("button", { name: "Create my profile" }).click();
   await page.getByLabel("Full name").fill("Alex Morgan");
+  await page.getByLabel("Height unit", { exact: true }).selectOption("ft");
+  await page.getByLabel("Feet", { exact: true }).fill("5");
+  await page.getByLabel("Inches", { exact: true }).fill("12");
+  await page.getByRole("button", { name: "Continue", exact: true }).click();
+  await page
+    .getByRole("alert")
+    .getByText(/Inches must be/)
+    .waitFor();
+  await page.getByLabel("Inches", { exact: true }).fill("8");
+  await page.getByLabel("Height unit", { exact: true }).selectOption("cm");
+  if (
+    Number(
+      await page.getByLabel("Height (cm)", { exact: true }).inputValue(),
+    ) !== 172.72
+  )
+    throw new Error("Feet/inches conversion did not update centimetres");
+  // Switching unit views must not round or otherwise change the stored height.
+  await page.getByLabel("Height (cm)", { exact: true }).fill("180");
+  await page.getByLabel("Height unit", { exact: true }).selectOption("ft");
+  await page.getByLabel("Height unit", { exact: true }).selectOption("cm");
+  if (
+    Number(
+      await page.getByLabel("Height (cm)", { exact: true }).inputValue(),
+    ) !== 180
+  )
+    throw new Error("Height changed while switching units");
+  await page.getByLabel("Height (cm)", { exact: true }).fill("172.72");
+  await page.getByLabel("Height unit", { exact: true }).selectOption("ft");
   await page.getByRole("button", { name: "Continue", exact: true }).click();
   await page.getByRole("button", { name: "Continue", exact: true }).click();
   await page.getByRole("button", { name: "Muscle building" }).click();
@@ -139,6 +167,17 @@ try {
   await page.getByRole("dialog").waitFor({ state: "hidden" });
   if ((await page.evaluate(() => typeof crypto.randomUUID)) !== "undefined")
     throw new Error("Missing-UUID regression context was not applied");
+  await page.goto("http://localhost:4175/settings");
+  await page.getByRole("button", { name: "Edit profile", exact: true }).click();
+  if (
+    (await page.getByLabel("Height unit", { exact: true }).inputValue()) !==
+      "ft" ||
+    (await page.getByLabel("Feet", { exact: true }).inputValue()) !== "5" ||
+    (await page.getByLabel("Inches", { exact: true }).inputValue()) !== "8"
+  )
+    throw new Error("Height and unit were not saved with the profile");
+  await page.getByRole("button", { name: "Close dialog" }).click();
+  await page.goto("http://localhost:4175");
   const waterCard = page.locator(".water-card");
   await waterCard
     .getByRole("button", { name: "Log 250 ml of water", exact: true })
@@ -228,6 +267,73 @@ try {
     .click();
   await page.getByRole("dialog").waitFor({ state: "hidden" });
   await page.goto("http://localhost:4175/workout");
+  const workoutDays = page.getByRole("group", {
+    name: "Workout day",
+    exact: true,
+  });
+  await workoutDays.getByRole("button", { name: "Sun", exact: true }).click();
+  await page
+    .getByRole("heading", { name: "Sunday · Recovery day", exact: true })
+    .waitFor();
+  if (
+    (await page.locator(".exercise-card").count()) ||
+    (await page
+      .getByRole("button", { name: "Start workout", exact: true })
+      .count())
+  )
+    throw new Error("Rest day is incorrectly displaying a training session");
+  await page
+    .getByRole("button", { name: "View Monday workout", exact: true })
+    .click();
+  await page
+    .getByRole("heading", { name: "Monday · Full body", exact: true })
+    .waitFor();
+  await workoutDays.getByRole("button", { name: "Wed", exact: true }).click();
+  await page
+    .getByRole("heading", { name: "Wednesday · Full body", exact: true })
+    .waitFor();
+  await workoutDays.getByRole("button", { name: "Tue", exact: true }).click();
+  await page
+    .getByRole("heading", { name: "Tuesday · Recovery day", exact: true })
+    .waitFor();
+  // Old templates are preserved, but must be reviewed before another session.
+  await page.evaluate(
+    () =>
+      new Promise((resolve, reject) => {
+        const request = indexedDB.open("form-fitness");
+        request.onerror = () => reject(request.error);
+        request.onsuccess = () => {
+          const database = request.result;
+          const tx = database.transaction("plans", "readwrite");
+          const table = tx.objectStore("plans");
+          const current = table.get("current");
+          current.onsuccess = () =>
+            table.put({ ...current.result, version: 2 });
+          tx.oncomplete = () => {
+            database.close();
+            resolve();
+          };
+          tx.onerror = () => {
+            database.close();
+            reject(tx.error);
+          };
+        };
+      }),
+  );
+  // Raw IndexedDB writes do not emit Dexie's in-process live-query notifications.
+  await page.reload();
+  await page
+    .getByText(/This saved plan predates the technique and programming audit/)
+    .waitFor();
+  await workoutDays.getByRole("button", { name: "Mon", exact: true }).click();
+  if (
+    !(await page
+      .getByRole("button", { name: "Start workout", exact: true })
+      .isDisabled())
+  )
+    throw new Error(
+      "Unreviewed legacy plan can start despite updated programming",
+    );
   await page
     .getByRole("button", { name: "Change plan", exact: true })
     .first()
@@ -248,10 +354,36 @@ try {
   await page.getByRole("button", { name: "Save plan", exact: true }).click();
   await page.getByRole("dialog").waitFor({ state: "hidden" });
   await page.getByRole("button", { name: /Monday Chest & triceps/ }).waitFor();
+  for (const [short, full, focus] of [
+    ["Mon", "Monday", "Chest & triceps"],
+    ["Tue", "Tuesday", "Back & biceps"],
+    ["Wed", "Wednesday", "Shoulders & traps"],
+    ["Thu", "Thursday", "Quads & calves"],
+    ["Fri", "Friday", "Glutes & hamstrings"],
+    ["Sat", "Saturday", "Abs & forearms"],
+  ]) {
+    await workoutDays.getByRole("button", { name: short, exact: true }).click();
+    await page
+      .getByRole("heading", { name: `${full} · ${focus}`, exact: true })
+      .waitFor();
+  }
+  await workoutDays.getByRole("button", { name: "Sun", exact: true }).click();
+  await page
+    .getByRole("heading", { name: "Sunday · Recovery day", exact: true })
+    .waitFor();
+  if (await page.locator(".exercise-card").count())
+    throw new Error("Sunday repeats Monday's workout");
+  await workoutDays.getByRole("button", { name: "Mon", exact: true }).click();
   const firstExercise = page.locator(".exercise-card").first();
   const exerciseName = await firstExercise.locator("h3").innerText();
-  await firstExercise.getByText("Main muscles", { exact: true }).waitFor();
-  await firstExercise.getByText("Also works", { exact: true }).waitFor();
+  await firstExercise
+    .getByRole("button", { name: /About the exercise/ })
+    .waitFor();
+  if (
+    (await firstExercise.getByText("Main muscles", { exact: true }).count()) ||
+    (await firstExercise.getByText("Also works", { exact: true }).count())
+  )
+    throw new Error("Muscle details must not appear above sets");
   const tutorial = firstExercise.getByRole("link", {
     name: /tutorial on YouTube/,
   });
@@ -286,19 +418,63 @@ try {
     .fill("Dead Bug");
   await page
     .locator(".library-item")
-    .getByRole("link", { name: /Watch Dead Bug tutorial/ })
+    .getByRole("link", { name: /Dead Bug tutorial on YouTube/ })
     .waitFor();
   await page.getByLabel("Search exercise library", { exact: true }).fill("");
   const libraryCard = page.locator(".library-item").first();
-  await libraryCard.getByText("Main muscles", { exact: true }).waitFor();
+  await libraryCard.getByText("About the exercise", { exact: true }).waitFor();
   await libraryCard
     .getByRole("link", { name: /tutorial on YouTube/ })
     .waitFor();
-  await libraryCard.getByRole("button", { name: /Instructions for/ }).click();
+  await libraryCard.getByRole("button", { name: /About the exercise/ }).click();
   await page
     .getByRole("dialog")
     .getByText("Main muscles", { exact: true })
     .waitFor();
+  await page
+    .getByRole("dialog")
+    .getByText("Why this exercise?", { exact: true })
+    .waitFor();
+  await page
+    .getByLabel("Exercise explanation language", { exact: true })
+    .selectOption("hi");
+  await page
+    .getByRole("dialog")
+    .getByText("यह व्यायाम क्यों करें?", { exact: true })
+    .waitFor();
+  await page
+    .getByRole("dialog")
+    .getByText("मुख्य मांसपेशियाँ", { exact: true })
+    .waitFor();
+  const localizedTutorial = await page
+    .getByRole("dialog")
+    .getByRole("link", { name: /tutorial on YouTube/ })
+    .getAttribute("href");
+  if (
+    !new URL(localizedTutorial).searchParams
+      .get("search_query")
+      .endsWith("in Hindi")
+  )
+    throw new Error("Hindi tutorial search preference missing");
+  await page.getByRole("button", { name: "Close dialog" }).click();
+  await libraryCard.getByRole("button", { name: /About the exercise/ }).click();
+  if (
+    (await page
+      .getByLabel("Exercise explanation language", { exact: true })
+      .inputValue()) !== "hi"
+  )
+    throw new Error("Exercise language did not persist");
+  await page
+    .getByLabel("Exercise explanation language", { exact: true })
+    .selectOption("ta");
+  await page
+    .getByRole("dialog")
+    .getByText("இந்தப் பயிற்சி ஏன்?", { exact: true })
+    .waitFor();
+  await page
+    .getByLabel("Exercise explanation language", { exact: true })
+    .selectOption("en");
+
   await page
     .getByRole("dialog")
     .getByRole("link", { name: /tutorial on YouTube/ })
@@ -308,6 +484,10 @@ try {
   await page
     .getByRole("button", { name: "Start workout", exact: true })
     .click();
+  if (
+    await page.getByLabel("Good technique", { exact: true }).first().isChecked()
+  )
+    throw new Error("Technique feedback is incorrectly pre-approved");
   await page.getByLabel("Set 1 weight", { exact: true }).first().fill("12");
   await page
     .getByRole("button", { name: "Complete set", exact: true })
@@ -315,6 +495,9 @@ try {
     .click();
   await page.waitForTimeout(300);
   console.log("sets saved");
+  if (await workoutDays.count())
+    throw new Error("Weekday picker misleadingly switches an active session");
+  await page.getByText(/Finish this workout to browse other days/).waitFor();
   await page.reload();
   await page
     .getByRole("button", { name: "Mark set incomplete" })
@@ -394,8 +577,36 @@ try {
   await page
     .locator(".exercise-card")
     .first()
-    .getByText("Main muscles", { exact: true })
+    .getByRole("button", { name: /About the exercise/ })
     .waitFor();
+  if (
+    await page
+      .locator(".exercise-card")
+      .first()
+      .getByText("Main muscles", { exact: true })
+      .count()
+  )
+    throw new Error("Muscle labels still clutter the set card");
+  await page
+    .locator(".exercise-card")
+    .first()
+    .getByRole("button", { name: /About the exercise/ })
+    .click();
+  await page
+    .getByLabel("Exercise explanation language", { exact: true })
+    .selectOption("hi");
+  await page
+    .getByRole("dialog")
+    .getByText("यह व्यायाम क्यों करें?", { exact: true })
+    .waitFor();
+  if (
+    await page.evaluate(() => document.documentElement.scrollWidth > innerWidth)
+  )
+    throw new Error("Localized exercise details overflow mobile viewport");
+  await page.screenshot({
+    path: "test-results/about-exercise-hindi-mobile.png",
+  });
+  await page.getByRole("button", { name: "Close dialog" }).click();
   if (
     await page.evaluate(() => document.documentElement.scrollWidth > innerWidth)
   )
@@ -486,6 +697,9 @@ try {
     JSON.stringify({
       passed: [
         "onboarding",
+        "feet/inches validation, cm conversion, unit switching and saved profile",
+        "distinct weekday plans, recovery days without fallback workouts, and clear active session",
+        "legacy plan review guard and technique feedback not pre-approved",
         "expanded food and exercise search with source metadata",
         "profile and all record creation without crypto.randomUUID",
         "water custom amounts, undo, target and reminder delivery",
@@ -497,7 +711,8 @@ try {
         "mobile width",
         "real no-update check",
         "six-day plan selection with preview",
-        "primary and secondary muscle information",
+        "about dialog contains benefits and muscle details away from sets",
+        "Hindi/Tamil explanation switching, persistence and offline access",
         "direct YouTube tutorial opens correct search in a new tab",
         "exercise library and detail tutorial access",
         "custom food label normalization and logging",

@@ -1,64 +1,33 @@
 import { ExternalLink, Play } from "lucide-react";
 import type { Exercise } from "../domain/types";
-import { bodyPartLabel, tutorialUrl } from "../domain/exercise-guide";
-export function ExerciseOverview({
-  exercise,
-  compact = false,
-}: {
-  exercise: Exercise;
-  compact?: boolean;
-}) {
-  const supporting = [...new Set(exercise.secondary)].filter(
-    (m) => m && m !== exercise.muscle,
-  );
-  return (
-    <div className={`exercise-overview ${compact ? "compact" : ""}`}>
-      <dl className="muscle-details">
-        <div>
-          <dt>Main muscles</dt>
-          <dd>
-            <span className="muscle-chip primary">
-              {bodyPartLabel(exercise.muscle)}
-            </span>
-          </dd>
-        </div>
-        {supporting.length > 0 && (
-          <div>
-            <dt>Also works</dt>
-            <dd>
-              {supporting.map((m) => (
-                <span className="muscle-chip" key={m}>
-                  {bodyPartLabel(m)}
-                </span>
-              ))}
-            </dd>
-          </div>
-        )}
-      </dl>
-    </div>
-  );
-}
+import { tutorialUrl } from "../domain/exercise-guide";
 export function TutorialLink({
   exercise,
+  language,
+  label = "Watch on YouTube",
+  note = "Opens tutorial search · internet required",
 }: {
   exercise: Pick<Exercise, "name">;
+  language?: string;
+  label?: string;
+  note?: string;
 }) {
   return (
     <div className="tutorial-action">
       <a
         className="youtube-tutorial"
-        href={tutorialUrl(exercise)}
+        href={tutorialUrl(exercise, language)}
         target="_blank"
         rel="noopener noreferrer"
-        aria-label={`Watch ${exercise.name} tutorial on YouTube (opens in a new tab)`}
+        aria-label={`${label}: ${exercise.name} tutorial on YouTube (opens in a new tab)`}
       >
         <span className="youtube-play">
           <Play size={14} fill="currentColor" />
         </span>
-        Watch on YouTube
+        {label}
         <ExternalLink size={14} />
       </a>
-      <small>Opens tutorial search · internet required</small>
+      <small>{note}</small>
     </div>
   );
 }

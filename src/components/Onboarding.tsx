@@ -9,6 +9,13 @@ import { saveErrorMessage } from "../data/errors";
 import { splitOptions } from "../domain/engine";
 import { Modal } from "./ui";
 import { days } from "../domain/calendar";
+import EquipmentSupports from "./EquipmentSupports";
+import { equipmentOptions } from "../domain/equipment";
+import {
+  cmToFeetInches,
+  feetInchesToCm,
+  displayHeight,
+} from "../domain/height";
 const schema = z.object({
   name: z.string().min(1, "Please enter your name"),
   age: z.coerce.number().min(13).max(100),
@@ -21,6 +28,7 @@ const initial: Profile = {
   age: 25,
   gender: "Prefer not to say",
   height: 170,
+  heightUnit: "ft",
   weight: 70,
   experience: "Complete beginner",
   goal: "General fitness",
@@ -50,6 +58,10 @@ export default function Onboarding({
   const [step, setStep] = useState(0);
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState("");
+  const [imperialHeight, setImperialHeight] = useState(() =>
+    cmToFeetInches(p.height),
+  );
+  const heightUnit = p.heightUnit || "ft";
   const form = useForm({
     resolver: zodResolver(schema),
     defaultValues: {
@@ -61,6 +73,13 @@ export default function Onboarding({
   });
   const update = (key: keyof Profile, value: unknown) =>
     setP((v) => ({ ...v, [key]: value }));
+  function changeImperialHeight(key: "feet" | "inches", value: string) {
+    const next = { ...imperialHeight, [key]: value };
+    setImperialHeight(next);
+    form.setValue("height", feetInchesToCm(next.feet, next.inches), {
+      shouldValidate: true,
+    });
+  }
   const titles = [
     "Make it personal",
     "Your starting point",
@@ -99,6 +118,7 @@ export default function Onboarding({
     <label>
       {label}
       <select
+        aria-label={label}
         value={String(
           p[key] ??
             (key === "preferredSplit"
@@ -140,19 +160,90 @@ export default function Onboarding({
               <small className="danger">Enter your name.</small>
             )}
           </label>
-          {(["age", "height", "weight"] as const).map((k) => (
+          {(["age", "weight"] as const).map((k) => (
             <label key={k}>
-              {k === "height"
-                ? "Height (cm)"
-                : k === "weight"
-                  ? "Current weight (kg)"
-                  : "Age"}
+              {k === "weight" ? "Current weight (kg)" : "Age"}
               <input type="number" {...form.register(k)} />
               {form.formState.errors[k] && (
                 <small className="danger">Enter a valid {k}.</small>
               )}
             </label>
           ))}
+          <fieldset className="height-input span2">
+            <legend>Height</legend>
+            <label>
+              Height unit
+              <select
+                aria-label="Height unit"
+                value={heightUnit}
+                onChange={(e) => {
+                  const unit = e.target.value as "cm" | "ft";
+                  const cm = Number(form.getValues("height"));
+                  if (unit === "ft" && Number.isFinite(cm))
+                    setImperialHeight(cmToFeetInches(cm));
+                  update("heightUnit", unit);
+                }}
+              >
+                <option value="ft">Feet & inches</option>
+                <option value="cm">Centimetres</option>
+              </select>
+            </label>
+            {heightUnit === "cm" ? (
+              <label>
+                Height (cm)
+                <input
+                  type="number"
+                  min="100"
+                  max="250"
+                  step="any"
+                  {...form.register("height")}
+                />
+              </label>
+            ) : (
+              <>
+                <input type="hidden" {...form.register("height")} />
+                <div className="height-parts">
+                  <label>
+                    Feet
+                    <input
+                      type="number"
+                      inputMode="numeric"
+                      min="3"
+                      max="8"
+                      step="1"
+                      value={imperialHeight.feet}
+                      onChange={(e) =>
+                        changeImperialHeight("feet", e.target.value)
+                      }
+                    />
+                  </label>
+                  <label>
+                    Inches
+                    <input
+                      type="number"
+                      inputMode="decimal"
+                      min="0"
+                      max="11.99"
+                      step="0.01"
+                      value={imperialHeight.inches}
+                      onChange={(e) =>
+                        changeImperialHeight("inches", e.target.value)
+                      }
+                    />
+                  </label>
+                </div>
+                <p className="hint">
+                  For 5 ft 8 in, enter 5 feet and 8 inches.
+                </p>
+              </>
+            )}
+            {form.formState.errors.height && (
+              <small role="alert" className="danger">
+                Enter a height between 100 and 250 cm (about 3 ft 3 in to 8 ft 2
+                in). Inches must be from 0 to less than 12.
+              </small>
+            )}
+          </fieldset>
           {select("Gender (optional)", "gender", [
             "Prefer not to say",
             "Female",
@@ -281,23 +372,21 @@ export default function Onboarding({
       )}
       {step === 4 && (
         <div className="option-list">
-          {[
-            "Full gym",
-            "Dumbbells",
-            "Home workout",
-            "Bands",
-            "Bodyweight",
-            "Limited equipment",
-          ].map((x) => (
+          {equipmentOptions.map((x) => (
             <button
               key={x}
               className={p.equipment === x ? "option selected" : "option"}
               onClick={() => update("equipment", x)}
             >
-              {x}
+              {x === "Partial gym" ? "Partial / half gym" : x}
               {p.equipment === x && <Check size={18} />}
             </button>
           ))}
+          <EquipmentSupports
+            profile={p}
+            onChange={(v) => update("supports", v)}
+            onInventoryChange={(v) => update("equipmentInventory", v)}
+          />
         </div>
       )}
       {step === 5 && (
@@ -448,6 +537,7 @@ export default function Onboarding({
           <div className="review-grid">
             {[
               ["Name", p.name],
+              ["Height", displayHeight(p.height, p.heightUnit)],
               ["Goal", p.goal],
               ["Experience", p.experience],
               [

@@ -4,12 +4,40 @@ export type Goal =
   | "Muscle building"
   | "Strength building"
   | "Flexibility & endurance";
+export type EquipmentItem =
+  | "dumbbells"
+  | "bands"
+  | "barbell"
+  | "rack"
+  | "cable"
+  | "dual-cable"
+  | "seated-row"
+  | "pulldown"
+  | "leg-press"
+  | "leg-extension"
+  | "seated-leg-curl"
+  | "lying-leg-curl"
+  | "chest-press"
+  | "shoulder-press"
+  | "biceps-machine"
+  | "triceps-machine"
+  | "pec-deck"
+  | "dip-bars"
+  | "dip-machine"
+  | "pull-up-bar"
+  | "seated-calf-machine"
+  | "standing-calf-machine"
+  | "bike"
+  | "elliptical"
+  | "rower";
 export interface Profile {
   id: string;
   name: string;
   age: number;
   gender: string;
   height: number;
+  heightUnit?: "cm" | "ft";
+  supports?: ("bench" | "anchor" | "step")[];
   weight: number;
   target?: number;
   experience: string;
@@ -17,6 +45,7 @@ export interface Profile {
   days: number[];
   duration: number;
   equipment: string;
+  equipmentInventory?: EquipmentItem[];
   restrictions: string;
   medical: boolean;
   diet: string;
@@ -37,6 +66,7 @@ export interface Profile {
 export interface Exercise {
   id: string;
   name: string;
+  aliases?: string[];
   muscle: string;
   secondary: string[];
   category: string;
@@ -51,6 +81,10 @@ export interface Exercise {
   source?: string;
   sourceUrl?: string;
   tracking?: "reps" | "seconds";
+  requires?: ("bench" | "anchor" | "step")[];
+  unilateral?: boolean;
+  automatic?: boolean;
+  equipmentItems?: EquipmentItem[];
 }
 export interface PlanExercise {
   exerciseId: string;
@@ -62,6 +96,7 @@ export interface PlanDay {
   day: number;
   focus: string;
   exercises: PlanExercise[];
+  estimatedMinutes?: number;
 }
 export interface WorkoutPlan {
   id: string;
@@ -147,6 +182,8 @@ export interface Settings {
   id: string;
   theme: string;
   textSize?: "normal" | "large";
+  exerciseLanguage?:
+    "en" | "hi" | "mr" | "gu" | "bn" | "ta" | "te" | "kn" | "ml" | "pa";
   language: string;
   unit: string;
   rest: number;

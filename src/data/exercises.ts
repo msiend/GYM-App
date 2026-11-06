@@ -1,5 +1,6 @@
 import additional from "./expanded-exercises.json";
 import type { Exercise } from "../domain/types";
+import { yogaExercises, practicalExercises } from "./practice-exercises";
 type Row = [string, string, string, string, string, string, string, string];
 const rows: Row[] = [
   [
@@ -39,7 +40,7 @@ const rows: Row[] = [
     "Triceps,Abs",
     "Bodyweight",
     "Push",
-    "Place hands on a sturdy elevated surface, a little wider than shoulders. Keep body aligned.",
+    "Place hands on a wall or a stable elevated exercise surface, a little wider than shoulders. Keep body aligned.",
     "Bend elbows and lower chest toward the surface, then press away. Increase the elevation to make it easier.",
   ],
   [
@@ -150,7 +151,7 @@ const rows: Row[] = [
     "Bodyweight",
     "Core",
     "Place elbows beneath shoulders, forearms on the floor. Extend legs, or keep knees down.",
-    "Hold a straight trunk while breathing normally. Stop when you can no longer maintain alignment.",
+    "Hold a controlled trunk while breathing normally. Begin with a short comfortable hold and stop before you can no longer maintain alignment.",
   ],
   [
     "bird",
@@ -200,7 +201,7 @@ const rows: Row[] = [
     "Bodyweight",
     "Cardio",
     "Wear comfortable footwear and choose a level route.",
-    "Walk at a pace that lets you speak in short sentences. Start short and build gradually.",
+    "Begin at an easy pace. For moderate effort you should be able to talk but not sing. Start short and build gradually.",
   ],
   [
     "mobility",
@@ -216,11 +217,11 @@ const rows: Row[] = [
     "stretch",
     "Standing calf stretch",
     "Calves",
-    "Hamstrings",
+    "Feet",
     "Bodyweight",
     "Stretching",
     "Face a wall with hands supported and one foot behind the other.",
-    "Keep the back heel down and lean gently forward. Hold comfortably without bouncing.",
+    "Keep the back heel down and lean gently forward. Hold at mild tension for about 10–30 seconds without bouncing, then switch sides.",
   ],
 ];
 const starterExercises: Exercise[] = rows.map(
@@ -241,10 +242,11 @@ const starterExercises: Exercise[] = rows.map(
             : "Compound",
     difficulty: "Beginner",
     instructions: [start, execution],
-    breathing:
-      pattern === "Core"
-        ? "Breathe normally throughout the hold."
-        : "Exhale during the effort; inhale during the return. Avoid holding your breath.",
+    breathing: ["Core", "Carry", "Cardio", "Mobility", "Stretching"].includes(
+      pattern,
+    )
+      ? "Breathe normally throughout the movement or hold."
+      : "Exhale during the effort; inhale during the return. Avoid holding your breath.",
     mistakes:
       "Rushing repetitions, using momentum, or continuing after technique breaks down.",
     safety:
@@ -257,8 +259,32 @@ const starterExercises: Exercise[] = rows.map(
 export const exercises: Exercise[] = [
   ...starterExercises.map((e) => ({
     ...e,
-    tracking: e.id === "plank" ? ("seconds" as const) : ("reps" as const),
+    tracking: ["plank", "grip", "march", "walk", "stretch"].includes(e.id)
+      ? ("seconds" as const)
+      : ("reps" as const),
+    ...(["press", "row", "shoulder"].includes(e.id)
+      ? { requires: ["bench" as const] }
+      : {}),
+    ...(["bandrow", "triceps"].includes(e.id)
+      ? {
+          requires: ["anchor" as const],
+          safety:
+            "Inspect the band and use a rated anchor installed as instructed. Stay within the manufacturer stretch limit and keep the face out of the recoil path. Stop if the band slips or causes pain.",
+        }
+      : {}),
+    unilateral: ["row", "bird", "lunge", "stretch"].includes(e.id),
+    ...(e.id === "stretch" ? { secondary: [] } : {}),
+    source:
+      "App-authored introductory technique summary; editorial audit 2026-11-03. Educational reference, not individually assessed coaching.",
   })),
-  ...(additional as Exercise[]),
+  ...(additional as Exercise[]).map((e) =>
+    ["db-barbell-bench-press---medium-grip", "db-cable-chest-press"].includes(
+      e.id,
+    )
+      ? { ...e, requires: [...(e.requires || []), "bench" as const] }
+      : e,
+  ),
+  ...practicalExercises,
+  ...yogaExercises,
 ];
 export const exerciseById = (id: string) => exercises.find((e) => e.id === id)!;

@@ -5,6 +5,8 @@ import { saveProfileAndPlan } from "../data/profile-repository";
 import { saveErrorMessage } from "../data/errors";
 import { Modal } from "./ui";
 import { days } from "../domain/calendar";
+import EquipmentSupports from "./EquipmentSupports";
+import { equipmentOptions } from "../domain/equipment";
 export default function PlanSettings({
   profile,
   onClose,
@@ -118,15 +120,10 @@ export default function PlanSettings({
               value={p.equipment}
               onChange={(e) => update("equipment", e.target.value)}
             >
-              {[
-                "Full gym",
-                "Dumbbells",
-                "Home workout",
-                "Bands",
-                "Bodyweight",
-                "Limited equipment",
-              ].map((x) => (
-                <option key={x}>{x}</option>
+              {equipmentOptions.map((x) => (
+                <option key={x} value={x}>
+                  {x === "Partial gym" ? "Partial / half gym" : x}
+                </option>
               ))}
             </select>
           </label>
@@ -143,6 +140,11 @@ export default function PlanSettings({
             </select>
           </label>
         </div>
+        <EquipmentSupports
+          profile={p}
+          onChange={(v) => update("supports", v)}
+          onInventoryChange={(v) => update("equipmentInventory", v)}
+        />
         <label>Available days (choose 2–6)</label>
         <div className="day-picker">
           {days.map((d, i) => (

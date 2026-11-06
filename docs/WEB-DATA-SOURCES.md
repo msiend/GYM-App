@@ -2,6 +2,8 @@
 
 Android work is paused. These changes concern the React web PWA only.
 
+**Subsequent correction:** The [3 November exercise audit](EXERCISE-AUDIT.md) supersedes the historical instruction-retention and programming details below. Imported records now contain explicitly adapted/corrected guidance; original URLs remain for provenance. Program version 3 adds equipment-support checks, more conservative prescriptions and progression safeguards.
+
 ## Food composition researched online
 
 Additional foods were extracted from the published USDA Standard Reference Release 28 (2015) files in [alyssaq/usda-sqlite](https://github.com/alyssaq/usda-sqlite), commit `1e457b599af101ce463a195867574eba16c81acb`. Its README documents the USDA origin and that nutrient amounts are per 100 g. The app retains original USDA NDB identifiers, descriptions, preparation states and source links for each new entry. This is a published historical reference, not the newest FoodData Central branded-product data.

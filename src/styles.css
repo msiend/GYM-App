@@ -4131,3 +4131,309 @@ html[data-text-size="large"]
 html[data-text-size="large"] :is(input, select, textarea, .button) {
   min-height: 48px;
 }
+.height-input {
+  min-width: 0;
+  margin: 0;
+  padding: 18px;
+  border: 1px solid var(--border);
+  border-radius: 10px;
+}
+.height-input legend {
+  padding: 0 7px;
+  font-weight: 600;
+}
+.height-parts {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 14px;
+}
+.height-input > label {
+  margin-bottom: 14px;
+}
+.recovery-day {
+  display: grid;
+  gap: 18px;
+}
+.recovery-day .button {
+  justify-self: start;
+}
+.exercise-language-picker {
+  margin: 0 0 20px;
+}
+.fitness-disclaimer {
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  background: var(--surface);
+  padding: 14px 18px;
+  margin-bottom: 22px;
+}
+.fitness-disclaimer summary {
+  cursor: pointer;
+  font-size: 1rem;
+  font-weight: 600;
+  line-height: 1.6;
+}
+.fitness-disclaimer p {
+  font-size: 1rem;
+  line-height: 1.8;
+  margin-top: 14px;
+}
+.body-part-shortcuts {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 9px;
+  margin: 20px 0;
+}
+.body-part-shortcuts.yoga-shortcuts {
+  display: none;
+}
+.library-main-filter {
+  display: none;
+}
+.library-main-filter.yoga-body-filter {
+  display: block;
+  max-width: 440px;
+}
+.library-advanced-filters {
+  margin: 15px 0;
+  padding: 14px 18px;
+  border: 1px solid var(--border);
+  border-radius: 9px;
+}
+.library-advanced-filters summary,
+.yoga-practice-notes summary {
+  cursor: pointer;
+  font-size: 1rem;
+  line-height: 1.7;
+}
+.yoga-practice-notes p {
+  margin-top: 14px;
+}
+.body-part-shortcuts button {
+  padding: 10px 15px;
+  min-height: 44px;
+  border: 1px solid var(--border);
+  border-radius: 24px;
+  background: var(--surface);
+  color: var(--text);
+  font-size: 0.95rem;
+}
+.workout-body-filter {
+  margin: 20px 0;
+  padding: 18px;
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  background: var(--surface);
+}
+.workout-body-filter label {
+  max-width: 440px;
+}
+.workout-body-filter .hint {
+  margin-top: 12px;
+}
+.fat-loss-guide,
+.yoga-intro {
+  display: grid;
+  gap: 14px;
+  padding: 22px;
+  margin-bottom: 22px;
+}
+.fat-loss-guide p,
+.yoga-intro p {
+  font-size: 1rem;
+  line-height: 1.8;
+}
+.fat-loss-guide .button {
+  justify-self: start;
+}
+.equipment-check-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 9px 18px;
+}
+.equipment-inventory {
+  margin-bottom: 20px;
+}
+.settings-grid > .stack,
+.settings-card {
+  min-width: 0;
+}
+:root {
+  --chart-green: var(--primary);
+  --chart-blue: #93b7fd;
+  --chart-purple: #d9adf9;
+}
+[data-theme="light"] {
+  --chart-blue: #245db5;
+  --chart-purple: #793eb0;
+}
+.settings-card .button {
+  max-width: 100%;
+  white-space: normal;
+}
+.settings-card .button svg {
+  flex-shrink: 0;
+}
+.app-footer,
+.exercise-number {
+  color: var(--muted);
+}
+[data-theme="light"] .danger,
+[data-theme="light"] .danger-button {
+  color: #a82222 !important;
+}
+.equipment-check-grid .check {
+  margin: 0;
+  padding: 10px 0;
+  line-height: 1.65;
+}
+.tabs {
+  overflow-x: auto;
+}
+@media (max-width: 640px) {
+  .library-filters {
+    grid-template-columns: 1fr;
+  }
+  .body-part-shortcuts {
+    display: none;
+  }
+  .library-main-filter {
+    display: block;
+  }
+  .settings-grid {
+    grid-template-columns: minmax(0, 1fr);
+  }
+  .macro-grid {
+    grid-template-columns: minmax(0, 1fr);
+  }
+  .settings-card .grow {
+    overflow-wrap: anywhere;
+  }
+  .workout-tabs {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 6px;
+    overflow: visible;
+  }
+  .workout-tabs button {
+    min-height: 48px;
+  }
+  .mobile-nav a {
+    color: var(--muted);
+  }
+  .mobile-nav a.active {
+    color: var(--primary);
+  }
+  .equipment-check-grid {
+    grid-template-columns: 1fr;
+  }
+  .body-part-shortcuts button {
+    font-size: 1rem;
+  }
+  .fitness-disclaimer {
+    padding: 14px;
+  }
+  .tabs button {
+    white-space: nowrap;
+  }
+  .workout-body-filter select {
+    font-size: 1rem;
+  }
+}
+.exercise-language-picker select {
+  margin-top: 9px;
+}
+.about-exercise {
+  padding-top: 3px;
+}
+.about-benefit {
+  padding: 18px;
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  background: color-mix(in srgb, var(--primary) 4%, var(--surface));
+  margin: 20px 0;
+}
+.modal .about-benefit h3 {
+  margin: 0 0 10px;
+  font-size: 18px;
+}
+.modal .about-benefit p {
+  margin: 0;
+  font-size: 15px;
+  line-height: 1.85;
+}
+.about-exercise > .muscle-details {
+  margin: 22px 0;
+}
+.about-exercise .muscle-details dt {
+  width: 120px;
+  line-height: 1.7;
+}
+.about-exercise > .tutorial-action {
+  margin: 22px 0;
+}
+.about-practice ul {
+  padding-left: 23px;
+}
+.modal .about-practice li {
+  font-size: 14px;
+  line-height: 1.9;
+}
+.language-source-note {
+  padding: 14px;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  background: var(--bg);
+}
+.original-exercise-steps {
+  border-top: 1px solid var(--border);
+  padding: 18px 0 0;
+  margin-top: 18px;
+}
+.original-exercise-steps summary {
+  cursor: pointer;
+  font-size: 14px;
+  line-height: 1.8;
+  font-weight: 600;
+}
+.about-exercise .hint {
+  font-size: 12px;
+}
+.exercise-card > .exercise-help-actions {
+  margin-bottom: 15px;
+}
+@media (max-width: 640px) {
+  .about-exercise .muscle-details > div {
+    flex-direction: column;
+    gap: 7px;
+  }
+  .about-exercise .muscle-details dt {
+    width: auto;
+    font-size: 1rem;
+  }
+  .about-exercise .muscle-chip {
+    font-size: 0.95rem;
+  }
+  .modal .about-benefit p,
+  .modal .about-practice li,
+  .original-exercise-steps summary {
+    font-size: 1rem;
+    line-height: 1.9;
+  }
+  .about-benefit {
+    padding: 16px;
+  }
+  .about-exercise .tutorial-action .youtube-tutorial {
+    width: 100%;
+    font-size: 1rem;
+  }
+  .exercise-language-picker select {
+    font-size: 1rem;
+  }
+  .about-exercise h3 {
+    font-size: 1.15rem;
+  }
+  .language-source-note {
+    font-size: 0.95rem !important;
+  }
+}

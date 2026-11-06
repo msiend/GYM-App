@@ -2,6 +2,7 @@ import { z } from "zod";
 import { db } from "./db";
 import { exercises } from "./exercises";
 import { foods } from "./foods";
+import { equipmentItems } from "../domain/equipment";
 const id = z.string().min(1);
 const num = z.number().finite();
 const date = z.string().regex(/^\d{4}-\d{2}-\d{2}$/);
@@ -46,6 +47,12 @@ const schemas: Record<string, z.ZodType> = {
       name: id,
       age: num.min(13).max(100),
       height: num.min(100).max(250),
+      heightUnit: z.enum(["cm", "ft"]).optional(),
+      supports: z.array(z.enum(["bench", "anchor", "step"])).optional(),
+      equipmentInventory: z
+        .array(z.enum(equipmentItems.map((x) => x.id)))
+        .optional(),
+      priorityMuscles: z.array(z.string()).max(20).optional(),
       weight: num.min(25).max(350),
       gender: z.string(),
       target: num.min(25).max(350).optional(),
@@ -97,6 +104,7 @@ const schemas: Record<string, z.ZodType> = {
         day: num.int().min(0).max(6),
         focus: id,
         exercises: z.array(planExercise),
+        estimatedMinutes: num.positive().optional(),
       }),
     ),
   }),
@@ -150,6 +158,9 @@ const schemas: Record<string, z.ZodType> = {
     id: z.literal("preferences"),
     theme: z.enum(["light", "dark"]),
     textSize: z.enum(["normal", "large"]).optional(),
+    exerciseLanguage: z
+      .enum(["en", "hi", "mr", "gu", "bn", "ta", "te", "kn", "ml", "pa"])
+      .optional(),
     language: z.enum(["hi", "en"]),
     unit: z.enum(["kg", "lbs"]),
     rest: num.min(10).max(600),

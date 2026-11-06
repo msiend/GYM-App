@@ -24,6 +24,7 @@ import { foods as baseFoods, allowedFoods } from "./data/foods";
 import { indianMeals, labelTemplates } from "./data/recipes";
 import HydrationCard from "./features/hydration/HydrationCard";
 import CustomFood from "./components/CustomFood";
+import FitnessDisclaimer from "./components/FitnessDisclaimer";
 import { localDate, nutrition, uid } from "./domain/engine";
 import type { Profile, Food, MealPlan } from "./domain/types";
 import { Empty, Heading, Modal, Ring } from "./components/ui";
@@ -335,6 +336,7 @@ export default function Nutrition({
           </button>
         }
       />
+      <FitnessDisclaimer />
       <div className="tabs scroll-tabs">
         {tabs.map((t, i) => (
           <button
@@ -695,11 +697,11 @@ export default function Nutrition({
                         />
                         <XAxis
                           dataKey="date"
-                          tick={{ fill: "#92959d", fontSize: 11 }}
+                          tick={{ fill: "var(--muted)", fontSize: 12 }}
                           tickLine={false}
                         />
                         <YAxis
-                          tick={{ fill: "#92959d", fontSize: 11 }}
+                          tick={{ fill: "var(--muted)", fontSize: 12 }}
                           width={42}
                         />
                         <Tooltip
@@ -711,7 +713,11 @@ export default function Nutrition({
                         />
                         <Bar
                           dataKey={key}
-                          fill={key === "protein" ? "#b8f34a" : "#93b7fd"}
+                          fill={
+                            key === "protein"
+                              ? "var(--chart-green)"
+                              : "var(--chart-blue)"
+                          }
                           radius={[4, 4, 0, 0]}
                         />
                       </BarChart>

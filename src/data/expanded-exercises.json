@@ -7,19 +7,18 @@
     "category": "Compound",
     "equipment": "Gym",
     "pattern": "Push",
-    "difficulty": "Beginner",
+    "difficulty": "Intermediate",
     "instructions": [
-      "Lie back on a flat bench. Using a medium width grip (a grip that creates a 90-degree angle in the middle of the movement between the forearms and the upper arms), lift the bar from the rack and hold it straight over you with your arms locked. This will be your starting position.",
-      "From the starting position, breathe in and begin coming down slowly until the bar touches your middle chest.",
-      "After a brief pause, push the bar back to the starting position as you breathe out. Focus on pushing the bar using your chest muscles. Lock your arms and squeeze your chest in the contracted position at the top of the motion, hold for a second and then start coming down slowly again. Tip: Ideally, lowering the weight should take about twice as long as raising it.",
-      "Repeat the movement for the prescribed amount of repetitions.",
-      "When you are done, place the bar back in the rack."
+      "Use a stable bench in a rack with correctly positioned safety arms and a competent spotter. Start with a light bar you can control; get coaching before an unfamiliar barbell lift.",
+      "Lie with feet supported, upper back settled on the bench and wrists above the forearms. Take a comfortable grip that keeps forearms near vertical near the bottom.",
+      "Unrack with help if needed. Lower slowly toward the mid-chest through a comfortable range, keeping elbows at a comfortable angle to the torso. Do not bounce the bar.",
+      "Press upward without slamming the elbows into lockout. Keep hips on the bench and return the bar securely to both hooks before releasing it."
     ],
     "breathing": "Breathe continuously. Exhale during the effort and inhale during the controlled return; avoid prolonged breath-holding.",
     "mistakes": "Using excessive load, rushing the movement, or continuing when technique breaks down.",
-    "safety": "Use a comfortable range and conservative load. Stop for pain or unusual symptoms. Get technique guidance for unfamiliar movements.",
+    "safety": "Use rack safeties and a competent spotter; never assume you can safely escape a failed barbell press. Stop before technique fails.",
     "alternatives": [],
-    "source": "Free Exercise DB, public-domain exercise descriptions (Unlicense). Community catalog, not individual clinical advice.",
+    "source": "Adapted from Free Exercise DB (Unlicense); editorial technique and metadata audit 2026-11-03. Original community record is provenance, not clinical validation.",
     "sourceUrl": "https://github.com/yuhonas/free-exercise-db/blob/main/exercises/Barbell_Bench_Press_-_Medium_Grip.json",
     "tracking": "reps"
   },
@@ -33,21 +32,18 @@
     "pattern": "Push",
     "difficulty": "Beginner",
     "instructions": [
-      "Lie back on an incline bench with a dumbbell in each hand atop your thighs. The palms of your hands will be facing each other.",
-      "Then, using your thighs to help push the dumbbells up, lift the dumbbells one at a time so that you can hold them at shoulder width.",
-      "Once you have the dumbbells raised to shoulder width, rotate your wrists forward so that the palms of your hands are facing away from you. This will be your starting position.",
-      "Be sure to keep full control of the dumbbells at all times. Then breathe out and push the dumbbells up with your chest.",
-      "Lock your arms at the top, hold for a second, and then start slowly lowering the weight. Tip Ideally, lowering the weights should take about twice as long as raising them.",
-      "Repeat the movement for the prescribed amount of repetitions.",
-      "When you are done, place the dumbbells back on your thighs and then on the floor. This is the safest manner to release the dumbbells."
+      "Set a stable exercise bench to a modest incline and choose light dumbbells. Sit, then position the weights beside the chest with help if necessary; do not swing heavy weights into place.",
+      "Keep feet supported, wrists aligned over the forearms and elbows at a comfortable angle to the torso. Press up without forcefully locking the elbows.",
+      "Lower under control only as far as the shoulders comfortably allow. Finish with help or a controlled return to sitting; do not drop the weights."
     ],
     "breathing": "Breathe continuously. Exhale during the effort and inhale during the controlled return; avoid prolonged breath-holding.",
     "mistakes": "Using excessive load, rushing the movement, or continuing when technique breaks down.",
     "safety": "Use a comfortable range and conservative load. Stop for pain or unusual symptoms. Get technique guidance for unfamiliar movements.",
     "alternatives": [],
-    "source": "Free Exercise DB, public-domain exercise descriptions (Unlicense). Community catalog, not individual clinical advice.",
+    "source": "Adapted from Free Exercise DB (Unlicense); editorial technique and metadata audit 2026-11-03. Original community record is provenance, not clinical validation.",
     "sourceUrl": "https://github.com/yuhonas/free-exercise-db/blob/main/exercises/Incline_Dumbbell_Press.json",
-    "tracking": "reps"
+    "tracking": "reps",
+    "requires": ["bench"]
   },
   {
     "id": "db-dumbbell-flyes",
@@ -57,21 +53,20 @@
     "category": "Isolation",
     "equipment": "Dumbbells",
     "pattern": "Isolation",
-    "difficulty": "Beginner",
+    "difficulty": "Intermediate",
     "instructions": [
-      "Lie down on a flat bench with a dumbbell on each hand resting on top of your thighs. The palms of your hand will be facing each other.",
-      "Then using your thighs to help raise the dumbbells, lift the dumbbells one at a time so you can hold them in front of you at shoulder width with the palms of your hands facing each other. Raise the dumbbells up like you're pressing them, but stop and hold just before you lock out. This will be your starting position.",
-      "With a slight bend on your elbows in order to prevent stress at the biceps tendon, lower your arms out at both sides in a wide arc until you feel a stretch on your chest. Breathe in as you perform this portion of the movement. Tip: Keep in mind that throughout the movement, the arms should remain stationary; the movement should only occur at the shoulder joint.",
-      "Return your arms back to the starting position as you squeeze your chest muscles and breathe out. Tip: Make sure to use the same arc of motion used to lower the weights.",
-      "Hold for a second at the contracted position and repeat the movement for the prescribed amount of repetitions."
+      "Lie on a stable flat bench with very light dumbbells above the chest, palms facing each other and elbows gently bent.",
+      "Keep the elbow bend nearly constant while opening the arms slowly in an arc. Stop before discomfort or excessive shoulder stretch; do not force the upper arms below the torso.",
+      "Bring the arms together above the chest in the same arc without banging the weights together. Use a press variation if you cannot control this movement."
     ],
     "breathing": "Breathe continuously. Exhale during the effort and inhale during the controlled return; avoid prolonged breath-holding.",
     "mistakes": "Using excessive load, rushing the movement, or continuing when technique breaks down.",
     "safety": "Use a comfortable range and conservative load. Stop for pain or unusual symptoms. Get technique guidance for unfamiliar movements.",
     "alternatives": [],
-    "source": "Free Exercise DB, public-domain exercise descriptions (Unlicense). Community catalog, not individual clinical advice.",
+    "source": "Adapted from Free Exercise DB (Unlicense); editorial technique and metadata audit 2026-11-03. Original community record is provenance, not clinical validation.",
     "sourceUrl": "https://github.com/yuhonas/free-exercise-db/blob/main/exercises/Dumbbell_Flyes.json",
-    "tracking": "reps"
+    "tracking": "reps",
+    "requires": ["bench"]
   },
   {
     "id": "db-cable-crossover",
@@ -83,17 +78,15 @@
     "pattern": "Isolation",
     "difficulty": "Beginner",
     "instructions": [
-      "To get yourself into the starting position, place the pulleys on a high position (above your head), select the resistance to be used and hold the pulleys in each hand.",
-      "Step forward in front of an imaginary straight line between both pulleys while pulling your arms together in front of you. Your torso should have a small forward bend from the waist. This will be your starting position.",
-      "With a slight bend on your elbows in order to prevent stress at the biceps tendon, extend your arms to the side (straight out at both sides) in a wide arc until you feel a stretch on your chest. Breathe in as you perform this portion of the movement. Tip: Keep in mind that throughout the movement, the arms and torso should remain stationary; the movement should only occur at the shoulder joint.",
-      "Return your arms back to the starting position as you breathe out. Make sure to use the same arc of motion used to lower the weights.",
-      "Hold for a second at the starting position and repeat the movement for the prescribed amount of repetitions."
+      "Set matching cable pulleys around upper-chest to shoulder height with a light load. Hold the handles and take a stable staggered stance.",
+      "With a gentle bend in the elbows, bring the hands forward and toward each other in an arc. Keep the trunk steady; the arms move at the shoulders.",
+      "Return slowly only as far as the shoulders comfortably allow. Do not force a deep stretch or let the cables pull you backward."
     ],
     "breathing": "Breathe continuously. Exhale during the effort and inhale during the controlled return; avoid prolonged breath-holding.",
     "mistakes": "Using excessive load, rushing the movement, or continuing when technique breaks down.",
     "safety": "Use a comfortable range and conservative load. Stop for pain or unusual symptoms. Get technique guidance for unfamiliar movements.",
     "alternatives": [],
-    "source": "Free Exercise DB, public-domain exercise descriptions (Unlicense). Community catalog, not individual clinical advice.",
+    "source": "Adapted from Free Exercise DB (Unlicense); editorial technique and metadata audit 2026-11-03. Original community record is provenance, not clinical validation.",
     "sourceUrl": "https://github.com/yuhonas/free-exercise-db/blob/main/exercises/Cable_Crossover.json",
     "tracking": "reps"
   },
@@ -101,23 +94,21 @@
     "id": "db-seated-cable-rows",
     "name": "Seated Cable Rows",
     "muscle": "Back",
-    "secondary": ["Biceps", "Back", "Shoulders"],
+    "secondary": ["Biceps", "Shoulders"],
     "category": "Compound",
     "equipment": "Gym",
     "pattern": "Pull",
     "difficulty": "Beginner",
     "instructions": [
-      "For this exercise you will need access to a low pulley row machine with a V-bar. Note: The V-bar will enable you to have a neutral grip where the palms of your hands face each other. To get into the starting position, first sit down on the machine and place your feet on the front platform or crossbar provided making sure that your knees are slightly bent and not locked.",
-      "Lean over as you keep the natural alignment of your back and grab the V-bar handles.",
-      "With your arms extended pull back until your torso is at a 90-degree angle from your legs. Your back should be slightly arched and your chest should be sticking out. You should be feeling a nice stretch on your lats as you hold the bar in front of you. This is the starting position of the exercise.",
-      "Keeping the torso stationary, pull the handles back towards your torso while keeping the arms close to it until you touch the abdominals. Breathe out as you perform that movement. At that point you should be squeezing your back muscles hard. Hold that contraction for a second and slowly go back to the original position while breathing in.",
-      "Repeat for the recommended amount of repetitions."
+      "Adjust the row machine, place feet on its supports and keep a soft knee bend. Hold the handle with a neutral spine and a comfortable upright trunk.",
+      "Pull the handle toward the lower ribs, bending the elbows without leaning backward or shrugging.",
+      "Return the arms forward under control without rounding or deliberately arching the lower back. Let the shoulder blades move naturally."
     ],
     "breathing": "Breathe continuously. Exhale during the effort and inhale during the controlled return; avoid prolonged breath-holding.",
     "mistakes": "Using excessive load, rushing the movement, or continuing when technique breaks down.",
     "safety": "Use a comfortable range and conservative load. Stop for pain or unusual symptoms. Get technique guidance for unfamiliar movements.",
     "alternatives": [],
-    "source": "Free Exercise DB, public-domain exercise descriptions (Unlicense). Community catalog, not individual clinical advice.",
+    "source": "Adapted from Free Exercise DB (Unlicense); editorial technique and metadata audit 2026-11-03. Original community record is provenance, not clinical validation.",
     "sourceUrl": "https://github.com/yuhonas/free-exercise-db/blob/main/exercises/Seated_Cable_Rows.json",
     "tracking": "reps"
   },
@@ -125,22 +116,21 @@
     "id": "db-bent-over-barbell-row",
     "name": "Bent Over Barbell Row",
     "muscle": "Back",
-    "secondary": ["Biceps", "Back", "Shoulders"],
+    "secondary": ["Biceps", "Shoulders"],
     "category": "Compound",
     "equipment": "Gym",
     "pattern": "Pull",
-    "difficulty": "Beginner",
+    "difficulty": "Intermediate",
     "instructions": [
-      "Holding a barbell with a pronated grip (palms facing down), bend your knees slightly and bring your torso forward, by bending at the waist, while keeping the back straight until it is almost parallel to the floor. Tip: Make sure that you keep the head up. The barbell should hang directly in front of you as your arms hang perpendicular to the floor and your torso. This is your starting position.",
-      "Now, while keeping the torso stationary, breathe out and lift the barbell to you. Keep the elbows close to the body and only use the forearms to hold the weight. At the top contracted position, squeeze the back muscles and hold for a brief pause.",
-      "Then inhale and slowly lower the barbell back to the starting position.",
-      "Repeat for the recommended amount of repetitions."
+      "Choose a light barbell. With feet about hip width and knees softly bent, hinge at the hips to a trunk angle you can hold. Keep the neck aligned with the trunk.",
+      "Brace gently and row the bar toward the lower ribs without jerking or changing the trunk angle.",
+      "Lower slowly. Stop if you cannot maintain a comfortable neutral spine; a supported row is an alternative."
     ],
     "breathing": "Breathe continuously. Exhale during the effort and inhale during the controlled return; avoid prolonged breath-holding.",
     "mistakes": "Using excessive load, rushing the movement, or continuing when technique breaks down.",
     "safety": "Use a comfortable range and conservative load. Stop for pain or unusual symptoms. Get technique guidance for unfamiliar movements.",
     "alternatives": [],
-    "source": "Free Exercise DB, public-domain exercise descriptions (Unlicense). Community catalog, not individual clinical advice.",
+    "source": "Adapted from Free Exercise DB (Unlicense); editorial technique and metadata audit 2026-11-03. Original community record is provenance, not clinical validation.",
     "sourceUrl": "https://github.com/yuhonas/free-exercise-db/blob/main/exercises/Bent_Over_Barbell_Row.json",
     "tracking": "reps"
   },
@@ -148,24 +138,21 @@
     "id": "db-wide-grip-lat-pulldown",
     "name": "Wide-Grip Lat Pulldown",
     "muscle": "Back",
-    "secondary": ["Biceps", "Back", "Shoulders"],
+    "secondary": ["Biceps", "Shoulders"],
     "category": "Compound",
     "equipment": "Gym",
     "pattern": "Pull",
     "difficulty": "Beginner",
     "instructions": [
-      "Sit down on a pull-down machine with a wide bar attached to the top pulley. Make sure that you adjust the knee pad of the machine to fit your height. These pads will prevent your body from being raised by the resistance attached to the bar.",
-      "Grab the bar with the palms facing forward using the prescribed grip. Note on grips: For a wide grip, your hands need to be spaced out at a distance wider than shoulder width. For a medium grip, your hands need to be spaced out at a distance equal to your shoulder width and for a close grip at a distance smaller than your shoulder width.",
-      "As you have both arms extended in front of you holding the bar at the chosen grip width, bring your torso back around 30 degrees or so while creating a curvature on your lower back and sticking your chest out. This is your starting position.",
-      "As you breathe out, bring the bar down until it touches your upper chest by drawing the shoulders and the upper arms down and back. Tip: Concentrate on squeezing the back muscles once you reach the full contracted position. The upper torso should remain stationary and only the arms should move. The forearms should do no other work except for holding the bar; therefore do not try to pull down the bar using the forearms.",
-      "After a second at the contracted position squeezing your shoulder blades together, slowly raise the bar back to the starting position when your arms are fully extended and the lats are fully stretched. Inhale during this portion of the movement.",
-      "Repeat this motion for the prescribed amount of repetitions."
+      "Adjust the seat and thigh pad so you are secure. Hold a comfortable overhand grip slightly wider than the shoulders and sit tall with only a slight, steady backward lean.",
+      "Pull the handle in front of the body toward the upper chest while bringing the elbows down. Stop at a comfortable range; touching the chest is not required.",
+      "Return slowly overhead, letting the shoulder blades move naturally. Avoid swinging, pulling behind the neck or forcing a lower-back arch."
     ],
     "breathing": "Breathe continuously. Exhale during the effort and inhale during the controlled return; avoid prolonged breath-holding.",
     "mistakes": "Using excessive load, rushing the movement, or continuing when technique breaks down.",
     "safety": "Use a comfortable range and conservative load. Stop for pain or unusual symptoms. Get technique guidance for unfamiliar movements.",
     "alternatives": [],
-    "source": "Free Exercise DB, public-domain exercise descriptions (Unlicense). Community catalog, not individual clinical advice.",
+    "source": "Adapted from Free Exercise DB (Unlicense); editorial technique and metadata audit 2026-11-03. Original community record is provenance, not clinical validation.",
     "sourceUrl": "https://github.com/yuhonas/free-exercise-db/blob/main/exercises/Wide-Grip_Lat_Pulldown.json",
     "tracking": "reps"
   },
@@ -189,7 +176,7 @@
     "mistakes": "Using excessive load, rushing the movement, or continuing when technique breaks down.",
     "safety": "Use a comfortable range and conservative load. Stop for pain or unusual symptoms. Get technique guidance for unfamiliar movements.",
     "alternatives": [],
-    "source": "Free Exercise DB, public-domain exercise descriptions (Unlicense). Community catalog, not individual clinical advice.",
+    "source": "Adapted from Free Exercise DB (Unlicense); editorial technique and metadata audit 2026-11-03. Original community record is provenance, not clinical validation.",
     "sourceUrl": "https://github.com/yuhonas/free-exercise-db/blob/main/exercises/Straight-Arm_Pulldown.json",
     "tracking": "reps"
   },
@@ -197,23 +184,21 @@
     "id": "db-pullups",
     "name": "Pullups",
     "muscle": "Back",
-    "secondary": ["Biceps", "Back"],
+    "secondary": ["Biceps"],
     "category": "Compound",
     "equipment": "Gym",
     "pattern": "Pull",
-    "difficulty": "Beginner",
+    "difficulty": "Intermediate",
     "instructions": [
-      "Grab the pull-up bar with the palms facing forward using the prescribed grip. Note on grips: For a wide grip, your hands need to be spaced out at a distance wider than your shoulder width. For a medium grip, your hands need to be spaced out at a distance equal to your shoulder width and for a close grip at a distance smaller than your shoulder width.",
-      "As you have both arms extended in front of you holding the bar at the chosen grip width, bring your torso back around 30 degrees or so while creating a curvature on your lower back and sticking your chest out. This is your starting position.",
-      "Pull your torso up until the bar touches your upper chest by drawing the shoulders and the upper arms down and back. Exhale as you perform this portion of the movement. Tip: Concentrate on squeezing the back muscles once you reach the full contracted position. The upper torso should remain stationary as it moves through space and only the arms should move. The forearms should do no other work other than hold the bar.",
-      "After a second on the contracted position, start to inhale and slowly lower your torso back to the starting position when your arms are fully extended and the lats are fully stretched.",
-      "Repeat this motion for the prescribed amount of repetitions."
+      "Use a secure, rated pull-up bar and a step to reach it safely. Choose a comfortable grip around shoulder width. This is a demanding bodyweight movement, not a beginner starting load.",
+      "From a controlled hang with comfortable shoulders, pull the body upward by bringing the elbows down. Avoid swinging or craning the neck to reach the bar.",
+      "Lower under control through a comfortable range. Stop before losing control; use a properly set assisted machine or a lat pulldown if needed."
     ],
     "breathing": "Breathe continuously. Exhale during the effort and inhale during the controlled return; avoid prolonged breath-holding.",
     "mistakes": "Using excessive load, rushing the movement, or continuing when technique breaks down.",
     "safety": "Use a comfortable range and conservative load. Stop for pain or unusual symptoms. Get technique guidance for unfamiliar movements.",
     "alternatives": [],
-    "source": "Free Exercise DB, public-domain exercise descriptions (Unlicense). Community catalog, not individual clinical advice.",
+    "source": "Adapted from Free Exercise DB (Unlicense); editorial technique and metadata audit 2026-11-03. Original community record is provenance, not clinical validation.",
     "sourceUrl": "https://github.com/yuhonas/free-exercise-db/blob/main/exercises/Pullups.json",
     "tracking": "reps"
   },
@@ -222,18 +207,20 @@
     "name": "Face Pull",
     "muscle": "Shoulders",
     "secondary": ["Back"],
-    "category": "Compound",
+    "category": "Isolation",
     "equipment": "Gym",
     "pattern": "Isolation",
     "difficulty": "Intermediate",
     "instructions": [
-      "Facing a high pulley with a rope or dual handles attached, pull the weight directly towards your face, separating your hands as you do so. Keep your upper arms parallel to the ground."
+      "Attach a rope to a secure cable pulley around face height. Select a light load and step back into a stable stance with the trunk upright.",
+      "Pull toward the face while separating the hands, keeping elbows at a comfortable height and shoulders away from the ears.",
+      "Return slowly without leaning backward. Do not force shoulder rotation or pull into pain."
     ],
     "breathing": "Breathe continuously. Exhale during the effort and inhale during the controlled return; avoid prolonged breath-holding.",
     "mistakes": "Using excessive load, rushing the movement, or continuing when technique breaks down.",
     "safety": "Use a comfortable range and conservative load. Stop for pain or unusual symptoms. Get technique guidance for unfamiliar movements.",
     "alternatives": [],
-    "source": "Free Exercise DB, public-domain exercise descriptions (Unlicense). Community catalog, not individual clinical advice.",
+    "source": "Adapted from Free Exercise DB (Unlicense); editorial technique and metadata audit 2026-11-03. Original community record is provenance, not clinical validation.",
     "sourceUrl": "https://github.com/yuhonas/free-exercise-db/blob/main/exercises/Face_Pull.json",
     "tracking": "reps"
   },
@@ -258,9 +245,10 @@
     "mistakes": "Using excessive load, rushing the movement, or continuing when technique breaks down.",
     "safety": "Use a comfortable range and conservative load. Stop for pain or unusual symptoms. Get technique guidance for unfamiliar movements.",
     "alternatives": [],
-    "source": "Free Exercise DB, public-domain exercise descriptions (Unlicense). Community catalog, not individual clinical advice.",
+    "source": "Adapted from Free Exercise DB (Unlicense); editorial technique and metadata audit 2026-11-03. Original community record is provenance, not clinical validation.",
     "sourceUrl": "https://github.com/yuhonas/free-exercise-db/blob/main/exercises/Reverse_Flyes.json",
-    "tracking": "reps"
+    "tracking": "reps",
+    "requires": ["bench"]
   },
   {
     "id": "db-dumbbell-shrug",
@@ -273,7 +261,7 @@
     "difficulty": "Beginner",
     "instructions": [
       "Stand erect with a dumbbell on each hand (palms facing your torso), arms extended on the sides.",
-      "Lift the dumbbells by elevating the shoulders as high as possible while you exhale. Hold the contraction at the top for a second. Tip: The arms should remain extended at all times. Refrain from using the biceps to help lift the dumbbells. Only the shoulders should be moving up and down.",
+      "Lift the dumbbells by elevating the shoulders through a comfortable range without rolling the shoulders while you exhale. Hold the contraction at the top for a second. Tip: The arms should remain extended at all times. Refrain from using the biceps to help lift the dumbbells. Only the shoulders should be moving up and down.",
       "Lower the dumbbells back to the original position.",
       "Repeat for the recommended amount of repetitions."
     ],
@@ -281,7 +269,7 @@
     "mistakes": "Using excessive load, rushing the movement, or continuing when technique breaks down.",
     "safety": "Use a comfortable range and conservative load. Stop for pain or unusual symptoms. Get technique guidance for unfamiliar movements.",
     "alternatives": [],
-    "source": "Free Exercise DB, public-domain exercise descriptions (Unlicense). Community catalog, not individual clinical advice.",
+    "source": "Adapted from Free Exercise DB (Unlicense); editorial technique and metadata audit 2026-11-03. Original community record is provenance, not clinical validation.",
     "sourceUrl": "https://github.com/yuhonas/free-exercise-db/blob/main/exercises/Dumbbell_Shrug.json",
     "tracking": "reps"
   },
@@ -295,17 +283,16 @@
     "pattern": "Squat",
     "difficulty": "Beginner",
     "instructions": [
-      "Using a leg press machine, sit down on the machine and place your legs on the platform directly in front of you at a medium (shoulder width) foot stance. (Note: For the purposes of this discussion we will use the medium stance described above which targets overall development; however you can choose any of the three stances described in the foot positioning section).",
-      "Lower the safety bars holding the weighted platform in place and press the platform all the way up until your legs are fully extended in front of you. Tip: Make sure that you do not lock your knees. Your torso and the legs should make a perfect 90-degree angle. This will be your starting position.",
-      "As you inhale, slowly lower the platform until your upper and lower legs make a 90-degree angle.",
-      "Pushing mainly with the heels of your feet and using the quadriceps go back to the starting position as you exhale.",
-      "Repeat for the recommended amount of repetitions and ensure to lock the safety pins properly once you are done. You do not want that platform falling on you fully loaded."
+      "Follow the machine instructions and have staff show you its stops and safety catches. Adjust the seat with the back and pelvis supported, feet around shoulder width on the platform.",
+      "Release the catch only when the platform is controlled. Bend the knees slowly within a range that keeps the heels, pelvis and back supported.",
+      "Press through the whole foot to straighten the legs without forceful knee lockout. Do not force a fixed knee angle or allow the pelvis to roll off the pad.",
+      "Re-engage and check both safety catches before leaving the machine."
     ],
     "breathing": "Breathe continuously. Exhale during the effort and inhale during the controlled return; avoid prolonged breath-holding.",
     "mistakes": "Using excessive load, rushing the movement, or continuing when technique breaks down.",
     "safety": "Use a comfortable range and conservative load. Stop for pain or unusual symptoms. Get technique guidance for unfamiliar movements.",
     "alternatives": [],
-    "source": "Free Exercise DB, public-domain exercise descriptions (Unlicense). Community catalog, not individual clinical advice.",
+    "source": "Adapted from Free Exercise DB (Unlicense); editorial technique and metadata audit 2026-11-03. Original community record is provenance, not clinical validation.",
     "sourceUrl": "https://github.com/yuhonas/free-exercise-db/blob/main/exercises/Leg_Press.json",
     "tracking": "reps"
   },
@@ -319,16 +306,15 @@
     "pattern": "Isolation",
     "difficulty": "Beginner",
     "instructions": [
-      "For this exercise you will need to use a leg extension machine. First choose your weight and sit on the machine with your legs under the pad (feet pointed forward) and the hands holding the side bars. This will be your starting position. Tip: You will need to adjust the pad so that it falls on top of your lower leg (just above your feet). Also, make sure that your legs form a 90-degree angle between the lower and upper leg. If the angle is less than 90-degrees then that means the knee is over the toes which in turn creates undue stress at the knee joint. If the machine is designed that way, either look for another machine or just make sure that when you start executing the exercise you stop going down once you hit the 90-degree angle.",
-      "Using your quadriceps, extend your legs to the maximum as you exhale. Ensure that the rest of the body remains stationary on the seat. Pause a second on the contracted position.",
-      "Slowly lower the weight back to the original position as you inhale, ensuring that you do not go past the 90-degree angle limit.",
-      "Repeat for the recommended amount of times."
+      "Adjust the machine so its pivot lines up with the knee joint, the back is supported and the lower-leg pad sits above the ankle. Follow the machine setup instructions.",
+      "With a light load, extend the knees through a comfortable range without kicking or slamming into lockout.",
+      "Lower slowly to the chosen starting position. Knee travel and starting angle depend on the person and machine; do not force a range that causes pain."
     ],
     "breathing": "Breathe continuously. Exhale during the effort and inhale during the controlled return; avoid prolonged breath-holding.",
     "mistakes": "Using excessive load, rushing the movement, or continuing when technique breaks down.",
     "safety": "Use a comfortable range and conservative load. Stop for pain or unusual symptoms. Get technique guidance for unfamiliar movements.",
     "alternatives": [],
-    "source": "Free Exercise DB, public-domain exercise descriptions (Unlicense). Community catalog, not individual clinical advice.",
+    "source": "Adapted from Free Exercise DB (Unlicense); editorial technique and metadata audit 2026-11-03. Original community record is provenance, not clinical validation.",
     "sourceUrl": "https://github.com/yuhonas/free-exercise-db/blob/main/exercises/Leg_Extensions.json",
     "tracking": "reps"
   },
@@ -342,16 +328,15 @@
     "pattern": "Isolation",
     "difficulty": "Beginner",
     "instructions": [
-      "Adjust the machine lever to fit your height and lie face down on the leg curl machine with the pad of the lever on the back of your legs (just a few inches under the calves). Tip: Preferably use a leg curl machine that is angled as opposed to flat since an angled position is more favorable for hamstrings recruitment.",
-      "Keeping the torso flat on the bench, ensure your legs are fully stretched and grab the side handles of the machine. Position your toes straight (or you can also use any of the other two stances described on the foot positioning section). This will be your starting position.",
-      "As you exhale, curl your legs up as far as possible without lifting the upper legs from the pad. Once you hit the fully contracted position, hold it for a second.",
-      "As you inhale, bring the legs back to the initial position. Repeat for the recommended amount of repetitions."
+      "Follow the specific leg-curl machine instructions. Adjust its pivot to the knee joint and place the lower-leg pad above the heels, with the body supported on the bench.",
+      "With a light load, bend the knees through a comfortable range while keeping the hips and trunk supported. Do not arch the lower back or lift the pelvis to move the load.",
+      "Lower slowly without forcing full knee extension or letting the stack slam. Stop if the knee or back hurts."
     ],
     "breathing": "Breathe continuously. Exhale during the effort and inhale during the controlled return; avoid prolonged breath-holding.",
     "mistakes": "Using excessive load, rushing the movement, or continuing when technique breaks down.",
     "safety": "Use a comfortable range and conservative load. Stop for pain or unusual symptoms. Get technique guidance for unfamiliar movements.",
     "alternatives": [],
-    "source": "Free Exercise DB, public-domain exercise descriptions (Unlicense). Community catalog, not individual clinical advice.",
+    "source": "Adapted from Free Exercise DB (Unlicense); editorial technique and metadata audit 2026-11-03. Original community record is provenance, not clinical validation.",
     "sourceUrl": "https://github.com/yuhonas/free-exercise-db/blob/main/exercises/Lying_Leg_Curls.json",
     "tracking": "reps"
   },
@@ -365,17 +350,15 @@
     "pattern": "Isolation",
     "difficulty": "Beginner",
     "instructions": [
-      "Adjust the machine lever to fit your height and sit on the machine with your back against the back support pad.",
-      "Place the back of lower leg on top of padded lever (just a few inches under the calves) and secure the lap pad against your thighs, just above the knees. Then grasp the side handles on the machine as you point your toes straight (or you can also use any of the other two stances) and ensure that the legs are fully straight right in front of you. This will be your starting position.",
-      "As you exhale, pull the machine lever as far as possible to the back of your thighs by flexing at the knees. Keep your torso stationary at all times. Hold the contracted position for a second.",
-      "Slowly return to the starting position as you breathe in.",
-      "Repeat for the recommended amount of repetitions."
+      "Follow the machine instructions. Adjust the back support and knee pivot, place the lower-leg pad above the heels and secure the thigh pad comfortably above the knees.",
+      "Keeping the trunk supported, bend the knees to pull the pad backward through a comfortable range.",
+      "Return slowly without lifting the hips, forcing the knees straight or letting the weight stack slam."
     ],
     "breathing": "Breathe continuously. Exhale during the effort and inhale during the controlled return; avoid prolonged breath-holding.",
     "mistakes": "Using excessive load, rushing the movement, or continuing when technique breaks down.",
     "safety": "Use a comfortable range and conservative load. Stop for pain or unusual symptoms. Get technique guidance for unfamiliar movements.",
     "alternatives": [],
-    "source": "Free Exercise DB, public-domain exercise descriptions (Unlicense). Community catalog, not individual clinical advice.",
+    "source": "Adapted from Free Exercise DB (Unlicense); editorial technique and metadata audit 2026-11-03. Original community record is provenance, not clinical validation.",
     "sourceUrl": "https://github.com/yuhonas/free-exercise-db/blob/main/exercises/Seated_Leg_Curl.json",
     "tracking": "reps"
   },
@@ -387,53 +370,41 @@
     "category": "Compound",
     "equipment": "Gym",
     "pattern": "Squat",
-    "difficulty": "Beginner",
+    "difficulty": "Intermediate",
     "instructions": [
-      "This exercise is best performed inside a squat rack for safety purposes. To begin, first set the bar on a rack to just below shoulder level. Once the correct height is chosen and the bar is loaded, step under the bar and place the back of your shoulders (slightly below the neck) across it.",
-      "Hold on to the bar using both arms at each side and lift it off the rack by first pushing with your legs and at the same time straightening your torso.",
-      "Step away from the rack and position your legs using a shoulder width medium stance with the toes slightly pointed out. Keep your head up at all times and also maintain a straight back. This will be your starting position. (Note: For the purposes of this discussion we will use the medium stance described above which targets overall development; however you can choose any of the three stances discussed in the foot stances section).",
-      "Begin to slowly lower the bar by bending the knees and hips as you maintain a straight posture with the head up. Continue down until the angle between the upper leg and the calves becomes slightly less than 90-degrees. Inhale as you perform this portion of the movement. Tip: If you performed the exercise correctly, the front of the knees should make an imaginary straight line with the toes that is perpendicular to the front. If your knees are past that imaginary line (if they are past your toes) then you are placing undue stress on the knee and the exercise has been performed incorrectly.",
-      "Begin to raise the bar as you exhale by pushing the floor with the heel of your foot as you straighten the legs again and go back to the starting position.",
-      "Repeat for the recommended amount of repetitions."
+      "Learn the movement with a qualified coach before adding load. Use a squat rack with safety bars set just below your controlled squat depth.",
+      "Rest the bar across the upper back, not on the neck. Grip it securely, unrack and take a small step back with feet in a comfortable stance.",
+      "Brace and bend hips and knees together, keeping heels supported and knees generally tracking the toes. Knee travel beyond the toes can be normal; depth depends on control and comfort.",
+      "Stand through the whole foot without forcing a backward lean. Rerack securely; stop before you can no longer maintain technique."
     ],
     "breathing": "Breathe continuously. Exhale during the effort and inhale during the controlled return; avoid prolonged breath-holding.",
     "mistakes": "Using excessive load, rushing the movement, or continuing when technique breaks down.",
-    "safety": "Use a comfortable range and conservative load. Stop for pain or unusual symptoms. Get technique guidance for unfamiliar movements.",
+    "safety": "Use correctly positioned rack safeties and technique coaching. Do not attempt a heavy or unfamiliar squat alone.",
     "alternatives": [],
-    "source": "Free Exercise DB, public-domain exercise descriptions (Unlicense). Community catalog, not individual clinical advice.",
+    "source": "Adapted from Free Exercise DB (Unlicense); editorial technique and metadata audit 2026-11-03. Original community record is provenance, not clinical validation.",
     "sourceUrl": "https://github.com/yuhonas/free-exercise-db/blob/main/exercises/Barbell_Squat.json",
     "tracking": "reps"
   },
   {
     "id": "db-barbell-deadlift",
     "name": "Barbell Deadlift",
-    "muscle": "Back",
-    "secondary": [
-      "Calves",
-      "Forearms",
-      "Glutes",
-      "Hamstrings",
-      "Back",
-      "Back",
-      "Quadriceps",
-      "Traps"
-    ],
+    "muscle": "Glutes",
+    "secondary": ["Hamstrings", "Quadriceps", "Back", "Forearms"],
     "category": "Compound",
     "equipment": "Gym",
     "pattern": "Hinge",
     "difficulty": "Intermediate",
     "instructions": [
-      "Stand in front of a loaded barbell.",
-      "While keeping the back as straight as possible, bend your knees, bend forward and grasp the bar using a medium (shoulder width) overhand grip. This will be the starting position of the exercise. Tip: If it is difficult to hold on to the bar with this grip, alternate your grip or use wrist straps.",
-      "While holding the bar, start the lift by pushing with your legs while simultaneously getting your torso to the upright position as you breathe out. In the upright position, stick your chest out and contract the back by bringing the shoulder blades back. Think of how the soldiers in the military look when they are in standing in attention.",
-      "Go back to the starting position by bending at the knees while simultaneously leaning the torso forward at the waist while keeping the back straight. When the weights on the bar touch the floor you are back at the starting position and ready to perform another repetition.",
-      "Perform the amount of repetitions prescribed in the program."
+      "Use a light bar set at a height you can reach with control. Stand with the bar close over the mid-foot, feet about hip width, and get coaching before unfamiliar floor lifts.",
+      "Hinge at the hips and bend the knees to grip just outside the legs. Brace the trunk, keep the bar close and the spine in a comfortable neutral position.",
+      "Push the floor away while hips and shoulders rise together. Stand tall without leaning back or shrugging.",
+      "Lower by moving hips back, then bending the knees as the bar passes them. Reset between repetitions; raise the starting height or use a simpler hinge if necessary."
     ],
     "breathing": "Breathe continuously. Exhale during the effort and inhale during the controlled return; avoid prolonged breath-holding.",
     "mistakes": "Using excessive load, rushing the movement, or continuing when technique breaks down.",
     "safety": "Use a comfortable range and conservative load. Stop for pain or unusual symptoms. Get technique guidance for unfamiliar movements.",
     "alternatives": [],
-    "source": "Free Exercise DB, public-domain exercise descriptions (Unlicense). Community catalog, not individual clinical advice.",
+    "source": "Adapted from Free Exercise DB (Unlicense); editorial technique and metadata audit 2026-11-03. Original community record is provenance, not clinical validation.",
     "sourceUrl": "https://github.com/yuhonas/free-exercise-db/blob/main/exercises/Barbell_Deadlift.json",
     "tracking": "reps"
   },
@@ -447,17 +418,15 @@
     "pattern": "Hinge",
     "difficulty": "Intermediate",
     "instructions": [
-      "Put a barbell in front of you on the ground and grab it using a pronated (palms facing down) grip that a little wider than shoulder width. Tip: Depending on the weight used, you may need wrist wraps to perform the exercise and also a raised platform in order to allow for better range of motion.",
-      "Bend the knees slightly and keep the shins vertical, hips back and back straight. This will be your starting position.",
-      "Keeping your back and arms completely straight at all times, use your hips to lift the bar as you exhale. Tip: The movement should not be fast but steady and under control.",
-      "Once you are standing completely straight up, lower the bar by pushing the hips back, only slightly bending the knees, unlike when squatting. Tip: Take a deep breath at the start of the movement and keep your chest up. Hold your breath as you lower and exhale as you complete the movement.",
-      "Repeat for the recommended amount of repetitions."
+      "Start standing with a light bar in front of the thighs, using a rack or controlled setup you have learned. Keep feet about hip width and knees softly bent.",
+      "Brace gently and move the hips backward while the bar stays near the legs. Lower only until you feel comfortable hamstring tension and can keep the spine controlled; reaching the floor is not required.",
+      "Extend the hips to stand without leaning backward. Breathe throughout; do not use a raised platform to force extra depth."
     ],
     "breathing": "Breathe continuously. Exhale during the effort and inhale during the controlled return; avoid prolonged breath-holding.",
     "mistakes": "Using excessive load, rushing the movement, or continuing when technique breaks down.",
     "safety": "Use a comfortable range and conservative load. Stop for pain or unusual symptoms. Get technique guidance for unfamiliar movements.",
     "alternatives": [],
-    "source": "Free Exercise DB, public-domain exercise descriptions (Unlicense). Community catalog, not individual clinical advice.",
+    "source": "Adapted from Free Exercise DB (Unlicense); editorial technique and metadata audit 2026-11-03. Original community record is provenance, not clinical validation.",
     "sourceUrl": "https://github.com/yuhonas/free-exercise-db/blob/main/exercises/Romanian_Deadlift.json",
     "tracking": "reps"
   },
@@ -471,40 +440,41 @@
     "pattern": "Hinge",
     "difficulty": "Intermediate",
     "instructions": [
-      "Begin seated on the ground with a bench directly behind you. Have a loaded barbell over your legs. Using a fat bar or having a pad on the bar can greatly reduce the discomfort caused by this exercise.",
-      "Roll the bar so that it is directly above your hips, and lean back against the bench so that your shoulder blades are near the top of it.",
-      "Begin the movement by driving through your feet, extending your hips vertically through the bar. Your weight should be supported by your shoulder blades and your feet. Extend as far as possible, then reverse the motion to return to the starting position."
+      "Use a stable bench that cannot slide. Position the upper back against its edge and a comfortably padded, manageable bar across the hip crease, not the abdomen.",
+      "With feet flat and knees bent, lift the hips through a controlled range until the trunk and thighs are roughly in line.",
+      "Keep ribs controlled and finish with the hips rather than arching the lower back. Lower slowly. Use an unloaded bridge if setup or control is uncertain."
     ],
     "breathing": "Breathe continuously. Exhale during the effort and inhale during the controlled return; avoid prolonged breath-holding.",
     "mistakes": "Using excessive load, rushing the movement, or continuing when technique breaks down.",
     "safety": "Use a comfortable range and conservative load. Stop for pain or unusual symptoms. Get technique guidance for unfamiliar movements.",
     "alternatives": [],
-    "source": "Free Exercise DB, public-domain exercise descriptions (Unlicense). Community catalog, not individual clinical advice.",
+    "source": "Adapted from Free Exercise DB (Unlicense); editorial technique and metadata audit 2026-11-03. Original community record is provenance, not clinical validation.",
     "sourceUrl": "https://github.com/yuhonas/free-exercise-db/blob/main/exercises/Barbell_Hip_Thrust.json",
-    "tracking": "reps"
+    "tracking": "reps",
+    "requires": ["bench"]
   },
   {
     "id": "db-glute-kickback",
     "name": "Glute Kickback",
     "muscle": "Glutes",
     "secondary": ["Hamstrings"],
-    "category": "Compound",
+    "category": "Isolation",
     "equipment": "Bodyweight",
     "pattern": "Isolation",
     "difficulty": "Beginner",
     "instructions": [
-      "Kneel on the floor or an exercise mat and bend at the waist with your arms extended in front of you (perpendicular to the torso) in order to get into a kneeling push-up position but with the arms spaced at shoulder width. Your head should be looking forward and the bend of the knees should create a 90-degree angle between the hamstrings and the calves. This will be your starting position.",
-      "As you exhale, lift up your right leg until the hamstrings are in line with the back while maintaining the 90-degree angle bend. Contract the glutes throughout this movement and hold the contraction at the top for a second. Tip: At the end of the movement the upper leg should be parallel to the floor while the calf should be perpendicular to it.",
-      "Go back to the initial position as you inhale and now repeat with the left leg.",
-      "Continue to alternate legs until all of the recommended repetitions have been performed."
+      "Start on hands and knees with hands beneath shoulders, knees beneath hips and the neck aligned with the trunk.",
+      "Keeping one knee bent, lift that thigh backward only until you can maintain a steady pelvis and comfortable spine. Do not arch the lower back to lift higher.",
+      "Lower slowly and repeat on both sides. Use a small, controlled range."
     ],
     "breathing": "Breathe continuously. Exhale during the effort and inhale during the controlled return; avoid prolonged breath-holding.",
     "mistakes": "Using excessive load, rushing the movement, or continuing when technique breaks down.",
     "safety": "Use a comfortable range and conservative load. Stop for pain or unusual symptoms. Get technique guidance for unfamiliar movements.",
     "alternatives": [],
-    "source": "Free Exercise DB, public-domain exercise descriptions (Unlicense). Community catalog, not individual clinical advice.",
+    "source": "Adapted from Free Exercise DB (Unlicense); editorial technique and metadata audit 2026-11-03. Original community record is provenance, not clinical validation.",
     "sourceUrl": "https://github.com/yuhonas/free-exercise-db/blob/main/exercises/Glute_Kickback.json",
-    "tracking": "reps"
+    "tracking": "reps",
+    "unilateral": true
   },
   {
     "id": "db-hammer-curls",
@@ -526,7 +496,7 @@
     "mistakes": "Using excessive load, rushing the movement, or continuing when technique breaks down.",
     "safety": "Use a comfortable range and conservative load. Stop for pain or unusual symptoms. Get technique guidance for unfamiliar movements.",
     "alternatives": [],
-    "source": "Free Exercise DB, public-domain exercise descriptions (Unlicense). Community catalog, not individual clinical advice.",
+    "source": "Adapted from Free Exercise DB (Unlicense); editorial technique and metadata audit 2026-11-03. Original community record is provenance, not clinical validation.",
     "sourceUrl": "https://github.com/yuhonas/free-exercise-db/blob/main/exercises/Hammer_Curls.json",
     "tracking": "reps"
   },
@@ -550,7 +520,7 @@
     "mistakes": "Using excessive load, rushing the movement, or continuing when technique breaks down.",
     "safety": "Use a comfortable range and conservative load. Stop for pain or unusual symptoms. Get technique guidance for unfamiliar movements.",
     "alternatives": [],
-    "source": "Free Exercise DB, public-domain exercise descriptions (Unlicense). Community catalog, not individual clinical advice.",
+    "source": "Adapted from Free Exercise DB (Unlicense); editorial technique and metadata audit 2026-11-03. Original community record is provenance, not clinical validation.",
     "sourceUrl": "https://github.com/yuhonas/free-exercise-db/blob/main/exercises/Barbell_Curl.json",
     "tracking": "reps"
   },
@@ -574,7 +544,7 @@
     "mistakes": "Using excessive load, rushing the movement, or continuing when technique breaks down.",
     "safety": "Use a comfortable range and conservative load. Stop for pain or unusual symptoms. Get technique guidance for unfamiliar movements.",
     "alternatives": [],
-    "source": "Free Exercise DB, public-domain exercise descriptions (Unlicense). Community catalog, not individual clinical advice.",
+    "source": "Adapted from Free Exercise DB (Unlicense); editorial technique and metadata audit 2026-11-03. Original community record is provenance, not clinical validation.",
     "sourceUrl": "https://github.com/yuhonas/free-exercise-db/blob/main/exercises/Triceps_Pushdown.json",
     "tracking": "reps"
   },
@@ -586,18 +556,17 @@
     "category": "Compound",
     "equipment": "Gym",
     "pattern": "Push",
-    "difficulty": "Beginner",
+    "difficulty": "Intermediate",
     "instructions": [
-      "To get into the starting position, hold your body at arm's length with your arms nearly locked above the bars.",
-      "Now, inhale and slowly lower yourself downward. Your torso should remain upright and your elbows should stay close to your body. This helps to better focus on tricep involvement. Lower yourself until there is a 90 degree angle formed between the upper arm and forearm.",
-      "Then, exhale and push your torso back up using your triceps to bring your body back to the starting position.",
-      "Repeat the movement for the prescribed amount of repetitions."
+      "Use secure parallel bars or a correctly adjusted assisted dip machine. This is a demanding bodyweight movement; choose a pressdown if you cannot control it.",
+      "Support yourself with elbows extended comfortably. Bend the elbows and lower only through a pain-free range; do not force the shoulders deeply behind the body.",
+      "Press upward without bouncing or slamming into lockout. Stop before control or shoulder comfort is lost."
     ],
     "breathing": "Breathe continuously. Exhale during the effort and inhale during the controlled return; avoid prolonged breath-holding.",
     "mistakes": "Using excessive load, rushing the movement, or continuing when technique breaks down.",
     "safety": "Use a comfortable range and conservative load. Stop for pain or unusual symptoms. Get technique guidance for unfamiliar movements.",
     "alternatives": [],
-    "source": "Free Exercise DB, public-domain exercise descriptions (Unlicense). Community catalog, not individual clinical advice.",
+    "source": "Adapted from Free Exercise DB (Unlicense); editorial technique and metadata audit 2026-11-03. Original community record is provenance, not clinical validation.",
     "sourceUrl": "https://github.com/yuhonas/free-exercise-db/blob/main/exercises/Dips_-_Triceps_Version.json",
     "tracking": "reps"
   },
@@ -611,18 +580,18 @@
     "pattern": "Isolation",
     "difficulty": "Beginner",
     "instructions": [
-      "Sit on the machine and place your toes on the lower portion of the platform provided with the heels extending off. Choose the toe positioning of your choice (forward, in, or out) as per the beginning of this chapter.",
+      "Follow the seated calf machine instructions. Adjust the thigh pad, support the balls of the feet securely and use a comfortable mostly forward foot position.",
       "Place your lower thighs under the lever pad, which will need to be adjusted according to the height of your thighs. Now place your hands on top of the lever pad in order to prevent it from slipping forward.",
       "Lift the lever slightly by pushing your heels up and release the safety bar. This will be your starting position.",
-      "Slowly lower your heels by bending at the ankles until the calves are fully stretched. Inhale as you perform this movement.",
-      "Raise the heels by extending the ankles as high as possible as you contract the calves and breathe out. Hold the top contraction for a second.",
+      "Slowly lower your heels by bending at the ankles only to comfortable tension. Inhale as you perform this movement.",
+      "Raise the heels by extending the ankles through a comfortable range as you contract the calves and breathe out. Hold the top contraction for a second.",
       "Repeat for the recommended amount of repetitions."
     ],
     "breathing": "Breathe continuously. Exhale during the effort and inhale during the controlled return; avoid prolonged breath-holding.",
     "mistakes": "Using excessive load, rushing the movement, or continuing when technique breaks down.",
     "safety": "Use a comfortable range and conservative load. Stop for pain or unusual symptoms. Get technique guidance for unfamiliar movements.",
     "alternatives": [],
-    "source": "Free Exercise DB, public-domain exercise descriptions (Unlicense). Community catalog, not individual clinical advice.",
+    "source": "Adapted from Free Exercise DB (Unlicense); editorial technique and metadata audit 2026-11-03. Original community record is provenance, not clinical validation.",
     "sourceUrl": "https://github.com/yuhonas/free-exercise-db/blob/main/exercises/Seated_Calf_Raise.json",
     "tracking": "reps"
   },
@@ -637,16 +606,16 @@
     "difficulty": "Beginner",
     "instructions": [
       "Adjust the padded lever of the calf raise machine to fit your height.",
-      "Place your shoulders under the pads provided and position your toes facing forward (or using any of the two other positions described at the beginning of the chapter). The balls of your feet should be secured on top of the calf block with the heels extending off it. Push the lever up by extending your hips and knees until your torso is standing erect. The knees should be kept with a slight bend; never locked. Toes should be facing forward, outwards or inwards as described at the beginning of the chapter. This will be your starting position.",
-      "Raise your heels as you breathe out by extending your ankles as high as possible and flexing your calf. Ensure that the knee is kept stationary at all times. There should be no bending at any time. Hold the contracted position by a second before you start to go back down.",
-      "Go back slowly to the starting position as you breathe in by lowering your heels as you bend the ankles until calves are stretched.",
+      "Place shoulders comfortably under the pads with the balls of both feet securely supported. Keep knees softly extended and feet in a comfortable mostly forward position; learn the release/catch mechanism before loading.",
+      "Raise your heels as you breathe out by extending your ankles through a comfortable range and flexing your calf. Ensure that the knee is kept stationary at all times. There should be no bending at any time. Hold the contracted position by a second before you start to go back down.",
+      "Go back slowly to the starting position as you breathe in by lowering your heels as you bend the ankles only to comfortable tension.",
       "Repeat for the recommended amount of repetitions."
     ],
     "breathing": "Breathe continuously. Exhale during the effort and inhale during the controlled return; avoid prolonged breath-holding.",
     "mistakes": "Using excessive load, rushing the movement, or continuing when technique breaks down.",
     "safety": "Use a comfortable range and conservative load. Stop for pain or unusual symptoms. Get technique guidance for unfamiliar movements.",
     "alternatives": [],
-    "source": "Free Exercise DB, public-domain exercise descriptions (Unlicense). Community catalog, not individual clinical advice.",
+    "source": "Adapted from Free Exercise DB (Unlicense); editorial technique and metadata audit 2026-11-03. Original community record is provenance, not clinical validation.",
     "sourceUrl": "https://github.com/yuhonas/free-exercise-db/blob/main/exercises/Standing_Calf_Raises.json",
     "tracking": "reps"
   },
@@ -660,18 +629,15 @@
     "pattern": "Core",
     "difficulty": "Beginner",
     "instructions": [
-      "Lie flat on your back with your feet flat on the ground, or resting on a bench with your knees bent at a 90 degree angle. If you are resting your feet on a bench, place them three to four inches apart and point your toes inward so they touch.",
-      "Now place your hands lightly on either side of your head keeping your elbows in. Tip: Don't lock your fingers behind your head.",
-      "While pushing the small of your back down in the floor to better isolate your abdominal muscles, begin to roll your shoulders off the floor.",
-      "Continue to push down as hard as you can with your lower back as you contract your abdominals and exhale. Your shoulders should come up off the floor only about four inches, and your lower back should remain on the floor. At the top of the movement, contract your abdominals hard and keep the contraction for a second. Tip: Focus on slow, controlled movement - don't cheat yourself by using momentum.",
-      "After the one second contraction, begin to come down slowly again to the starting position as you inhale.",
-      "Repeat for the recommended amount of repetitions."
+      "Lie on the back with knees bent and feet comfortably supported on the floor. Rest hands across the chest or lightly beside the head without pulling on the neck.",
+      "Exhale and gently lift the head and shoulders a short distance, keeping the neck aligned and lower back comfortably supported.",
+      "Lower slowly while inhaling. Do not push the back down as hard as possible or use momentum; stop if the neck or back hurts."
     ],
     "breathing": "Breathe continuously. Exhale during the effort and inhale during the controlled return; avoid prolonged breath-holding.",
     "mistakes": "Using excessive load, rushing the movement, or continuing when technique breaks down.",
     "safety": "Use a comfortable range and conservative load. Stop for pain or unusual symptoms. Get technique guidance for unfamiliar movements.",
     "alternatives": [],
-    "source": "Free Exercise DB, public-domain exercise descriptions (Unlicense). Community catalog, not individual clinical advice.",
+    "source": "Adapted from Free Exercise DB (Unlicense); editorial technique and metadata audit 2026-11-03. Original community record is provenance, not clinical validation.",
     "sourceUrl": "https://github.com/yuhonas/free-exercise-db/blob/main/exercises/Crunches.json",
     "tracking": "reps"
   },
@@ -683,20 +649,17 @@
     "category": "Isolation",
     "equipment": "Gym",
     "pattern": "Core",
-    "difficulty": "Beginner",
+    "difficulty": "Intermediate",
     "instructions": [
-      "Kneel below a high pulley that contains a rope attachment.",
-      "Grasp cable rope attachment and lower the rope until your hands are placed next to your face.",
-      "Flex your hips slightly and allow the weight to hyperextend the lower back. This will be your starting position.",
-      "With the hips stationary, flex the waist as you contract the abs so that the elbows travel towards the middle of the thighs. Exhale as you perform this portion of the movement and hold the contraction for a second.",
-      "Slowly return to the starting position as you inhale. Tip: Make sure that you keep constant tension on the abs throughout the movement. Also, do not choose a weight so heavy that the lower back handles the brunt of the work.",
-      "Repeat for the recommended amount of repetitions."
+      "Kneel on a padded surface below a high cable pulley with a rope attachment and a light load. Hold the rope near the sides of the head.",
+      "Start with a controlled neutral spine. Gently curl the ribs toward the pelvis while the hips remain fairly steady; the hands only hold the rope.",
+      "Return slowly to neutral. Do not allow the weight to pull the lower back into hyperextension or force the elbows to reach the thighs."
     ],
     "breathing": "Breathe continuously. Exhale during the effort and inhale during the controlled return; avoid prolonged breath-holding.",
     "mistakes": "Using excessive load, rushing the movement, or continuing when technique breaks down.",
     "safety": "Use a comfortable range and conservative load. Stop for pain or unusual symptoms. Get technique guidance for unfamiliar movements.",
     "alternatives": [],
-    "source": "Free Exercise DB, public-domain exercise descriptions (Unlicense). Community catalog, not individual clinical advice.",
+    "source": "Adapted from Free Exercise DB (Unlicense); editorial technique and metadata audit 2026-11-03. Original community record is provenance, not clinical validation.",
     "sourceUrl": "https://github.com/yuhonas/free-exercise-db/blob/main/exercises/Cable_Crunch.json",
     "tracking": "reps"
   },
@@ -708,20 +671,20 @@
     "category": "Isolation",
     "equipment": "Gym",
     "pattern": "Core",
-    "difficulty": "Beginner",
+    "difficulty": "Intermediate",
     "instructions": [
-      "Lie with your back flat on a bench and your legs extended in front of you off the end.",
-      "Place your hands either under your glutes with your palms down or by the sides holding on to the bench. This will be your starting position.",
-      "As you keep your legs extended, straight as possible with your knees slightly bent but locked raise your legs until they make a 90-degree angle with the floor. Exhale as you perform this portion of the movement and hold the contraction at the top for a second.",
-      "Now, as you inhale, slowly lower your legs back down to the starting position."
+      "Lie on a stable flat bench with hands holding the sides. Start with knees bent enough to maintain comfortable control of the trunk and pelvis.",
+      "Raise the legs slowly through a range that does not cause the lower back to arch or hurt.",
+      "Lower only as far as you can keep control. Do not force straight legs or a deep lowering range; use a bent-knee floor exercise if needed."
     ],
     "breathing": "Breathe continuously. Exhale during the effort and inhale during the controlled return; avoid prolonged breath-holding.",
     "mistakes": "Using excessive load, rushing the movement, or continuing when technique breaks down.",
     "safety": "Use a comfortable range and conservative load. Stop for pain or unusual symptoms. Get technique guidance for unfamiliar movements.",
     "alternatives": [],
-    "source": "Free Exercise DB, public-domain exercise descriptions (Unlicense). Community catalog, not individual clinical advice.",
+    "source": "Adapted from Free Exercise DB (Unlicense); editorial technique and metadata audit 2026-11-03. Original community record is provenance, not clinical validation.",
     "sourceUrl": "https://github.com/yuhonas/free-exercise-db/blob/main/exercises/Flat_Bench_Lying_Leg_Raise.json",
-    "tracking": "reps"
+    "tracking": "reps",
+    "requires": ["bench"]
   },
   {
     "id": "db-palms-up-dumbbell-wrist-curl-over-a-bench",
@@ -745,9 +708,10 @@
     "mistakes": "Using excessive load, rushing the movement, or continuing when technique breaks down.",
     "safety": "Use a comfortable range and conservative load. Stop for pain or unusual symptoms. Get technique guidance for unfamiliar movements.",
     "alternatives": [],
-    "source": "Free Exercise DB, public-domain exercise descriptions (Unlicense). Community catalog, not individual clinical advice.",
+    "source": "Adapted from Free Exercise DB (Unlicense); editorial technique and metadata audit 2026-11-03. Original community record is provenance, not clinical validation.",
     "sourceUrl": "https://github.com/yuhonas/free-exercise-db/blob/main/exercises/Palms-Up_Dumbbell_Wrist_Curl_Over_A_Bench.json",
-    "tracking": "reps"
+    "tracking": "reps",
+    "requires": ["bench"]
   },
   {
     "id": "db-seated-dumbbell-palms-down-wrist-curl",
@@ -771,9 +735,10 @@
     "mistakes": "Using excessive load, rushing the movement, or continuing when technique breaks down.",
     "safety": "Use a comfortable range and conservative load. Stop for pain or unusual symptoms. Get technique guidance for unfamiliar movements.",
     "alternatives": [],
-    "source": "Free Exercise DB, public-domain exercise descriptions (Unlicense). Community catalog, not individual clinical advice.",
+    "source": "Adapted from Free Exercise DB (Unlicense); editorial technique and metadata audit 2026-11-03. Original community record is provenance, not clinical validation.",
     "sourceUrl": "https://github.com/yuhonas/free-exercise-db/blob/main/exercises/Seated_Dumbbell_Palms-Down_Wrist_Curl.json",
-    "tracking": "reps"
+    "tracking": "reps",
+    "requires": ["bench"]
   },
   {
     "id": "db-band-pull-apart",
@@ -792,9 +757,9 @@
     ],
     "breathing": "Breathe continuously. Exhale during the effort and inhale during the controlled return; avoid prolonged breath-holding.",
     "mistakes": "Using excessive load, rushing the movement, or continuing when technique breaks down.",
-    "safety": "Use a comfortable range and conservative load. Stop for pain or unusual symptoms. Get technique guidance for unfamiliar movements.",
+    "safety": "Inspect the band and attachment before each use. Use only manufacturer-approved anchors and stretch limits; keep the face out of the recoil path. Stop if the band slips, is damaged or causes pain.",
     "alternatives": [],
-    "source": "Free Exercise DB, public-domain exercise descriptions (Unlicense). Community catalog, not individual clinical advice.",
+    "source": "Adapted from Free Exercise DB (Unlicense); editorial technique and metadata audit 2026-11-03. Original community record is provenance, not clinical validation.",
     "sourceUrl": "https://github.com/yuhonas/free-exercise-db/blob/main/exercises/Band_Pull_Apart.json",
     "tracking": "reps"
   },
@@ -806,42 +771,43 @@
     "category": "Compound",
     "equipment": "Bands",
     "pattern": "Hinge",
-    "difficulty": "Beginner",
+    "difficulty": "Intermediate",
     "instructions": [
-      "Using a 41 inch band, stand on one end, spreading your feet a small amount. Bend at the hips to loop the end of the band behind your neck. This will be your starting position.",
-      "Keeping your legs straight, extend through the hips to come to a near vertical position.",
-      "Ensure that you do not round your back as you go down back to the starting position."
+      "This band setup needs in-person instruction. Use an intact loop band under both feet, supported across the upper back/shoulders and held securely with the hands; do not load the neck.",
+      "Keep knees softly bent and hinge the hips backward while maintaining a controlled trunk.",
+      "Extend the hips to stand. Stop before the band approaches its stretch limit or control is lost; an unloaded hip hinge is a simpler alternative."
     ],
     "breathing": "Breathe continuously. Exhale during the effort and inhale during the controlled return; avoid prolonged breath-holding.",
     "mistakes": "Using excessive load, rushing the movement, or continuing when technique breaks down.",
-    "safety": "Use a comfortable range and conservative load. Stop for pain or unusual symptoms. Get technique guidance for unfamiliar movements.",
+    "safety": "Inspect the band and attachment before each use. Use only manufacturer-approved anchors and stretch limits; keep the face out of the recoil path. Stop if the band slips, is damaged or causes pain.",
     "alternatives": [],
-    "source": "Free Exercise DB, public-domain exercise descriptions (Unlicense). Community catalog, not individual clinical advice.",
+    "source": "Adapted from Free Exercise DB (Unlicense); editorial technique and metadata audit 2026-11-03. Original community record is provenance, not clinical validation.",
     "sourceUrl": "https://github.com/yuhonas/free-exercise-db/blob/main/exercises/Band_Good_Morning.json",
-    "tracking": "reps"
+    "tracking": "reps",
+    "automatic": false
   },
   {
     "id": "db-hip-extension-with-bands",
     "name": "Hip Extension with Bands",
     "muscle": "Glutes",
     "secondary": ["Hamstrings"],
-    "category": "Compound",
+    "category": "Isolation",
     "equipment": "Bands",
     "pattern": "Isolation",
     "difficulty": "Beginner",
     "instructions": [
-      "Secure one end of the band to the lower portion of a post and attach the other to one ankle.",
-      "Facing the attachment point of the band, hold on to the column to stabilize yourself.",
-      "Keeping your head and your chest up, move the resisted leg back as far as you can while keeping the knee straight.",
-      "Return the leg to the starting position."
+      "Inspect the band and use a rated low anchor and secure ankle cuff as instructed by the manufacturer. Face the anchor and use stable hand support.",
+      "Keeping the pelvis steady and the working knee softly bent, move the leg a short distance backward against the band.",
+      "Return slowly without leaning forward or arching the lower back. Work both sides."
     ],
     "breathing": "Breathe continuously. Exhale during the effort and inhale during the controlled return; avoid prolonged breath-holding.",
     "mistakes": "Using excessive load, rushing the movement, or continuing when technique breaks down.",
-    "safety": "Use a comfortable range and conservative load. Stop for pain or unusual symptoms. Get technique guidance for unfamiliar movements.",
+    "safety": "Inspect the band and attachment before each use. Use only manufacturer-approved anchors and stretch limits; keep the face out of the recoil path. Stop if the band slips, is damaged or causes pain.",
     "alternatives": [],
-    "source": "Free Exercise DB, public-domain exercise descriptions (Unlicense). Community catalog, not individual clinical advice.",
+    "source": "Adapted from Free Exercise DB (Unlicense); editorial technique and metadata audit 2026-11-03. Original community record is provenance, not clinical validation.",
     "sourceUrl": "https://github.com/yuhonas/free-exercise-db/blob/main/exercises/Hip_Extension_with_Bands.json",
-    "tracking": "reps"
+    "tracking": "reps",
+    "requires": ["anchor"]
   },
   {
     "id": "db-lateral-raise---with-bands",
@@ -853,16 +819,15 @@
     "pattern": "Isolation",
     "difficulty": "Beginner",
     "instructions": [
-      "To begin, stand on an exercise band so that tension begins at arm's length. Grasp the handles using a pronated (palms facing your thighs) grip that is slightly less than shoulder width. The handles should be resting on the sides of your thighs. Your arms should be extended with a slight bend at the elbows and your back should be straight. This will be your starting position.",
-      "Use your side shoulders to lift the handles to the sides as you exhale. Continue to lift the handles until they are slightly above parallel. Tip: As you lift the handles, slightly tilt the hand as if you were pouring water and keep your arms extended. Also, keep your torso stationary and pause for a second at the top of the movement.",
-      "Lower the handles back down slowly to the starting position. Inhale as you perform this portion of the movement.",
-      "Repeat for the recommended amount of repetitions."
+      "Stand securely on the centre of an intact band as the manufacturer permits, holding its handles with light tension at the sides.",
+      "With elbows softly bent, raise the arms to the sides or slightly forward only to a comfortable height near shoulder level. Keep wrists neutral; do not deliberately tip the thumbs down.",
+      "Lower slowly without shrugging or swinging. Stay below the band stretch limit."
     ],
     "breathing": "Breathe continuously. Exhale during the effort and inhale during the controlled return; avoid prolonged breath-holding.",
     "mistakes": "Using excessive load, rushing the movement, or continuing when technique breaks down.",
-    "safety": "Use a comfortable range and conservative load. Stop for pain or unusual symptoms. Get technique guidance for unfamiliar movements.",
+    "safety": "Inspect the band and attachment before each use. Use only manufacturer-approved anchors and stretch limits; keep the face out of the recoil path. Stop if the band slips, is damaged or causes pain.",
     "alternatives": [],
-    "source": "Free Exercise DB, public-domain exercise descriptions (Unlicense). Community catalog, not individual clinical advice.",
+    "source": "Adapted from Free Exercise DB (Unlicense); editorial technique and metadata audit 2026-11-03. Original community record is provenance, not clinical validation.",
     "sourceUrl": "https://github.com/yuhonas/free-exercise-db/blob/main/exercises/Lateral_Raise_-_With_Bands.json",
     "tracking": "reps"
   },
@@ -876,15 +841,15 @@
     "pattern": "Push",
     "difficulty": "Beginner",
     "instructions": [
-      "To begin, stand on an exercise band so that tension begins at arm's length. Grasp the handles and lift them so that the hands are at shoulder height at each side.",
-      "Rotate the wrists so that the palms of your hands are facing forward. Your elbows should be bent, with the upper arms and forearms in line to the torso. This is your starting position.",
-      "As you exhale, lift the handles up until your arms are fully extended overhead."
+      "Stand securely on an intact band as instructed by its manufacturer. Hold the handles near the shoulders with wrists over the forearms and light starting tension.",
+      "Press upward through a comfortable range without arching the lower back or forcefully locking the elbows.",
+      "Lower under control to shoulder height. Do not exceed the band stretch limit; use a different press if the overhead position is uncomfortable."
     ],
     "breathing": "Breathe continuously. Exhale during the effort and inhale during the controlled return; avoid prolonged breath-holding.",
     "mistakes": "Using excessive load, rushing the movement, or continuing when technique breaks down.",
-    "safety": "Use a comfortable range and conservative load. Stop for pain or unusual symptoms. Get technique guidance for unfamiliar movements.",
+    "safety": "Inspect the band and attachment before each use. Use only manufacturer-approved anchors and stretch limits; keep the face out of the recoil path. Stop if the band slips, is damaged or causes pain.",
     "alternatives": [],
-    "source": "Free Exercise DB, public-domain exercise descriptions (Unlicense). Community catalog, not individual clinical advice.",
+    "source": "Adapted from Free Exercise DB (Unlicense); editorial technique and metadata audit 2026-11-03. Original community record is provenance, not clinical validation.",
     "sourceUrl": "https://github.com/yuhonas/free-exercise-db/blob/main/exercises/Shoulder_Press_-_With_Bands.json",
     "tracking": "reps"
   },
@@ -898,17 +863,15 @@
     "pattern": "Squat",
     "difficulty": "Beginner",
     "instructions": [
-      "To start out, make sure that the exercise band is at an even split between both the left and right side of the body. To do this, use your hands to grab both sides of the band and place both feet in the middle of the band. Your feet should be shoulder width apart from each other.",
-      "When holding the bands, they should be the same height on each side. You should be using a pronated grip (palms facing forward) and have the handles of the bands next to your face for this exercise. This is the starting position.",
-      "Slowly start to bend the knees and lower the legs so that your thighs are parallel to the floor while exhaling.",
-      "Use the heel of your feet to push your body up to the starting position as you exhale.",
-      "Repeat for the recommended amount of repetitions."
+      "Stand on the centre of an intact band with feet in a comfortable stance, holding the handles near the shoulders. Check footing and the band stretch limit.",
+      "Bend hips and knees together, keeping heels supported and knees generally following the toes. Lower only through a range you can control.",
+      "Exhale while standing through the whole foot, then lower under control for the next repetition. Do not bounce or force a fixed depth."
     ],
     "breathing": "Breathe continuously. Exhale during the effort and inhale during the controlled return; avoid prolonged breath-holding.",
     "mistakes": "Using excessive load, rushing the movement, or continuing when technique breaks down.",
-    "safety": "Use a comfortable range and conservative load. Stop for pain or unusual symptoms. Get technique guidance for unfamiliar movements.",
+    "safety": "Inspect the band and attachment before each use. Use only manufacturer-approved anchors and stretch limits; keep the face out of the recoil path. Stop if the band slips, is damaged or causes pain.",
     "alternatives": [],
-    "source": "Free Exercise DB, public-domain exercise descriptions (Unlicense). Community catalog, not individual clinical advice.",
+    "source": "Adapted from Free Exercise DB (Unlicense); editorial technique and metadata audit 2026-11-03. Original community record is provenance, not clinical validation.",
     "sourceUrl": "https://github.com/yuhonas/free-exercise-db/blob/main/exercises/Squats_-_With_Bands.json",
     "tracking": "reps"
   },
@@ -920,18 +883,17 @@
     "category": "Compound",
     "equipment": "Bodyweight",
     "pattern": "Push",
-    "difficulty": "Beginner",
+    "difficulty": "Intermediate",
     "instructions": [
-      "With your hands wide apart, support your body on your toes and hands in a plank position. Your elbows should be extended and your body straight. Do not allow your hips to sag. This will be your starting position.",
-      "To begin, allow the elbows to flex, lowering your chest to the floor as you inhale.",
-      "Using your pectoral muscles, press your upper body back up to the starting position by extending the elbows. Exhale as you perform this step.",
-      "After pausing at the contracted position, repeat the movement for the prescribed amount of repetitions."
+      "Place hands around shoulder width or slightly wider on the floor, with feet or knees supported. Choose a spacing comfortable for your shoulders rather than a fixed distance.",
+      "Keep the head, trunk and hips aligned. Bend the elbows at a comfortable angle to the body, lowering only as far as you can control without pain.",
+      "Press away without sagging the hips or forcing the elbows straight. Use a wall or incline push-up if needed."
     ],
     "breathing": "Breathe continuously. Exhale during the effort and inhale during the controlled return; avoid prolonged breath-holding.",
     "mistakes": "Using excessive load, rushing the movement, or continuing when technique breaks down.",
     "safety": "Use a comfortable range and conservative load. Stop for pain or unusual symptoms. Get technique guidance for unfamiliar movements.",
     "alternatives": [],
-    "source": "Free Exercise DB, public-domain exercise descriptions (Unlicense). Community catalog, not individual clinical advice.",
+    "source": "Adapted from Free Exercise DB (Unlicense); editorial technique and metadata audit 2026-11-03. Original community record is provenance, not clinical validation.",
     "sourceUrl": "https://github.com/yuhonas/free-exercise-db/blob/main/exercises/Push-Up_Wide.json",
     "tracking": "reps"
   },
@@ -943,21 +905,20 @@
     "category": "Compound",
     "equipment": "Bodyweight",
     "pattern": "Push",
-    "difficulty": "Beginner",
+    "difficulty": "Intermediate",
     "instructions": [
-      "Lie on the floor face down and place your hands about 36 inches apart from each other holding your torso up at arms length.",
-      "Place your toes on top of a flat bench. This will allow your body to be elevated. Note: The higher the elevation of the flat bench, the higher the resistance of the exercise is.",
-      "Lower yourself until your chest almost touches the floor as you inhale.",
-      "Using your pectoral muscles, press your upper body back up to the starting position and squeeze your chest. Breathe out as you perform this step.",
-      "After a second pause at the contracted position, repeat the movement for the prescribed amount of repetitions."
+      "Use a stable exercise bench for the feet and place hands on the floor around shoulder width or slightly wider. Try this only after controlling regular push-ups.",
+      "Keep the head, trunk and hips aligned. Bend the elbows at a comfortable angle to the body, lowering only as far as you can control without pain.",
+      "Press away without sagging the hips or forcing the elbows straight. Use a wall or incline push-up if needed."
     ],
     "breathing": "Breathe continuously. Exhale during the effort and inhale during the controlled return; avoid prolonged breath-holding.",
     "mistakes": "Using excessive load, rushing the movement, or continuing when technique breaks down.",
     "safety": "Use a comfortable range and conservative load. Stop for pain or unusual symptoms. Get technique guidance for unfamiliar movements.",
     "alternatives": [],
-    "source": "Free Exercise DB, public-domain exercise descriptions (Unlicense). Community catalog, not individual clinical advice.",
+    "source": "Adapted from Free Exercise DB (Unlicense); editorial technique and metadata audit 2026-11-03. Original community record is provenance, not clinical validation.",
     "sourceUrl": "https://github.com/yuhonas/free-exercise-db/blob/main/exercises/Push-Ups_With_Feet_Elevated.json",
-    "tracking": "reps"
+    "tracking": "reps",
+    "requires": ["bench"]
   },
   {
     "id": "db-dumbbell-rear-lunge",
@@ -969,18 +930,18 @@
     "pattern": "Squat",
     "difficulty": "Intermediate",
     "instructions": [
-      "Stand with your torso upright holding two dumbbells in your hands by your sides. This will be your starting position.",
-      "Step backward with your right leg around two feet or so from the left foot and lower your upper body down, while keeping the torso upright and maintaining balance. Inhale as you go down. Tip: As in the other exercises, do not allow your knee to go forward beyond your toes as you come down, as this will put undue stress on the knee joint. Make sure that you keep your front shin perpendicular to the ground. Keep the torso upright during the lunge; flexible hip flexors are important. A long lunge emphasizes the Gluteus Maximus; a short lunge emphasizes Quadriceps.",
-      "Push up and go back to the starting position as you exhale. Tip: Use the ball of your feet to push in order to accentuate the quadriceps. To focus on the glutes, press with your heels.",
-      "Now repeat with the opposite leg."
+      "Hold light dumbbells at your sides and stand with feet about hip width. Practice an unloaded supported lunge first if balance is uncertain.",
+      "Step backward a distance that allows balance, then bend hips and knees through a comfortable range. Keep the front heel supported and the knee generally aligned with the toes; some forward knee travel can be normal.",
+      "Push through the front foot to return to standing without bouncing. Repeat the target repetitions on each side."
     ],
     "breathing": "Breathe continuously. Exhale during the effort and inhale during the controlled return; avoid prolonged breath-holding.",
     "mistakes": "Using excessive load, rushing the movement, or continuing when technique breaks down.",
     "safety": "Use a comfortable range and conservative load. Stop for pain or unusual symptoms. Get technique guidance for unfamiliar movements.",
     "alternatives": [],
-    "source": "Free Exercise DB, public-domain exercise descriptions (Unlicense). Community catalog, not individual clinical advice.",
+    "source": "Adapted from Free Exercise DB (Unlicense); editorial technique and metadata audit 2026-11-03. Original community record is provenance, not clinical validation.",
     "sourceUrl": "https://github.com/yuhonas/free-exercise-db/blob/main/exercises/Dumbbell_Rear_Lunge.json",
-    "tracking": "reps"
+    "tracking": "reps",
+    "unilateral": true
   },
   {
     "id": "db-arnold-dumbbell-press",
@@ -1002,9 +963,10 @@
     "mistakes": "Rushing, using momentum, or forcing a range or load that you cannot control.",
     "safety": "Use a comfortable, pain-free range and conservative effort. Check required supports/equipment and stop for unusual symptoms.",
     "alternatives": [],
-    "source": "Free Exercise DB (Unlicense), adapted reference descriptions. Community catalog; not individual clinical guidance.",
+    "source": "Adapted from Free Exercise DB (Unlicense); editorial technique and metadata audit 2026-11-03. Original community record is provenance, not clinical validation.",
     "sourceUrl": "https://github.com/yuhonas/free-exercise-db/blob/main/exercises/Arnold_Dumbbell_Press.json",
-    "tracking": "reps"
+    "tracking": "reps",
+    "requires": ["bench"]
   },
   {
     "id": "db-dumbbell-bench-press-with-neutral-grip",
@@ -1025,29 +987,30 @@
     "mistakes": "Rushing, using momentum, or forcing a range or load that you cannot control.",
     "safety": "Use a comfortable, pain-free range and conservative effort. Check required supports/equipment and stop for unusual symptoms.",
     "alternatives": [],
-    "source": "Free Exercise DB (Unlicense), adapted reference descriptions. Community catalog; not individual clinical guidance.",
+    "source": "Adapted from Free Exercise DB (Unlicense); editorial technique and metadata audit 2026-11-03. Original community record is provenance, not clinical validation.",
     "sourceUrl": "https://github.com/yuhonas/free-exercise-db/blob/main/exercises/Dumbbell_Bench_Press_with_Neutral_Grip.json",
-    "tracking": "reps"
+    "tracking": "reps",
+    "requires": ["bench"]
   },
   {
     "id": "db-dumbbell-floor-press",
     "name": "Dumbbell Floor Press",
-    "muscle": "Triceps",
-    "secondary": ["Chest", "Shoulders"],
+    "muscle": "Chest",
+    "secondary": ["Triceps", "Shoulders"],
     "category": "Compound",
     "equipment": "Dumbbells",
     "pattern": "Push",
-    "difficulty": "Intermediate",
+    "difficulty": "Beginner",
     "instructions": [
-      "Lay on the floor holding dumbbells in your hands. Your knees can be bent. Begin with the weights fully extended above you.",
-      "Lower the weights until your upper arm comes in contact with the floor. You can tuck your elbows to emphasize triceps size and strength, or to focus on your chest angle your arms to the side.",
-      "Pause at the bottom, and then bring the weight together at the top by extending through the elbows."
+      "Choose dumbbells light enough to position and put down under control. Lie on the floor with knees bent, holding the weights above the chest and wrists aligned with the forearms.",
+      "Lower slowly with elbows at a comfortable angle to the torso until upper arms gently contact the floor. Do not bounce.",
+      "Press upward without slamming the elbows into lockout. Finish with a controlled setup reversal or assistance."
     ],
     "breathing": "Breathe normally throughout the movement; avoid prolonged breath-holding.",
     "mistakes": "Rushing, using momentum, or forcing a range or load that you cannot control.",
     "safety": "Use a comfortable, pain-free range and conservative effort. Check required supports/equipment and stop for unusual symptoms.",
     "alternatives": [],
-    "source": "Free Exercise DB (Unlicense), adapted reference descriptions. Community catalog; not individual clinical guidance.",
+    "source": "Adapted from Free Exercise DB (Unlicense); editorial technique and metadata audit 2026-11-03. Original community record is provenance, not clinical validation.",
     "sourceUrl": "https://github.com/yuhonas/free-exercise-db/blob/main/exercises/Dumbbell_Floor_Press.json",
     "tracking": "reps"
   },
@@ -1055,7 +1018,7 @@
     "id": "db-dumbbell-incline-row",
     "name": "Dumbbell Incline Row",
     "muscle": "Back",
-    "secondary": ["Biceps", "Forearms", "Back", "Shoulders"],
+    "secondary": ["Biceps", "Forearms", "Shoulders"],
     "category": "Compound",
     "equipment": "Dumbbells",
     "pattern": "Pull",
@@ -1070,30 +1033,30 @@
     "mistakes": "Rushing, using momentum, or forcing a range or load that you cannot control.",
     "safety": "Use a comfortable, pain-free range and conservative effort. Check required supports/equipment and stop for unusual symptoms.",
     "alternatives": [],
-    "source": "Free Exercise DB (Unlicense), adapted reference descriptions. Community catalog; not individual clinical guidance.",
+    "source": "Adapted from Free Exercise DB (Unlicense); editorial technique and metadata audit 2026-11-03. Original community record is provenance, not clinical validation.",
     "sourceUrl": "https://github.com/yuhonas/free-exercise-db/blob/main/exercises/Dumbbell_Incline_Row.json",
-    "tracking": "reps"
+    "tracking": "reps",
+    "requires": ["bench"]
   },
   {
     "id": "db-bent-over-two-dumbbell-row",
     "name": "Bent Over Two-Dumbbell Row",
     "muscle": "Back",
-    "secondary": ["Biceps", "Back", "Shoulders"],
+    "secondary": ["Biceps", "Shoulders"],
     "category": "Compound",
     "equipment": "Dumbbells",
     "pattern": "Pull",
     "difficulty": "Beginner",
     "instructions": [
-      "With a dumbbell in each hand (palms facing your torso), bend your knees slightly and bring your torso forward by bending at the waist; as you bend make sure to keep your back straight until it is almost parallel to the floor. Tip: Make sure that you keep the head up. The weights should hang directly in front of you as your arms hang perpendicular to the floor and your torso. This is your starting position.",
-      "While keeping the torso stationary, lift the dumbbells to your side (as you breathe out), keeping the elbows close to the body (do not exert any force with the forearm other than holding the weights). On the top contracted position, squeeze the back muscles and hold for a second.",
-      "Slowly lower the weight again to the starting position as you inhale.",
-      "Repeat for the recommended amount of repetitions."
+      "Hold light dumbbells, bend the knees softly and hinge at the hips to a position you can maintain. Keep the neck aligned with the trunk and the spine comfortably neutral.",
+      "Row the weights toward the lower ribs while keeping the trunk steady and shoulders away from the ears.",
+      "Lower slowly. Do not swing, jerk or lift the chin; use a supported version if you cannot maintain position."
     ],
     "breathing": "Breathe normally throughout the movement; avoid prolonged breath-holding.",
     "mistakes": "Rushing, using momentum, or forcing a range or load that you cannot control.",
     "safety": "Use a comfortable, pain-free range and conservative effort. Check required supports/equipment and stop for unusual symptoms.",
     "alternatives": [],
-    "source": "Free Exercise DB (Unlicense), adapted reference descriptions. Community catalog; not individual clinical guidance.",
+    "source": "Adapted from Free Exercise DB (Unlicense); editorial technique and metadata audit 2026-11-03. Original community record is provenance, not clinical validation.",
     "sourceUrl": "https://github.com/yuhonas/free-exercise-db/blob/main/exercises/Bent_Over_Two-Dumbbell_Row.json",
     "tracking": "reps"
   },
@@ -1105,20 +1068,20 @@
     "category": "Compound",
     "equipment": "Dumbbells",
     "pattern": "Squat",
-    "difficulty": "Beginner",
+    "difficulty": "Intermediate",
     "instructions": [
-      "Stand with your torso upright holding two dumbbells in your hands by your sides. This will be your starting position.",
-      "Step forward with your right leg around 2 feet or so from the foot being left stationary behind and lower your upper body down, while keeping the torso upright and maintaining balance. Inhale as you go down. Note: As in the other exercises, do not allow your knee to go forward beyond your toes as you come down, as this will put undue stress on the knee joint. Make sure that you keep your front shin perpendicular to the ground.",
-      "Using mainly the heel of your foot, push up and go back to the starting position as you exhale.",
-      "Repeat the movement for the recommended amount of repetitions and then perform with the left leg."
+      "Hold light dumbbells at your sides and stand with feet about hip width. Practice an unloaded supported lunge first if balance is uncertain.",
+      "Step forward a distance that allows balance, then bend hips and knees through a comfortable range. Keep the front heel supported and the knee generally aligned with the toes; some forward knee travel can be normal.",
+      "Push through the front foot to return to standing without bouncing. Repeat the target repetitions on each side."
     ],
     "breathing": "Breathe normally throughout the movement; avoid prolonged breath-holding.",
     "mistakes": "Rushing, using momentum, or forcing a range or load that you cannot control.",
     "safety": "Use a comfortable, pain-free range and conservative effort. Check required supports/equipment and stop for unusual symptoms.",
     "alternatives": [],
-    "source": "Free Exercise DB (Unlicense), adapted reference descriptions. Community catalog; not individual clinical guidance.",
+    "source": "Adapted from Free Exercise DB (Unlicense); editorial technique and metadata audit 2026-11-03. Original community record is provenance, not clinical validation.",
     "sourceUrl": "https://github.com/yuhonas/free-exercise-db/blob/main/exercises/Dumbbell_Lunges.json",
-    "tracking": "reps"
+    "tracking": "reps",
+    "unilateral": true
   },
   {
     "id": "db-dumbbell-squat",
@@ -1130,42 +1093,41 @@
     "pattern": "Squat",
     "difficulty": "Beginner",
     "instructions": [
-      "Stand up straight while holding a dumbbell on each hand (palms facing the side of your legs).",
-      "Position your legs using a shoulder width medium stance with the toes slightly pointed out. Keep your head up at all times as looking down will get you off balance and also maintain a straight back. This will be your starting position. Note: For the purposes of this discussion we will use the medium stance described above which targets overall development; however you can choose any of the three stances discussed in the foot stances section.",
-      "Begin to slowly lower your torso by bending the knees as you maintain a straight posture with the head up. Continue down until your thighs are parallel to the floor. Tip: If you performed the exercise correctly, the front of the knees should make an imaginary straight line with the toes that is perpendicular to the front. If your knees are past that imaginary line (if they are past your toes) then you are placing undue stress on the knee and the exercise has been performed incorrectly.",
-      "Begin to raise your torso as you exhale by pushing the floor with the heel of your foot mainly as you straighten the legs again and go back to the starting position.",
-      "Repeat for the recommended amount of repetitions."
+      "Stand with light dumbbells by your sides, feet in a comfortable stance and the neck aligned with the trunk.",
+      "Bend hips and knees together, keeping heels supported and knees generally tracking the toes. Lower to a depth you can control; knee travel beyond the toes can be normal.",
+      "Stand through the whole foot without bouncing or leaning backward. Practice the unloaded squat first if needed."
     ],
     "breathing": "Breathe normally throughout the movement; avoid prolonged breath-holding.",
     "mistakes": "Rushing, using momentum, or forcing a range or load that you cannot control.",
     "safety": "Use a comfortable, pain-free range and conservative effort. Check required supports/equipment and stop for unusual symptoms.",
     "alternatives": [],
-    "source": "Free Exercise DB (Unlicense), adapted reference descriptions. Community catalog; not individual clinical guidance.",
+    "source": "Adapted from Free Exercise DB (Unlicense); editorial technique and metadata audit 2026-11-03. Original community record is provenance, not clinical validation.",
     "sourceUrl": "https://github.com/yuhonas/free-exercise-db/blob/main/exercises/Dumbbell_Squat.json",
     "tracking": "reps"
   },
   {
     "id": "db-split-squat-with-dumbbells",
-    "name": "Split Squat with Dumbbells",
+    "name": "Rear-foot-elevated dumbbell split squat",
     "muscle": "Quadriceps",
     "secondary": ["Glutes", "Hamstrings"],
     "category": "Compound",
     "equipment": "Dumbbells",
     "pattern": "Squat",
-    "difficulty": "Beginner",
+    "difficulty": "Intermediate",
     "instructions": [
-      "Position yourself into a staggered stance with the rear foot elevated and front foot forward.",
-      "Hold a dumbbell in each hand, letting them hang at the sides. This will be your starting position.",
-      "Begin by descending, flexing your knee and hip to lower your body down. Maintain good posture througout the movement. Keep the front knee in line with the foot as you perform the exercise.",
-      "At the bottom of the movement, drive through the heel to extend the knee and hip to return to the starting position."
+      "Place the rear foot on a stable exercise bench or low platform, with the front foot far enough forward to allow a controlled split squat. Start unloaded and use stable hand support until balance is reliable.",
+      "If adding dumbbells, choose light loads. Bend the front hip and knee, lowering only as far as you can maintain balance and a comfortable trunk position.",
+      "Push through the front foot to stand. Complete the target repetitions on each side; a floor-level supported split squat is an easier alternative."
     ],
     "breathing": "Breathe normally throughout the movement; avoid prolonged breath-holding.",
     "mistakes": "Rushing, using momentum, or forcing a range or load that you cannot control.",
     "safety": "Use a comfortable, pain-free range and conservative effort. Check required supports/equipment and stop for unusual symptoms.",
     "alternatives": [],
-    "source": "Free Exercise DB (Unlicense), adapted reference descriptions. Community catalog; not individual clinical guidance.",
+    "source": "Adapted from Free Exercise DB (Unlicense); editorial technique and metadata audit 2026-11-03. Original community record is provenance, not clinical validation.",
     "sourceUrl": "https://github.com/yuhonas/free-exercise-db/blob/main/exercises/Split_Squat_with_Dumbbells.json",
-    "tracking": "reps"
+    "tracking": "reps",
+    "requires": ["bench"],
+    "unilateral": true
   },
   {
     "id": "db-dumbbell-step-ups",
@@ -1186,9 +1148,11 @@
     "mistakes": "Rushing, using momentum, or forcing a range or load that you cannot control.",
     "safety": "Use a comfortable, pain-free range and conservative effort. Check required supports/equipment and stop for unusual symptoms.",
     "alternatives": [],
-    "source": "Free Exercise DB (Unlicense), adapted reference descriptions. Community catalog; not individual clinical guidance.",
+    "source": "Adapted from Free Exercise DB (Unlicense); editorial technique and metadata audit 2026-11-03. Original community record is provenance, not clinical validation.",
     "sourceUrl": "https://github.com/yuhonas/free-exercise-db/blob/main/exercises/Dumbbell_Step_Ups.json",
-    "tracking": "reps"
+    "tracking": "reps",
+    "requires": ["step"],
+    "unilateral": true
   },
   {
     "id": "db-standing-dumbbell-calf-raise",
@@ -1200,16 +1164,15 @@
     "pattern": "Isolation",
     "difficulty": "Intermediate",
     "instructions": [
-      "Stand with your torso upright holding two dumbbells in your hands by your sides. Place the ball of the foot on a sturdy and stable wooden board (that is around 2-3 inches tall) while your heels extend off and touch the floor. This will be your starting position.",
-      "With the toes pointing either straight (to hit all parts equally), inwards (for emphasis on the outer head) or outwards (for emphasis on the inner head), raise the heels off the floor as you exhale by contracting the calves. Hold the top contraction for a second.",
-      "As you inhale, go back to the starting position by slowly lowering the heels.",
-      "Repeat for the recommended amount of times."
+      "Stand on a level floor near stable hand support. Hold a light dumbbell only if you can maintain balance; feet face a comfortable, mostly forward direction.",
+      "Rise onto the balls of the feet through a controlled range without rolling the ankles or bouncing.",
+      "Lower heels slowly to the floor. You do not need a board or block to begin."
     ],
     "breathing": "Breathe normally throughout the movement; avoid prolonged breath-holding.",
     "mistakes": "Rushing, using momentum, or forcing a range or load that you cannot control.",
     "safety": "Use a comfortable, pain-free range and conservative effort. Check required supports/equipment and stop for unusual symptoms.",
     "alternatives": [],
-    "source": "Free Exercise DB (Unlicense), adapted reference descriptions. Community catalog; not individual clinical guidance.",
+    "source": "Adapted from Free Exercise DB (Unlicense); editorial technique and metadata audit 2026-11-03. Original community record is provenance, not clinical validation.",
     "sourceUrl": "https://github.com/yuhonas/free-exercise-db/blob/main/exercises/Standing_Dumbbell_Calf_Raise.json",
     "tracking": "reps"
   },
@@ -1223,20 +1186,19 @@
     "pattern": "Isolation",
     "difficulty": "Beginner",
     "instructions": [
-      "Place a block on the floor about 12 inches from a flat bench.",
-      "Sit on a flat bench and place a dumbbell on your upper left thigh about 3 inches above your knee.",
-      "Now place the ball of your left foot on the block. This will be your starting position.",
-      "Raise your toes up as high as possible as you exhale and you contract your calf muscle. Hold the contraction for a second.",
-      "Slowly return to the starting position, stretching as far down as possible.",
-      "Repeat for your prescribed number of repetitions and then repeat with the right leg."
+      "Sit on a stable exercise bench with one foot flat on the floor. Hold a light dumbbell securely on the lower thigh above the knee, using padding if needed.",
+      "Raise the heel so the ball of the foot stays planted; the heel, not the toes, rises.",
+      "Lower slowly to the floor without forcing a stretch. Complete both sides."
     ],
     "breathing": "Breathe normally throughout the movement; avoid prolonged breath-holding.",
     "mistakes": "Rushing, using momentum, or forcing a range or load that you cannot control.",
     "safety": "Use a comfortable, pain-free range and conservative effort. Check required supports/equipment and stop for unusual symptoms.",
     "alternatives": [],
-    "source": "Free Exercise DB (Unlicense), adapted reference descriptions. Community catalog; not individual clinical guidance.",
+    "source": "Adapted from Free Exercise DB (Unlicense); editorial technique and metadata audit 2026-11-03. Original community record is provenance, not clinical validation.",
     "sourceUrl": "https://github.com/yuhonas/free-exercise-db/blob/main/exercises/Dumbbell_Seated_One-Leg_Calf_Raise.json",
-    "tracking": "reps"
+    "tracking": "reps",
+    "requires": ["bench"],
+    "unilateral": true
   },
   {
     "id": "db-dumbbell-scaption",
@@ -1248,15 +1210,15 @@
     "pattern": "Isolation",
     "difficulty": "Beginner",
     "instructions": [
-      "This corrective exercise strengthens the muscles that stabilize your shoulder blade. Hold a light weight in each hand, hanging at your sides. Your thumbs should pointing up.",
-      "Begin the movement raising your arms out in front of you, about 30 degrees off center. Your arms should be fully extended as you perform the movement.",
-      "Continue until your arms are parallel to the ground, and then return to the starting position."
+      "Stand tall with very light dumbbells at the sides and thumbs pointing upward.",
+      "With elbows softly bent, raise the arms slightly forward of directly out to the sides, only to a comfortable height near shoulder level.",
+      "Lower slowly without shrugging or forcing the range. This is a strength exercise, not a diagnosis or a guaranteed correction for shoulder problems."
     ],
     "breathing": "Breathe normally throughout the movement; avoid prolonged breath-holding.",
     "mistakes": "Rushing, using momentum, or forcing a range or load that you cannot control.",
     "safety": "Use a comfortable, pain-free range and conservative effort. Check required supports/equipment and stop for unusual symptoms.",
     "alternatives": [],
-    "source": "Free Exercise DB (Unlicense), adapted reference descriptions. Community catalog; not individual clinical guidance.",
+    "source": "Adapted from Free Exercise DB (Unlicense); editorial technique and metadata audit 2026-11-03. Original community record is provenance, not clinical validation.",
     "sourceUrl": "https://github.com/yuhonas/free-exercise-db/blob/main/exercises/Dumbbell_Scaption.json",
     "tracking": "reps"
   },
@@ -1270,18 +1232,18 @@
     "pattern": "Isolation",
     "difficulty": "Beginner",
     "instructions": [
-      "Pick a couple of dumbbells and stand with a straight torso and the dumbbells on front of your thighs at arms length with the palms of the hand facing your thighs. This will be your starting position.",
-      "While maintaining the torso stationary (no swinging), lift the left dumbbell to the front with a slight bend on the elbow and the palms of the hands always facing down. Continue to go up until you arm is slightly above parallel to the floor. Exhale as you execute this portion of the movement and pause for a second at the top. Inhale after the second pause.",
-      "Now lower the dumbbell back down slowly to the starting position as you simultaneously lift the right dumbbell.",
-      "Continue alternating in this fashion until all of the recommended amount of repetitions have been performed for each arm."
+      "Stand with light dumbbells in front of the thighs, a soft elbow bend and a steady trunk.",
+      "Raise one arm forward to a comfortable height no higher than shoulder level, without leaning backward or shrugging.",
+      "Lower under control before lifting the other arm. Complete the target repetitions on each side."
     ],
     "breathing": "Breathe normally throughout the movement; avoid prolonged breath-holding.",
     "mistakes": "Rushing, using momentum, or forcing a range or load that you cannot control.",
     "safety": "Use a comfortable, pain-free range and conservative effort. Check required supports/equipment and stop for unusual symptoms.",
     "alternatives": [],
-    "source": "Free Exercise DB (Unlicense), adapted reference descriptions. Community catalog; not individual clinical guidance.",
+    "source": "Adapted from Free Exercise DB (Unlicense); editorial technique and metadata audit 2026-11-03. Original community record is provenance, not clinical validation.",
     "sourceUrl": "https://github.com/yuhonas/free-exercise-db/blob/main/exercises/Front_Dumbbell_Raise.json",
-    "tracking": "reps"
+    "tracking": "reps",
+    "unilateral": true
   },
   {
     "id": "db-tricep-dumbbell-kickback",
@@ -1293,16 +1255,15 @@
     "pattern": "Isolation",
     "difficulty": "Beginner",
     "instructions": [
-      "Start with a dumbbell in each hand and your palms facing your torso. Keep your back straight with a slight bend in the knees and bend forward at the waist. Your torso should be almost parallel to the floor. Make sure to keep your head up. Your upper arms should be close to your torso and parallel to the floor. Your forearms should be pointed towards the floor as you hold the weights. There should be a 90-degree angle formed between your forearm and upper arm. This is your starting position.",
-      "Now, while keeping your upper arms stationary, exhale and use your triceps to lift the weights until the arm is fully extended. Focus on moving the forearm.",
-      "After a brief pause at the top contraction, inhale and slowly lower the dumbbells back down to the starting position.",
-      "Repeat the movement for the prescribed amount of repetitions."
+      "Hinge at the hips with softly bent knees, holding light dumbbells. Keep the neck aligned with the trunk and the upper arms beside the body.",
+      "Keeping the upper arms still, extend the elbows without swinging or forcing lockout.",
+      "Return slowly. Use a supported alternative if holding the trunk position is uncomfortable."
     ],
     "breathing": "Breathe normally throughout the movement; avoid prolonged breath-holding.",
     "mistakes": "Rushing, using momentum, or forcing a range or load that you cannot control.",
     "safety": "Use a comfortable, pain-free range and conservative effort. Check required supports/equipment and stop for unusual symptoms.",
     "alternatives": [],
-    "source": "Free Exercise DB (Unlicense), adapted reference descriptions. Community catalog; not individual clinical guidance.",
+    "source": "Adapted from Free Exercise DB (Unlicense); editorial technique and metadata audit 2026-11-03. Original community record is provenance, not clinical validation.",
     "sourceUrl": "https://github.com/yuhonas/free-exercise-db/blob/main/exercises/Tricep_Dumbbell_Kickback.json",
     "tracking": "reps"
   },
@@ -1314,19 +1275,17 @@
     "category": "Isolation",
     "equipment": "Dumbbells",
     "pattern": "Isolation",
-    "difficulty": "Beginner",
+    "difficulty": "Intermediate",
     "instructions": [
-      "To begin, stand up with a dumbbell held by both hands. Your feet should be about shoulder width apart from each other. Slowly use both hands to grab the dumbbell and lift it over your head until both arms are fully extended.",
-      "The resistance should be resting in the palms of your hands with your thumbs around it. The palm of the hands should be facing up towards the ceiling. This will be your starting position.",
-      "Keeping your upper arms close to your head with elbows in and perpendicular to the floor, lower the resistance in a semicircular motion behind your head until your forearms touch your biceps. Tip: The upper arms should remain stationary and only the forearms should move. Breathe in as you perform this step.",
-      "Go back to the starting position by using the triceps to raise the dumbbell. Breathe out as you perform this step.",
-      "Repeat for the recommended amount of repetitions."
+      "Use a light dumbbell held securely in both hands. Stand with a stable stance and position the weight overhead only if your shoulders are comfortable there.",
+      "Keep the ribs controlled and bend the elbows to lower the weight behind the head through a comfortable range. Do not force the forearms to touch the upper arms.",
+      "Extend the elbows without arching the back or forcing lockout. Put the weight down under control; choose a pressdown if the overhead position is unsuitable."
     ],
     "breathing": "Breathe normally throughout the movement; avoid prolonged breath-holding.",
     "mistakes": "Rushing, using momentum, or forcing a range or load that you cannot control.",
     "safety": "Use a comfortable, pain-free range and conservative effort. Check required supports/equipment and stop for unusual symptoms.",
     "alternatives": [],
-    "source": "Free Exercise DB (Unlicense), adapted reference descriptions. Community catalog; not individual clinical guidance.",
+    "source": "Adapted from Free Exercise DB (Unlicense); editorial technique and metadata audit 2026-11-03. Original community record is provenance, not clinical validation.",
     "sourceUrl": "https://github.com/yuhonas/free-exercise-db/blob/main/exercises/Standing_Dumbbell_Triceps_Extension.json",
     "tracking": "reps"
   },
@@ -1350,9 +1309,10 @@
     "mistakes": "Rushing, using momentum, or forcing a range or load that you cannot control.",
     "safety": "Use a comfortable, pain-free range and conservative effort. Check required supports/equipment and stop for unusual symptoms.",
     "alternatives": [],
-    "source": "Free Exercise DB (Unlicense), adapted reference descriptions. Community catalog; not individual clinical guidance.",
+    "source": "Adapted from Free Exercise DB (Unlicense); editorial technique and metadata audit 2026-11-03. Original community record is provenance, not clinical validation.",
     "sourceUrl": "https://github.com/yuhonas/free-exercise-db/blob/main/exercises/Seated_Dumbbell_Curl.json",
-    "tracking": "reps"
+    "tracking": "reps",
+    "requires": ["bench"]
   },
   {
     "id": "db-incline-dumbbell-curl",
@@ -1373,9 +1333,10 @@
     "mistakes": "Rushing, using momentum, or forcing a range or load that you cannot control.",
     "safety": "Use a comfortable, pain-free range and conservative effort. Check required supports/equipment and stop for unusual symptoms.",
     "alternatives": [],
-    "source": "Free Exercise DB (Unlicense), adapted reference descriptions. Community catalog; not individual clinical guidance.",
+    "source": "Adapted from Free Exercise DB (Unlicense); editorial technique and metadata audit 2026-11-03. Original community record is provenance, not clinical validation.",
     "sourceUrl": "https://github.com/yuhonas/free-exercise-db/blob/main/exercises/Incline_Dumbbell_Curl.json",
-    "tracking": "reps"
+    "tracking": "reps",
+    "requires": ["bench"]
   },
   {
     "id": "db-machine-bench-press",
@@ -1387,19 +1348,15 @@
     "pattern": "Push",
     "difficulty": "Beginner",
     "instructions": [
-      "Sit down on the Chest Press Machine and select the weight.",
-      "Step on the lever provided by the machine since it will help you to bring the handles forward so that you can grab the handles and fully extend the arms.",
-      "Grab the handles with a palms-down grip and lift your elbows so that your upper arms are parallel to the floor to the sides of your torso. Tip: Your forearms will be pointing forward since you are grabbing the handles. Once you bring the handles forward and extend the arms you will be at the starting position.",
-      "Now bring the handles back towards you as you breathe in.",
-      "Push the handles away from you as you flex your pecs and you breathe out. Hold the contraction for a second before going back to the starting position.",
-      "Repeat for the recommended amount of reps.",
-      "When finished step on the lever again and slowly get the handles back to their original place."
+      "Follow the specific machine instructions. Adjust the seat so handles are near mid-chest level, with back and feet supported, and choose a light load.",
+      "Grip the handles with wrists aligned and elbows at a comfortable angle to the torso. Press forward without forcefully locking the elbows.",
+      "Return slowly to a comfortable starting range without lifting the shoulders or letting the weight stack slam. Use any start/finish lever only as instructed."
     ],
     "breathing": "Breathe normally throughout the movement; avoid prolonged breath-holding.",
     "mistakes": "Rushing, using momentum, or forcing a range or load that you cannot control.",
     "safety": "Use a comfortable, pain-free range and conservative effort. Check required supports/equipment and stop for unusual symptoms.",
     "alternatives": [],
-    "source": "Free Exercise DB (Unlicense), adapted reference descriptions. Community catalog; not individual clinical guidance.",
+    "source": "Adapted from Free Exercise DB (Unlicense); editorial technique and metadata audit 2026-11-03. Original community record is provenance, not clinical validation.",
     "sourceUrl": "https://github.com/yuhonas/free-exercise-db/blob/main/exercises/Machine_Bench_Press.json",
     "tracking": "reps"
   },
@@ -1423,7 +1380,7 @@
     "mistakes": "Rushing, using momentum, or forcing a range or load that you cannot control.",
     "safety": "Use a comfortable, pain-free range and conservative effort. Check required supports/equipment and stop for unusual symptoms.",
     "alternatives": [],
-    "source": "Free Exercise DB (Unlicense), adapted reference descriptions. Community catalog; not individual clinical guidance.",
+    "source": "Adapted from Free Exercise DB (Unlicense); editorial technique and metadata audit 2026-11-03. Original community record is provenance, not clinical validation.",
     "sourceUrl": "https://github.com/yuhonas/free-exercise-db/blob/main/exercises/Machine_Shoulder_Military_Press.json",
     "tracking": "reps"
   },
@@ -1446,7 +1403,7 @@
     "mistakes": "Rushing, using momentum, or forcing a range or load that you cannot control.",
     "safety": "Use a comfortable, pain-free range and conservative effort. Check required supports/equipment and stop for unusual symptoms.",
     "alternatives": [],
-    "source": "Free Exercise DB (Unlicense), adapted reference descriptions. Community catalog; not individual clinical guidance.",
+    "source": "Adapted from Free Exercise DB (Unlicense); editorial technique and metadata audit 2026-11-03. Original community record is provenance, not clinical validation.",
     "sourceUrl": "https://github.com/yuhonas/free-exercise-db/blob/main/exercises/Machine_Bicep_Curl.json",
     "tracking": "reps"
   },
@@ -1469,7 +1426,7 @@
     "mistakes": "Rushing, using momentum, or forcing a range or load that you cannot control.",
     "safety": "Use a comfortable, pain-free range and conservative effort. Check required supports/equipment and stop for unusual symptoms.",
     "alternatives": [],
-    "source": "Free Exercise DB (Unlicense), adapted reference descriptions. Community catalog; not individual clinical guidance.",
+    "source": "Adapted from Free Exercise DB (Unlicense); editorial technique and metadata audit 2026-11-03. Original community record is provenance, not clinical validation.",
     "sourceUrl": "https://github.com/yuhonas/free-exercise-db/blob/main/exercises/Machine_Triceps_Extension.json",
     "tracking": "reps"
   },
@@ -1492,7 +1449,7 @@
     "mistakes": "Rushing, using momentum, or forcing a range or load that you cannot control.",
     "safety": "Use a comfortable, pain-free range and conservative effort. Check required supports/equipment and stop for unusual symptoms.",
     "alternatives": [],
-    "source": "Free Exercise DB (Unlicense), adapted reference descriptions. Community catalog; not individual clinical guidance.",
+    "source": "Adapted from Free Exercise DB (Unlicense); editorial technique and metadata audit 2026-11-03. Original community record is provenance, not clinical validation.",
     "sourceUrl": "https://github.com/yuhonas/free-exercise-db/blob/main/exercises/Reverse_Machine_Flyes.json",
     "tracking": "reps"
   },
@@ -1516,7 +1473,7 @@
     "mistakes": "Rushing, using momentum, or forcing a range or load that you cannot control.",
     "safety": "Use a comfortable, pain-free range and conservative effort. Check required supports/equipment and stop for unusual symptoms.",
     "alternatives": [],
-    "source": "Free Exercise DB (Unlicense), adapted reference descriptions. Community catalog; not individual clinical guidance.",
+    "source": "Adapted from Free Exercise DB (Unlicense); editorial technique and metadata audit 2026-11-03. Original community record is provenance, not clinical validation.",
     "sourceUrl": "https://github.com/yuhonas/free-exercise-db/blob/main/exercises/Dip_Machine.json",
     "tracking": "reps"
   },
@@ -1528,44 +1485,40 @@
     "category": "Isolation",
     "equipment": "Gym",
     "pattern": "Isolation",
-    "difficulty": "Beginner",
+    "difficulty": "Intermediate",
     "instructions": [
-      "Using a leg press machine, sit down on the machine and place your legs on the platform directly in front of you at a medium (shoulder width) foot stance.",
-      "Lower the safety bars holding the weighted platform in place and press the platform all the way up until your legs are fully extended in front of you without locking your knees. (Note: In some leg press units you can leave the safety bars on for increased safety. If your leg press unit allows for this, then this is the preferred method of performing the exercise.) Your torso and the legs should make perfect 90-degree angle. Now carefully place your toes and balls of your feet on the lower portion of the platform with the heels extending off. Toes should be facing forward, outwards or inwards as described at the beginning of the chapter. This will be your starting position.",
-      "Press on the platform by raising your heels as you breathe out by extending your ankles as high as possible and flexing your calf. Ensure that the knee is kept stationary at all times. There should be no bending at any time. Hold the contracted position by a second before you start to go back down.",
-      "Go back slowly to the starting position as you breathe in by lowering your heels as you bend the ankles until calves are stretched.",
-      "Repeat for the recommended amount of repetitions."
+      "Use this variation only on a leg-press machine whose manufacturer permits calf presses, with staff instruction and functional safety catches.",
+      "Keep the pelvis supported, knees softly extended and the balls of both feet securely on the platform. Never reposition the feet under an uncontrolled load.",
+      "Move only through a small, controlled ankle range, raising and lowering the heels without bouncing or letting the feet slip. Re-engage the catches before leaving."
     ],
     "breathing": "Breathe normally throughout the movement; avoid prolonged breath-holding.",
     "mistakes": "Rushing, using momentum, or forcing a range or load that you cannot control.",
-    "safety": "Use a comfortable, pain-free range and conservative effort. Check required supports/equipment and stop for unusual symptoms.",
+    "safety": "Library reference only. Machine compatibility and safety catches must be confirmed by staff. A supported floor calf raise is a simpler alternative.",
     "alternatives": [],
-    "source": "Free Exercise DB (Unlicense), adapted reference descriptions. Community catalog; not individual clinical guidance.",
+    "source": "Adapted from Free Exercise DB (Unlicense); editorial technique and metadata audit 2026-11-03. Original community record is provenance, not clinical validation.",
     "sourceUrl": "https://github.com/yuhonas/free-exercise-db/blob/main/exercises/Calf_Press_On_The_Leg_Press_Machine.json",
-    "tracking": "reps"
+    "tracking": "reps",
+    "automatic": false
   },
   {
     "id": "db-close-grip-front-lat-pulldown",
     "name": "Close-Grip Front Lat Pulldown",
     "muscle": "Back",
-    "secondary": ["Biceps", "Back", "Shoulders"],
+    "secondary": ["Biceps", "Shoulders"],
     "category": "Compound",
     "equipment": "Gym",
     "pattern": "Pull",
     "difficulty": "Beginner",
     "instructions": [
-      "Sit down on a pull-down machine with a wide bar attached to the top pulley. Make sure that you adjust the knee pad of the machine to fit your height. These pads will prevent your body from being raised by the resistance attached to the bar.",
-      "Grab the bar with the palms facing forward using the prescribed grip. Note on grips: For a wide grip, your hands need to be spaced out at a distance wider than your shoulder width. For a medium grip, your hands need to be spaced out at a distance equal to your shoulder width and for a close grip at a distance smaller than your shoulder width.",
-      "As you have both arms extended in front of you - while holding the bar at the chosen grip width - bring your torso back around 30 degrees or so while creating a curvature on your lower back and sticking your chest out. This is your starting position.",
-      "As you breathe out, bring the bar down until it touches your upper chest by drawing the shoulders and the upper arms down and back. Tip: Concentrate on squeezing the back muscles once you reach the full contracted position. The upper torso should remain stationary (only the arms should move). The forearms should do no other work except for holding the bar; therefore do not try to pull the bar down using the forearms.",
-      "After a second in the contracted position, while squeezing your shoulder blades together, slowly raise the bar back to the starting position when your arms are fully extended and the lats are fully stretched. Inhale during this portion of the movement.",
-      "6. Repeat this motion for the prescribed amount of repetitions."
+      "Adjust the seat and thigh pad so you are secure. Hold a comfortable overhand grip around shoulder width and sit tall with only a slight, steady backward lean.",
+      "Pull the handle in front of the body toward the upper chest while bringing the elbows down. Stop at a comfortable range; touching the chest is not required.",
+      "Return slowly overhead, letting the shoulder blades move naturally. Avoid swinging, pulling behind the neck or forcing a lower-back arch."
     ],
     "breathing": "Breathe normally throughout the movement; avoid prolonged breath-holding.",
     "mistakes": "Rushing, using momentum, or forcing a range or load that you cannot control.",
     "safety": "Use a comfortable, pain-free range and conservative effort. Check required supports/equipment and stop for unusual symptoms.",
     "alternatives": [],
-    "source": "Free Exercise DB (Unlicense), adapted reference descriptions. Community catalog; not individual clinical guidance.",
+    "source": "Adapted from Free Exercise DB (Unlicense); editorial technique and metadata audit 2026-11-03. Original community record is provenance, not clinical validation.",
     "sourceUrl": "https://github.com/yuhonas/free-exercise-db/blob/main/exercises/Close-Grip_Front_Lat_Pulldown.json",
     "tracking": "reps"
   },
@@ -1573,24 +1526,21 @@
     "id": "db-underhand-cable-pulldowns",
     "name": "Underhand Cable Pulldowns",
     "muscle": "Back",
-    "secondary": ["Biceps", "Back", "Shoulders"],
+    "secondary": ["Biceps", "Shoulders"],
     "category": "Compound",
     "equipment": "Gym",
     "pattern": "Pull",
     "difficulty": "Beginner",
     "instructions": [
-      "Sit down on a pull-down machine with a wide bar attached to the top pulley. Adjust the knee pad of the machine to fit your height. These pads will prevent your body from being raised by the resistance attached to the bar.",
-      "Grab the pull-down bar with the palms facing your torso (a supinated grip). Make sure that the hands are placed closer than the shoulder width.",
-      "As you have both arms extended in front of you holding the bar at the chosen grip width, bring your torso back around 30 degrees or so while creating a curvature on your lower back and sticking your chest out. This is your starting position.",
-      "As you breathe out, pull the bar down until it touches your upper chest by drawing the shoulders and the upper arms down and back. Tip: Concentrate on squeezing the back muscles once you reach the fully contracted position and keep the elbows close to your body. The upper torso should remain stationary as your bring the bar to you and only the arms should move. The forearms should do no other work other than hold the bar.",
-      "After a second on the contracted position, while breathing in, slowly bring the bar back to the starting position when your arms are fully extended and the lats are fully stretched.",
-      "Repeat this motion for the prescribed amount of repetitions."
+      "Adjust the seat and thigh pad so you are secure. Hold an underhand grip around shoulder width and sit tall with only a slight, steady backward lean.",
+      "Pull the handle in front of the body toward the upper chest while bringing the elbows down. Stop at a comfortable range; touching the chest is not required.",
+      "Return slowly overhead, letting the shoulder blades move naturally. Avoid swinging, pulling behind the neck or forcing a lower-back arch."
     ],
     "breathing": "Breathe normally throughout the movement; avoid prolonged breath-holding.",
     "mistakes": "Rushing, using momentum, or forcing a range or load that you cannot control.",
     "safety": "Use a comfortable, pain-free range and conservative effort. Check required supports/equipment and stop for unusual symptoms.",
     "alternatives": [],
-    "source": "Free Exercise DB (Unlicense), adapted reference descriptions. Community catalog; not individual clinical guidance.",
+    "source": "Adapted from Free Exercise DB (Unlicense); editorial technique and metadata audit 2026-11-03. Original community record is provenance, not clinical validation.",
     "sourceUrl": "https://github.com/yuhonas/free-exercise-db/blob/main/exercises/Underhand_Cable_Pulldowns.json",
     "tracking": "reps"
   },
@@ -1598,24 +1548,21 @@
     "id": "db-v-bar-pulldown",
     "name": "V-Bar Pulldown",
     "muscle": "Back",
-    "secondary": ["Biceps", "Back", "Shoulders"],
+    "secondary": ["Biceps", "Shoulders"],
     "category": "Compound",
     "equipment": "Gym",
     "pattern": "Pull",
     "difficulty": "Intermediate",
     "instructions": [
-      "Sit down on a pull-down machine with a V-Bar attached to the top pulley.",
-      "Adjust the knee pad of the machine to fit your height. These pads will prevent your body from being raised by the resistance attached to the bar.",
-      "Grab the V-bar with the palms facing each other (a neutral grip). Stick your chest out and lean yourself back slightly (around 30-degrees) in order to better engage the lats. This will be your starting position.",
-      "Using your lats, pull the bar down as you squeeze your shoulder blades. Continue until your chest nearly touches the V-bar. Exhale as you execute this motion. Tip: Keep the torso stationary throughout the movement.",
-      "After a second hold on the contracted position, slowly bring the bar back to the starting position as you breathe in.",
-      "Repeat for the prescribed number of repetitions."
+      "Adjust the seat and thigh pad so you are secure. Hold the neutral-grip V handle and sit tall with only a slight, steady backward lean.",
+      "Pull the handle in front of the body toward the upper chest while bringing the elbows down. Stop at a comfortable range; touching the chest is not required.",
+      "Return slowly overhead, letting the shoulder blades move naturally. Avoid swinging, pulling behind the neck or forcing a lower-back arch."
     ],
     "breathing": "Breathe normally throughout the movement; avoid prolonged breath-holding.",
     "mistakes": "Rushing, using momentum, or forcing a range or load that you cannot control.",
     "safety": "Use a comfortable, pain-free range and conservative effort. Check required supports/equipment and stop for unusual symptoms.",
     "alternatives": [],
-    "source": "Free Exercise DB (Unlicense), adapted reference descriptions. Community catalog; not individual clinical guidance.",
+    "source": "Adapted from Free Exercise DB (Unlicense); editorial technique and metadata audit 2026-11-03. Original community record is provenance, not clinical validation.",
     "sourceUrl": "https://github.com/yuhonas/free-exercise-db/blob/main/exercises/V-Bar_Pulldown.json",
     "tracking": "reps"
   },
@@ -1623,7 +1570,7 @@
     "id": "db-one-arm-lat-pulldown",
     "name": "One Arm Lat Pulldown",
     "muscle": "Back",
-    "secondary": ["Biceps", "Back"],
+    "secondary": ["Biceps"],
     "category": "Compound",
     "equipment": "Gym",
     "pattern": "Pull",
@@ -1638,34 +1585,33 @@
     "mistakes": "Rushing, using momentum, or forcing a range or load that you cannot control.",
     "safety": "Use a comfortable, pain-free range and conservative effort. Check required supports/equipment and stop for unusual symptoms.",
     "alternatives": [],
-    "source": "Free Exercise DB (Unlicense), adapted reference descriptions. Community catalog; not individual clinical guidance.",
+    "source": "Adapted from Free Exercise DB (Unlicense); editorial technique and metadata audit 2026-11-03. Original community record is provenance, not clinical validation.",
     "sourceUrl": "https://github.com/yuhonas/free-exercise-db/blob/main/exercises/One_Arm_Lat_Pulldown.json",
-    "tracking": "reps"
+    "tracking": "reps",
+    "unilateral": true
   },
   {
     "id": "db-seated-one-arm-cable-pulley-rows",
     "name": "Seated One-arm Cable Pulley Rows",
     "muscle": "Back",
-    "secondary": ["Biceps", "Back", "Traps"],
+    "secondary": ["Biceps", "Traps"],
     "category": "Compound",
     "equipment": "Gym",
     "pattern": "Pull",
     "difficulty": "Intermediate",
     "instructions": [
-      "To get into the starting position, first sit down on the machine and place your feet on the front platform or crossbar provided making sure that your knees are slightly bent and not locked.",
-      "Lean over as you keep the natural alignment of your back and grab the single handle attachment with your left arm using a palms-down grip.",
-      "With your arm extended pull back until your torso is at a 90-degree angle from your legs. Your back should be slightly arched and your chest should be sticking out. You should be feeling a nice stretch on your lat as you hold the bar in front of you. The right arm can be kept by the waist. This is the starting position of the exercise.",
-      "Keeping the torso stationary, pull the handles back towards your torso while keeping the arms close to it as you rotate the wrist, so that by the time your hand is by your abdominals it is in a neutral position (palms facing the torso). Breathe out as you perform that movement. At that point you should be squeezing your back muscles hard.",
-      "Hold that contraction for a second and slowly go back to the original position while breathing in. Tip: Remember to rotate the wrist as you go back to the starting position so that the palms are facing down again.",
-      "Repeat for the recommended amount of repetitions and then perform the same movement with the right hand."
+      "Adjust the seat, plant the feet and hold a single low cable handle. Sit with a comfortable neutral spine and a steady trunk.",
+      "Pull the handle toward the lower ribs without twisting, shrugging or leaning backward.",
+      "Return slowly with the shoulder blade moving naturally. Complete both sides without forcing a lower-back arch."
     ],
     "breathing": "Breathe normally throughout the movement; avoid prolonged breath-holding.",
     "mistakes": "Rushing, using momentum, or forcing a range or load that you cannot control.",
     "safety": "Use a comfortable, pain-free range and conservative effort. Check required supports/equipment and stop for unusual symptoms.",
     "alternatives": [],
-    "source": "Free Exercise DB (Unlicense), adapted reference descriptions. Community catalog; not individual clinical guidance.",
+    "source": "Adapted from Free Exercise DB (Unlicense); editorial technique and metadata audit 2026-11-03. Original community record is provenance, not clinical validation.",
     "sourceUrl": "https://github.com/yuhonas/free-exercise-db/blob/main/exercises/Seated_One-arm_Cable_Pulley_Rows.json",
-    "tracking": "reps"
+    "tracking": "reps",
+    "unilateral": true
   },
   {
     "id": "db-cable-chest-press",
@@ -1686,7 +1632,7 @@
     "mistakes": "Rushing, using momentum, or forcing a range or load that you cannot control.",
     "safety": "Use a comfortable, pain-free range and conservative effort. Check required supports/equipment and stop for unusual symptoms.",
     "alternatives": [],
-    "source": "Free Exercise DB (Unlicense), adapted reference descriptions. Community catalog; not individual clinical guidance.",
+    "source": "Adapted from Free Exercise DB (Unlicense); editorial technique and metadata audit 2026-11-03. Original community record is provenance, not clinical validation.",
     "sourceUrl": "https://github.com/yuhonas/free-exercise-db/blob/main/exercises/Cable_Chest_Press.json",
     "tracking": "reps"
   },
@@ -1700,17 +1646,18 @@
     "pattern": "Push",
     "difficulty": "Beginner",
     "instructions": [
-      "Adjust the weight to an appropriate amount and be seated, grasping the handles. Your upper arms should be about 45 degrees to the body, with your head and chest up. The elbows should be bent to about 90 degrees. This will be your starting position.",
-      "Begin by extending through the elbow, pressing the handles together straight in front of you. Keep your shoulder blades retracted as you execute the movement.",
-      "After pausing at full extension, return to the starting position, keeping tension on the cables."
+      "Position a stable incline bench securely between suitable cable pulleys. Follow the machine setup instructions, use matching light loads and ask staff for setup help if unfamiliar.",
+      "With back and feet supported, hold the handles beside the upper chest with wrists aligned over the forearms and elbows at a comfortable angle.",
+      "Press forward and upward without forcefully locking the elbows, then lower slowly through a comfortable shoulder range. Do not let the cables pull the arms deeply behind the body."
     ],
     "breathing": "Breathe normally throughout the movement; avoid prolonged breath-holding.",
     "mistakes": "Rushing, using momentum, or forcing a range or load that you cannot control.",
     "safety": "Use a comfortable, pain-free range and conservative effort. Check required supports/equipment and stop for unusual symptoms.",
     "alternatives": [],
-    "source": "Free Exercise DB (Unlicense), adapted reference descriptions. Community catalog; not individual clinical guidance.",
+    "source": "Adapted from Free Exercise DB (Unlicense); editorial technique and metadata audit 2026-11-03. Original community record is provenance, not clinical validation.",
     "sourceUrl": "https://github.com/yuhonas/free-exercise-db/blob/main/exercises/Incline_Cable_Chest_Press.json",
-    "tracking": "reps"
+    "tracking": "reps",
+    "requires": ["bench"]
   },
   {
     "id": "db-cable-rear-delt-fly",
@@ -1731,35 +1678,33 @@
     "mistakes": "Rushing, using momentum, or forcing a range or load that you cannot control.",
     "safety": "Use a comfortable, pain-free range and conservative effort. Check required supports/equipment and stop for unusual symptoms.",
     "alternatives": [],
-    "source": "Free Exercise DB (Unlicense), adapted reference descriptions. Community catalog; not individual clinical guidance.",
+    "source": "Adapted from Free Exercise DB (Unlicense); editorial technique and metadata audit 2026-11-03. Original community record is provenance, not clinical validation.",
     "sourceUrl": "https://github.com/yuhonas/free-exercise-db/blob/main/exercises/Cable_Rear_Delt_Fly.json",
     "tracking": "reps"
   },
   {
     "id": "db-cable-seated-lateral-raise",
-    "name": "Cable Seated Lateral Raise",
+    "name": "Seated bent-over cable reverse fly",
     "muscle": "Shoulders",
     "secondary": ["Back", "Traps"],
     "category": "Isolation",
     "equipment": "Gym",
     "pattern": "Isolation",
-    "difficulty": "Beginner",
+    "difficulty": "Intermediate",
     "instructions": [
-      "Stand in the middle of two low pulleys that are opposite to each other and place a flat bench right behind you (in perpendicular fashion to you; the narrow edge of the bench should be the one behind you). Select the weight to be used on each pulley.",
-      "Now sit at the edge of the flat bench behind you with your feet placed in front of your knees.",
-      "Bend forward while keeping your back flat and rest your torso on the thighs.",
-      "Have someone give you the single handles attached to the pulleys. Grasp the left pulley with the right hand and the right pulley with the left after you select your weight. The pulleys should run under your knees and your arms will be extended with palms facing each other and a slight bend at the elbows. This will be the starting position.",
-      "While keeping the arms stationary, raise the upper arms to the sides until they are parallel to the floor and at shoulder height. Exhale during the execution of this movement and hold the contraction for a second.",
-      "Slowly lower your arms to the starting position as you inhale.",
-      "Repeat for the recommended amount of repetitions. Tip: Maintain upper arms perpendicular to torso and a fixed elbow position (10 degree to 30 degree angle) throughout exercise."
+      "This is a bent-over rear-shoulder fly variation, not an upright lateral raise. Use two low cable handles and a stable bench, with assistance for setup if needed.",
+      "Sit and hinge forward with a comfortably neutral spine. Hold the opposite handles, elbows gently bent, and open the arms to the sides through a comfortable range.",
+      "Return slowly without swinging or lifting the trunk. Use a simpler reverse fly if setup or positioning is uncertain."
     ],
     "breathing": "Breathe normally throughout the movement; avoid prolonged breath-holding.",
     "mistakes": "Rushing, using momentum, or forcing a range or load that you cannot control.",
     "safety": "Use a comfortable, pain-free range and conservative effort. Check required supports/equipment and stop for unusual symptoms.",
     "alternatives": [],
-    "source": "Free Exercise DB (Unlicense), adapted reference descriptions. Community catalog; not individual clinical guidance.",
+    "source": "Adapted from Free Exercise DB (Unlicense); editorial technique and metadata audit 2026-11-03. Original community record is provenance, not clinical validation.",
     "sourceUrl": "https://github.com/yuhonas/free-exercise-db/blob/main/exercises/Cable_Seated_Lateral_Raise.json",
-    "tracking": "reps"
+    "tracking": "reps",
+    "automatic": false,
+    "requires": ["bench"]
   },
   {
     "id": "db-cable-hammer-curls---rope-attachment",
@@ -1782,7 +1727,7 @@
     "mistakes": "Rushing, using momentum, or forcing a range or load that you cannot control.",
     "safety": "Use a comfortable, pain-free range and conservative effort. Check required supports/equipment and stop for unusual symptoms.",
     "alternatives": [],
-    "source": "Free Exercise DB (Unlicense), adapted reference descriptions. Community catalog; not individual clinical guidance.",
+    "source": "Adapted from Free Exercise DB (Unlicense); editorial technique and metadata audit 2026-11-03. Original community record is provenance, not clinical validation.",
     "sourceUrl": "https://github.com/yuhonas/free-exercise-db/blob/main/exercises/Cable_Hammer_Curls_-_Rope_Attachment.json",
     "tracking": "reps"
   },
@@ -1805,7 +1750,7 @@
     "mistakes": "Rushing, using momentum, or forcing a range or load that you cannot control.",
     "safety": "Use a comfortable, pain-free range and conservative effort. Check required supports/equipment and stop for unusual symptoms.",
     "alternatives": [],
-    "source": "Free Exercise DB (Unlicense), adapted reference descriptions. Community catalog; not individual clinical guidance.",
+    "source": "Adapted from Free Exercise DB (Unlicense); editorial technique and metadata audit 2026-11-03. Original community record is provenance, not clinical validation.",
     "sourceUrl": "https://github.com/yuhonas/free-exercise-db/blob/main/exercises/Standing_Biceps_Cable_Curl.json",
     "tracking": "reps"
   },
@@ -1829,7 +1774,7 @@
     "mistakes": "Rushing, using momentum, or forcing a range or load that you cannot control.",
     "safety": "Use a comfortable, pain-free range and conservative effort. Check required supports/equipment and stop for unusual symptoms.",
     "alternatives": [],
-    "source": "Free Exercise DB (Unlicense), adapted reference descriptions. Community catalog; not individual clinical guidance.",
+    "source": "Adapted from Free Exercise DB (Unlicense); editorial technique and metadata audit 2026-11-03. Original community record is provenance, not clinical validation.",
     "sourceUrl": "https://github.com/yuhonas/free-exercise-db/blob/main/exercises/Cable_Rope_Overhead_Triceps_Extension.json",
     "tracking": "reps"
   },
@@ -1854,9 +1799,10 @@
     "mistakes": "Rushing, using momentum, or forcing a range or load that you cannot control.",
     "safety": "Use a comfortable, pain-free range and conservative effort. Check required supports/equipment and stop for unusual symptoms.",
     "alternatives": [],
-    "source": "Free Exercise DB (Unlicense), adapted reference descriptions. Community catalog; not individual clinical guidance.",
+    "source": "Adapted from Free Exercise DB (Unlicense); editorial technique and metadata audit 2026-11-03. Original community record is provenance, not clinical validation.",
     "sourceUrl": "https://github.com/yuhonas/free-exercise-db/blob/main/exercises/Cable_One_Arm_Tricep_Extension.json",
-    "tracking": "reps"
+    "tracking": "reps",
+    "unilateral": true
   },
   {
     "id": "db-cable-wrist-curl",
@@ -1879,9 +1825,10 @@
     "mistakes": "Rushing, using momentum, or forcing a range or load that you cannot control.",
     "safety": "Use a comfortable, pain-free range and conservative effort. Check required supports/equipment and stop for unusual symptoms.",
     "alternatives": [],
-    "source": "Free Exercise DB (Unlicense), adapted reference descriptions. Community catalog; not individual clinical guidance.",
+    "source": "Adapted from Free Exercise DB (Unlicense); editorial technique and metadata audit 2026-11-03. Original community record is provenance, not clinical validation.",
     "sourceUrl": "https://github.com/yuhonas/free-exercise-db/blob/main/exercises/Cable_Wrist_Curl.json",
-    "tracking": "reps"
+    "tracking": "reps",
+    "requires": ["bench"]
   },
   {
     "id": "db-cable-shrugs",
@@ -1895,7 +1842,7 @@
     "instructions": [
       "Grasp a cable bar attachment that is attached to a low pulley with a shoulder width or slightly wider overhand (palms facing down) grip.",
       "Stand erect close to the pulley with your arms extended in front of you holding the bar. This will be your starting position.",
-      "Lift the bar by elevating the shoulders as high as possible as you exhale. Hold the contraction at the top for a second. Tip: The arms should remain extended at all times. Refrain from using the biceps to help lift the bar. Only the shoulders should be moving up and down.",
+      "Lift the bar by elevating the shoulders through a comfortable range without rolling the shoulders as you exhale. Hold the contraction at the top for a second. Tip: The arms should remain extended at all times. Refrain from using the biceps to help lift the bar. Only the shoulders should be moving up and down.",
       "Lower the bar back to the original position.",
       "Repeat for the recommended amount of repetitions."
     ],
@@ -1903,7 +1850,7 @@
     "mistakes": "Rushing, using momentum, or forcing a range or load that you cannot control.",
     "safety": "Use a comfortable, pain-free range and conservative effort. Check required supports/equipment and stop for unusual symptoms.",
     "alternatives": [],
-    "source": "Free Exercise DB (Unlicense), adapted reference descriptions. Community catalog; not individual clinical guidance.",
+    "source": "Adapted from Free Exercise DB (Unlicense); editorial technique and metadata audit 2026-11-03. Original community record is provenance, not clinical validation.",
     "sourceUrl": "https://github.com/yuhonas/free-exercise-db/blob/main/exercises/Cable_Shrugs.json",
     "tracking": "reps"
   },
@@ -1917,21 +1864,18 @@
     "pattern": "Core",
     "difficulty": "Beginner",
     "instructions": [
-      "Begin lying on your back with your hands extended above you toward the ceiling.",
-      "Bring your feet, knees, and hips up to 90 degrees.",
-      "Exhale hard to bring your ribcage down and flatten your back onto the floor, rotating your pelvis up and squeezing your glutes. Hold this position throughout the movement. This will be your starting position.",
-      "Initiate the exercise by extending one leg, straightening the knee and hip to bring the leg just above the ground.",
-      "Maintain the position of your lumbar and pelvis as you perform the movement, as your back is going to want to arch.",
-      "Stay tight and return the working leg to the starting position.",
-      "Repeat on the opposite side, alternating until the set is complete."
+      "Lie on the back with hips and knees bent, feet lifted only if you can keep the trunk controlled. Hold arms comfortably above the chest.",
+      "Gently brace while breathing normally. Slowly extend one leg a short distance, keeping the pelvis steady and the back comfortable.",
+      "Return and alternate sides. Shorten the reach or slide the heel along the floor if the back arches; do not forcefully flatten the spine."
     ],
     "breathing": "Breathe normally throughout the movement; avoid prolonged breath-holding.",
     "mistakes": "Rushing, using momentum, or forcing a range or load that you cannot control.",
     "safety": "Use a comfortable, pain-free range and conservative effort. Check required supports/equipment and stop for unusual symptoms.",
     "alternatives": [],
-    "source": "Free Exercise DB (Unlicense), adapted reference descriptions. Community catalog; not individual clinical guidance.",
+    "source": "Adapted from Free Exercise DB (Unlicense); editorial technique and metadata audit 2026-11-03. Original community record is provenance, not clinical validation.",
     "sourceUrl": "https://github.com/yuhonas/free-exercise-db/blob/main/exercises/Dead_Bug.json",
-    "tracking": "reps"
+    "tracking": "reps",
+    "unilateral": true
   },
   {
     "id": "db-single-leg-glute-bridge",
@@ -1941,20 +1885,20 @@
     "category": "Isolation",
     "equipment": "Bodyweight",
     "pattern": "Hinge",
-    "difficulty": "Beginner",
+    "difficulty": "Intermediate",
     "instructions": [
-      "Lay on the floor with your feet flat and knees bent.",
-      "Raise one leg off of the ground, pulling the knee to your chest. This will be your starting position.",
-      "Execute the movement by driving through the heel, extending your hip upward and raising your glutes off of the ground.",
-      "Extend as far as possible, pause and then return to the starting position."
+      "Lie on the back with one foot flat and the other leg comfortably lifted. Start with a two-leg bridge if single-leg control is uncertain.",
+      "Push through the planted foot to raise the hips only until the trunk and thigh are roughly aligned. Keep the pelvis level and ribs controlled.",
+      "Lower slowly without arching the lower back. Complete both sides."
     ],
     "breathing": "Breathe normally throughout the movement; avoid prolonged breath-holding.",
     "mistakes": "Rushing, using momentum, or forcing a range or load that you cannot control.",
     "safety": "Use a comfortable, pain-free range and conservative effort. Check required supports/equipment and stop for unusual symptoms.",
     "alternatives": [],
-    "source": "Free Exercise DB (Unlicense), adapted reference descriptions. Community catalog; not individual clinical guidance.",
+    "source": "Adapted from Free Exercise DB (Unlicense); editorial technique and metadata audit 2026-11-03. Original community record is provenance, not clinical validation.",
     "sourceUrl": "https://github.com/yuhonas/free-exercise-db/blob/main/exercises/Single_Leg_Glute_Bridge.json",
-    "tracking": "reps"
+    "tracking": "reps",
+    "unilateral": true
   },
   {
     "id": "db-pushups",
@@ -1964,18 +1908,17 @@
     "category": "Compound",
     "equipment": "Bodyweight",
     "pattern": "Push",
-    "difficulty": "Beginner",
+    "difficulty": "Intermediate",
     "instructions": [
-      "Lie on the floor face down and place your hands about 36 inches apart while holding your torso up at arms length.",
-      "Next, lower yourself downward until your chest almost touches the floor as you inhale.",
-      "Now breathe out and press your upper body back up to the starting position while squeezing your chest.",
-      "After a brief pause at the top contracted position, you can begin to lower yourself downward again for as many repetitions as needed."
+      "Place hands around shoulder width or slightly wider on the floor, with feet or knees supported. Choose a spacing comfortable for your shoulders rather than a fixed distance.",
+      "Keep the head, trunk and hips aligned. Bend the elbows at a comfortable angle to the body, lowering only as far as you can control without pain.",
+      "Press away without sagging the hips or forcing the elbows straight. Use a wall or incline push-up if needed."
     ],
     "breathing": "Breathe normally throughout the movement; avoid prolonged breath-holding.",
     "mistakes": "Rushing, using momentum, or forcing a range or load that you cannot control.",
     "safety": "Use a comfortable, pain-free range and conservative effort. Check required supports/equipment and stop for unusual symptoms.",
     "alternatives": [],
-    "source": "Free Exercise DB (Unlicense), adapted reference descriptions. Community catalog; not individual clinical guidance.",
+    "source": "Adapted from Free Exercise DB (Unlicense); editorial technique and metadata audit 2026-11-03. Original community record is provenance, not clinical validation.",
     "sourceUrl": "https://github.com/yuhonas/free-exercise-db/blob/main/exercises/Pushups.json",
     "tracking": "reps"
   },
@@ -1998,7 +1941,7 @@
     "mistakes": "Rushing, using momentum, or forcing a range or load that you cannot control.",
     "safety": "Use a comfortable, pain-free range and conservative effort. Check required supports/equipment and stop for unusual symptoms.",
     "alternatives": [],
-    "source": "Free Exercise DB (Unlicense), adapted reference descriptions. Community catalog; not individual clinical guidance.",
+    "source": "Adapted from Free Exercise DB (Unlicense); editorial technique and metadata audit 2026-11-03. Original community record is provenance, not clinical validation.",
     "sourceUrl": "https://github.com/yuhonas/free-exercise-db/blob/main/exercises/Push-Ups_-_Close_Triceps_Position.json",
     "tracking": "reps"
   },
@@ -2006,26 +1949,24 @@
     "id": "db-back-flyes---with-bands",
     "name": "Back Flyes - With Bands",
     "muscle": "Shoulders",
-    "secondary": ["Back", "Triceps"],
-    "category": "Compound",
+    "secondary": ["Back"],
+    "category": "Isolation",
     "equipment": "Bands",
     "pattern": "Isolation",
     "difficulty": "Beginner",
     "instructions": [
-      "Run a band around a stationary post like that of a squat rack.",
-      "Grab the band by the handles and stand back so that the tension in the band rises.",
-      "Extend and lift the arms straight in front of you. Tip: Your arms should be straight and parallel to the floor while perpendicular to your torso. Your feet should be firmly planted on the floor spread at shoulder width. This will be your starting position.",
-      "As you exhale, move your arms to the sides and back. Keep your arms extended and parallel to the floor. Continue the movement until the arms are extended to your sides.",
-      "After a pause, go back to the original position as you inhale.",
-      "Repeat for the recommended amount of repetitions."
+      "Inspect an intact band and attach it to a rated anchor around chest height. Hold the handles in front with a soft elbow bend and a stable stance.",
+      "Open the arms out to the sides only through a comfortable range, keeping the trunk steady and shoulders relaxed.",
+      "Return slowly without forcing the arms behind the body. Stay within the manufacturer stretch limit."
     ],
     "breathing": "Breathe normally throughout the movement; avoid prolonged breath-holding.",
     "mistakes": "Rushing, using momentum, or forcing a range or load that you cannot control.",
-    "safety": "Use a comfortable, pain-free range and conservative effort. Check required supports/equipment and stop for unusual symptoms.",
+    "safety": "Inspect the band and attachment before each use. Use only manufacturer-approved anchors and stretch limits; keep the face out of the recoil path. Stop if the band slips, is damaged or causes pain.",
     "alternatives": [],
-    "source": "Free Exercise DB (Unlicense), adapted reference descriptions. Community catalog; not individual clinical guidance.",
+    "source": "Adapted from Free Exercise DB (Unlicense); editorial technique and metadata audit 2026-11-03. Original community record is provenance, not clinical validation.",
     "sourceUrl": "https://github.com/yuhonas/free-exercise-db/blob/main/exercises/Back_Flyes_-_With_Bands.json",
-    "tracking": "reps"
+    "tracking": "reps",
+    "requires": ["anchor"]
   },
   {
     "id": "db-band-skull-crusher",
@@ -2035,44 +1976,44 @@
     "category": "Isolation",
     "equipment": "Bands",
     "pattern": "Isolation",
-    "difficulty": "Beginner",
+    "difficulty": "Intermediate",
     "instructions": [
-      "Secure a band to the base of a rack or the bench. Lay on the bench so that the band is lined up with your head.",
-      "Take hold of the band, raising your elbows so that the upper arm is perpendicular to the floor. With the elbow flexed, the band should be above your head. This will be your starting position.",
-      "Extend through the elbow to straighten your arm, keeping your upper arm in place. Pause at the top of the motion, and return to the starting position."
+      "This setup needs a rated low band anchor, an intact band and a stable bench. Learn it with an instructor before positioning band tension near the head.",
+      "Lie on the bench holding the band securely, upper arms comfortably raised and elbows bent. Keep the band away from the face.",
+      "Extend and bend the elbows under control without forcing lockout or losing the grip. A standing band pressdown is a simpler alternative."
     ],
     "breathing": "Breathe normally throughout the movement; avoid prolonged breath-holding.",
     "mistakes": "Rushing, using momentum, or forcing a range or load that you cannot control.",
-    "safety": "Use a comfortable, pain-free range and conservative effort. Check required supports/equipment and stop for unusual symptoms.",
+    "safety": "Inspect the band and attachment before each use. Use only manufacturer-approved anchors and stretch limits; keep the face out of the recoil path. Stop if the band slips, is damaged or causes pain.",
     "alternatives": [],
-    "source": "Free Exercise DB (Unlicense), adapted reference descriptions. Community catalog; not individual clinical guidance.",
+    "source": "Adapted from Free Exercise DB (Unlicense); editorial technique and metadata audit 2026-11-03. Original community record is provenance, not clinical validation.",
     "sourceUrl": "https://github.com/yuhonas/free-exercise-db/blob/main/exercises/Band_Skull_Crusher.json",
-    "tracking": "reps"
+    "tracking": "reps",
+    "automatic": false,
+    "requires": ["bench", "anchor"]
   },
   {
     "id": "db-cross-over---with-bands",
     "name": "Cross Over - With Bands",
     "muscle": "Chest",
-    "secondary": ["Biceps", "Shoulders"],
-    "category": "Compound",
+    "secondary": ["Shoulders"],
+    "category": "Isolation",
     "equipment": "Bands",
     "pattern": "Isolation",
     "difficulty": "Beginner",
     "instructions": [
-      "Secure an exercise band around a stationary post.",
-      "While facing away from the post, grab the handles on both ends of the band and step forward enough to create tension on the band.",
-      "Raise your arms to the sides, parallel to the floor, perpendicular to your torso (your torso and the arms should resemble the letter \"T\") and with the palms facing forward. Have them extended with a slight bend at the elbows. This will be your starting position.",
-      "While keeping your arms straight, bring them across your chest in a semicircular motion to the front as you exhale and flex your pecs. Hold the contraction for a second.",
-      "Slowly return to the starting position as you inhale.",
-      "Perform for the recommended amount of repetitions."
+      "Attach an intact band to a rated anchor around chest height and face away in a stable stance. Hold the handles with light tension and elbows gently bent.",
+      "Bring the hands together in front of the chest in an arc while the trunk stays steady.",
+      "Return slowly without forcing a deep shoulder stretch or exceeding the band stretch limit."
     ],
     "breathing": "Breathe normally throughout the movement; avoid prolonged breath-holding.",
     "mistakes": "Rushing, using momentum, or forcing a range or load that you cannot control.",
-    "safety": "Use a comfortable, pain-free range and conservative effort. Check required supports/equipment and stop for unusual symptoms.",
+    "safety": "Inspect the band and attachment before each use. Use only manufacturer-approved anchors and stretch limits; keep the face out of the recoil path. Stop if the band slips, is damaged or causes pain.",
     "alternatives": [],
-    "source": "Free Exercise DB (Unlicense), adapted reference descriptions. Community catalog; not individual clinical guidance.",
+    "source": "Adapted from Free Exercise DB (Unlicense); editorial technique and metadata audit 2026-11-03. Original community record is provenance, not clinical validation.",
     "sourceUrl": "https://github.com/yuhonas/free-exercise-db/blob/main/exercises/Cross_Over_-_With_Bands.json",
-    "tracking": "reps"
+    "tracking": "reps",
+    "requires": ["anchor"]
   },
   {
     "id": "db-calf-raises---with-bands",
@@ -2082,19 +2023,17 @@
     "category": "Isolation",
     "equipment": "Bands",
     "pattern": "Isolation",
-    "difficulty": "Beginner",
+    "difficulty": "Intermediate",
     "instructions": [
-      "Grab an exercise band and stand on it with your toes making sure that the length of the band between the foot and the arms is the same for both sides.",
-      "While holding the handles of the band, raise the arms to the side of your head as if you were getting ready to perform a shoulder press. The palms should be facing forward with the elbows bent and to the sides. This movement will create tension on the band. This will be your starting position.",
-      "Keeping the hands by your shoulder, stand up on your toes as you exhale and contract the calves hard at the top of the movement.",
-      "After a one second contraction, slowly go back down to the starting position.",
-      "Repeat for the recommended amount of repetitions."
+      "Use this variation only if you can stand securely on the centre of an intact band as the manufacturer permits. Hold light tension near the shoulders and stay close to stable support.",
+      "Keeping the band secure under the feet, rise slowly onto the balls of the feet without rolling the ankles.",
+      "Lower under control. If the band slips or balance is uncertain, stop and use supported bodyweight calf raises instead."
     ],
     "breathing": "Breathe normally throughout the movement; avoid prolonged breath-holding.",
     "mistakes": "Rushing, using momentum, or forcing a range or load that you cannot control.",
-    "safety": "Use a comfortable, pain-free range and conservative effort. Check required supports/equipment and stop for unusual symptoms.",
+    "safety": "Inspect the band and attachment before each use. Use only manufacturer-approved anchors and stretch limits; keep the face out of the recoil path. Stop if the band slips, is damaged or causes pain.",
     "alternatives": [],
-    "source": "Free Exercise DB (Unlicense), adapted reference descriptions. Community catalog; not individual clinical guidance.",
+    "source": "Adapted from Free Exercise DB (Unlicense); editorial technique and metadata audit 2026-11-03. Original community record is provenance, not clinical validation.",
     "sourceUrl": "https://github.com/yuhonas/free-exercise-db/blob/main/exercises/Calf_Raises_-_With_Bands.json",
     "tracking": "reps"
   },
@@ -2108,44 +2047,43 @@
     "pattern": "Isolation",
     "difficulty": "Beginner",
     "instructions": [
-      "Anchor a band around a solid post or other object.",
-      "Stand with your left side to the post, and put your right foot through the band, getting it around the ankle.",
-      "Stand up straight and hold onto the post if needed. This will be your starting position.",
-      "Keeping the knee straight, raise your right legs out to the side as far as you can.",
-      "Return to the starting position and repeat for the desired rep count.",
-      "Switch sides."
+      "Attach an intact band to a rated low anchor and a secure cuff on the ankle nearest the anchor. Stand side-on with stable hand support and a steady pelvis.",
+      "Begin with that leg slightly out toward the anchor. Bring it inward toward the standing leg and the body midline against the band; do not swing it outward.",
+      "Return slowly and complete both sides. Keep a small, controlled range without leaning or twisting."
     ],
     "breathing": "Breathe normally throughout the movement; avoid prolonged breath-holding.",
     "mistakes": "Rushing, using momentum, or forcing a range or load that you cannot control.",
-    "safety": "Use a comfortable, pain-free range and conservative effort. Check required supports/equipment and stop for unusual symptoms.",
+    "safety": "Inspect the band and attachment before each use. Use only manufacturer-approved anchors and stretch limits; keep the face out of the recoil path. Stop if the band slips, is damaged or causes pain.",
     "alternatives": [],
-    "source": "Free Exercise DB (Unlicense), adapted reference descriptions. Community catalog; not individual clinical guidance.",
+    "source": "Adapted from Free Exercise DB (Unlicense); editorial technique and metadata audit 2026-11-03. Original community record is provenance, not clinical validation.",
     "sourceUrl": "https://github.com/yuhonas/free-exercise-db/blob/main/exercises/Band_Hip_Adductions.json",
-    "tracking": "reps"
+    "tracking": "reps",
+    "requires": ["anchor"],
+    "unilateral": true
   },
   {
     "id": "db-external-rotation-with-band",
     "name": "External Rotation with Band",
     "muscle": "Shoulders",
     "secondary": [],
-    "category": "Compound",
+    "category": "Isolation",
     "equipment": "Bands",
     "pattern": "Isolation",
     "difficulty": "Beginner",
     "instructions": [
-      "Choke the band around a post. The band should be at the same height as your elbow. Stand with your left side to the band a couple of feet away.",
-      "Grasp the end of the band with your right hand, and keep your elbow pressed firmly to your side. We recommend you hold a pad or foam roll in place with your elbow to keep it firmly in position.",
-      "With your upper arm in position, your elbow should be flexed to 90 degrees with your hand reaching across the front of your torso. This will be your starting position.",
-      "Execute the movement by rotating your arm in a backhand motion, keeping your elbow in place.",
-      "Continue as far as you are able, pause, and then return to the starting position."
+      "Attach an intact band to a rated anchor at elbow height. Stand side-on with the working arm farther from the anchor, elbow beside the ribs and bent about 90 degrees.",
+      "With very light tension, rotate the forearm outward while the upper arm stays near the side and the wrist remains aligned.",
+      "Return slowly without twisting the trunk or forcing shoulder range. This exercise is not a substitute for assessment of shoulder pain."
     ],
     "breathing": "Breathe normally throughout the movement; avoid prolonged breath-holding.",
     "mistakes": "Rushing, using momentum, or forcing a range or load that you cannot control.",
-    "safety": "Use a comfortable, pain-free range and conservative effort. Check required supports/equipment and stop for unusual symptoms.",
+    "safety": "Inspect the band and attachment before each use. Use only manufacturer-approved anchors and stretch limits; keep the face out of the recoil path. Stop if the band slips, is damaged or causes pain.",
     "alternatives": [],
-    "source": "Free Exercise DB (Unlicense), adapted reference descriptions. Community catalog; not individual clinical guidance.",
+    "source": "Adapted from Free Exercise DB (Unlicense); editorial technique and metadata audit 2026-11-03. Original community record is provenance, not clinical validation.",
     "sourceUrl": "https://github.com/yuhonas/free-exercise-db/blob/main/exercises/External_Rotation_with_Band.json",
-    "tracking": "reps"
+    "tracking": "reps",
+    "requires": ["anchor"],
+    "unilateral": true
   },
   {
     "id": "db-bicycling-stationary",
@@ -2157,16 +2095,17 @@
     "pattern": "Cardio",
     "difficulty": "Beginner",
     "instructions": [
-      "To begin, seat yourself on the bike and adjust the seat to your height.",
-      "Choose an easy initial pace and build gradually within your capacity. Keep breathing comfortably; stop for pain, dizziness or unusual breathlessness."
+      "Adjust the stationary bike according to its instructions. At the bottom of the pedal stroke the knee should remain slightly bent; set the handlebars so you are not reaching uncomfortably.",
+      "Start with low resistance and a short, easy duration, keeping feet secure and pedalling smoothly.",
+      "Build gradually. For moderate effort, you should be able to talk but not sing; stop for pain, dizziness or unusual breathlessness."
     ],
     "breathing": "Breathe normally throughout the movement; avoid prolonged breath-holding.",
     "mistakes": "Rushing, using momentum, or forcing a range or load that you cannot control.",
     "safety": "Use a comfortable, pain-free range and conservative effort. Check required supports/equipment and stop for unusual symptoms.",
     "alternatives": [],
-    "source": "Free Exercise DB (Unlicense), adapted reference descriptions. Community catalog; not individual clinical guidance.",
+    "source": "Adapted from Free Exercise DB (Unlicense); editorial technique and metadata audit 2026-11-03. Original community record is provenance, not clinical validation.",
     "sourceUrl": "https://github.com/yuhonas/free-exercise-db/blob/main/exercises/Bicycling_Stationary.json",
-    "tracking": "reps"
+    "tracking": "seconds"
   },
   {
     "id": "db-elliptical-trainer",
@@ -2178,37 +2117,38 @@
     "pattern": "Cardio",
     "difficulty": "Intermediate",
     "instructions": [
-      "To begin, step onto the elliptical and select the desired option from the menu. Most ellipticals have a manual setting, or you can select a program to run. Typically, you can enter your age and weight to estimate the amount of calories burned during exercise. Elevation can be adjusted to change the intensity of the workout.",
-      "Choose an easy initial pace and build gradually within your capacity. Keep breathing comfortably; stop for pain, dizziness or unusual breathlessness."
+      "Follow the machine instructions and use the handles to step on and off safely. Start with low resistance and a comfortable stride.",
+      "Keep an upright, steady trunk and breathe comfortably. Increase duration gradually; stop for pain, dizziness or unusual breathlessness."
     ],
     "breathing": "Breathe normally throughout the movement; avoid prolonged breath-holding.",
     "mistakes": "Rushing, using momentum, or forcing a range or load that you cannot control.",
     "safety": "Use a comfortable, pain-free range and conservative effort. Check required supports/equipment and stop for unusual symptoms.",
     "alternatives": [],
-    "source": "Free Exercise DB (Unlicense), adapted reference descriptions. Community catalog; not individual clinical guidance.",
+    "source": "Adapted from Free Exercise DB (Unlicense); editorial technique and metadata audit 2026-11-03. Original community record is provenance, not clinical validation.",
     "sourceUrl": "https://github.com/yuhonas/free-exercise-db/blob/main/exercises/Elliptical_Trainer.json",
-    "tracking": "reps"
+    "tracking": "seconds"
   },
   {
     "id": "db-rowing-stationary",
     "name": "Rowing, Stationary",
     "muscle": "Quadriceps",
-    "secondary": ["Biceps", "Calves", "Glutes", "Hamstrings", "Back", "Back"],
+    "secondary": ["Biceps", "Calves", "Glutes", "Hamstrings", "Back"],
     "category": "Cardio",
     "equipment": "Gym",
     "pattern": "Cardio",
     "difficulty": "Intermediate",
     "instructions": [
-      "To begin, seat yourself on the rower. Make sure that your heels are resting comfortably against the base of the foot pedals and that the straps are secured. Select the program that you wish to use, if applicable. Sit up straight and bend forward at the hips.",
-      "Choose an easy initial pace and build gradually within your capacity. Keep breathing comfortably; stop for pain, dizziness or unusual breathlessness."
+      "Adjust the rower foot straps and resistance as instructed. Begin with an easy stroke: push with the legs, then open the hips slightly, then pull the handle toward the lower ribs.",
+      "Recover in reverse order: arms forward, hinge forward from the hips, then bend the knees. Keep a comfortable neutral back and avoid jerking.",
+      "Start with a short easy duration and build gradually. Stop for pain, dizziness or unusual breathlessness."
     ],
     "breathing": "Breathe normally throughout the movement; avoid prolonged breath-holding.",
     "mistakes": "Rushing, using momentum, or forcing a range or load that you cannot control.",
     "safety": "Use a comfortable, pain-free range and conservative effort. Check required supports/equipment and stop for unusual symptoms.",
     "alternatives": [],
-    "source": "Free Exercise DB (Unlicense), adapted reference descriptions. Community catalog; not individual clinical guidance.",
+    "source": "Adapted from Free Exercise DB (Unlicense); editorial technique and metadata audit 2026-11-03. Original community record is provenance, not clinical validation.",
     "sourceUrl": "https://github.com/yuhonas/free-exercise-db/blob/main/exercises/Rowing_Stationary.json",
-    "tracking": "reps"
+    "tracking": "seconds"
   },
   {
     "id": "db-wrist-circles",
@@ -2220,15 +2160,15 @@
     "pattern": "Mobility",
     "difficulty": "Beginner",
     "instructions": [
-      "Start by standing straight with your feet being shoulder width apart from each other. Elevate your arms to the side of you until they are fully extended and parallel to the floor at a height that is evenly aligned with your shoulders. Tip: Your torso and arms should form the letter \"T: Your palms should be facing down. This is the starting position.",
-      "Keeping your entire body stationary except for the wrists, begin to rotate both wrists forward in a circular motion. Tip: Pretend that you are trying to draw circles by using your hands as the brush. Breathe normally as you perform this exercise.",
-      "Repeat for the recommended amount of repetitions."
+      "Sit or stand comfortably with the arms relaxed or elbows bent near the body. You do not need to hold the arms out at shoulder height.",
+      "Move the wrists slowly through small, comfortable circles without forcing the range.",
+      "Repeat gently in both directions and stop if the movement causes pain."
     ],
     "breathing": "Breathe normally throughout the movement; avoid prolonged breath-holding.",
     "mistakes": "Rushing, using momentum, or forcing a range or load that you cannot control.",
     "safety": "Use a comfortable, pain-free range and conservative effort. Check required supports/equipment and stop for unusual symptoms.",
     "alternatives": [],
-    "source": "Free Exercise DB (Unlicense), adapted reference descriptions. Community catalog; not individual clinical guidance.",
+    "source": "Adapted from Free Exercise DB (Unlicense); editorial technique and metadata audit 2026-11-03. Original community record is provenance, not clinical validation.",
     "sourceUrl": "https://github.com/yuhonas/free-exercise-db/blob/main/exercises/Wrist_Circles.json",
     "tracking": "reps"
   },
@@ -2242,18 +2182,18 @@
     "pattern": "Mobility",
     "difficulty": "Beginner",
     "instructions": [
-      "Begin standing on one leg, holding to a vertical support.",
-      "Raise the unsupported knee to 90 degrees. This will be your starting position.",
-      "Open the hip as far as possible, attempting to make a big circle with your knee.",
-      "Perform this movement slowly for a number of repetitions, and repeat on the other side."
+      "Stand beside stable hand support. Lift one knee only as high as you can while staying balanced.",
+      "Make a small, slow circle at the hip without twisting the trunk or forcing the range.",
+      "Lower the foot and repeat in both directions on both sides. Keep the movement comfortable."
     ],
     "breathing": "Breathe normally throughout the movement; avoid prolonged breath-holding.",
     "mistakes": "Rushing, using momentum, or forcing a range or load that you cannot control.",
     "safety": "Use a comfortable, pain-free range and conservative effort. Check required supports/equipment and stop for unusual symptoms.",
     "alternatives": [],
-    "source": "Free Exercise DB (Unlicense), adapted reference descriptions. Community catalog; not individual clinical guidance.",
+    "source": "Adapted from Free Exercise DB (Unlicense); editorial technique and metadata audit 2026-11-03. Original community record is provenance, not clinical validation.",
     "sourceUrl": "https://github.com/yuhonas/free-exercise-db/blob/main/exercises/Standing_Hip_Circles.json",
-    "tracking": "reps"
+    "tracking": "reps",
+    "unilateral": true
   },
   {
     "id": "db-shoulder-stretch",
@@ -2265,35 +2205,41 @@
     "pattern": "Stretching",
     "difficulty": "Beginner",
     "instructions": [
-      "Reach your left arm across your body and hold it straight."
+      "Stand or sit tall. Bring one arm gently across the chest below shoulder height.",
+      "Use the other arm to support above the elbow and draw it toward the body only until there is mild, comfortable tension at the back of the shoulder.",
+      "Breathe normally and hold for about 10–30 seconds without bouncing. Release slowly and repeat on the other side; stop if painful."
     ],
     "breathing": "Breathe normally throughout the movement; avoid prolonged breath-holding.",
     "mistakes": "Rushing, using momentum, or forcing a range or load that you cannot control.",
     "safety": "Use a comfortable, pain-free range and conservative effort. Check required supports/equipment and stop for unusual symptoms.",
     "alternatives": [],
-    "source": "Free Exercise DB (Unlicense), adapted reference descriptions. Community catalog; not individual clinical guidance.",
+    "source": "Adapted from Free Exercise DB (Unlicense); editorial technique and metadata audit 2026-11-03. Original community record is provenance, not clinical validation.",
     "sourceUrl": "https://github.com/yuhonas/free-exercise-db/blob/main/exercises/Shoulder_Stretch.json",
-    "tracking": "seconds"
+    "tracking": "seconds",
+    "unilateral": true
   },
   {
     "id": "db-triceps-stretch",
     "name": "Triceps Stretch",
     "muscle": "Triceps",
-    "secondary": ["Back"],
+    "secondary": [],
     "category": "Stretching",
     "equipment": "Bodyweight",
     "pattern": "Stretching",
     "difficulty": "Beginner",
     "instructions": [
-      "Reach your hand behind your head, grasp your elbow and gently pull. Hold for 10 to 20 seconds, then switch sides."
+      "Stand or sit tall. Raise one arm comfortably overhead and bend the elbow so the hand moves toward the upper back.",
+      "If comfortable, support the elbow gently with the other hand. Do not pull hard, press on the neck or force the shoulder range.",
+      "Breathe normally and hold about 10–30 seconds at mild tension, then release and switch sides. Skip the overhead stretch if it causes pain."
     ],
     "breathing": "Breathe normally throughout the movement; avoid prolonged breath-holding.",
     "mistakes": "Rushing, using momentum, or forcing a range or load that you cannot control.",
     "safety": "Use a comfortable, pain-free range and conservative effort. Check required supports/equipment and stop for unusual symptoms.",
     "alternatives": [],
-    "source": "Free Exercise DB (Unlicense), adapted reference descriptions. Community catalog; not individual clinical guidance.",
+    "source": "Adapted from Free Exercise DB (Unlicense); editorial technique and metadata audit 2026-11-03. Original community record is provenance, not clinical validation.",
     "sourceUrl": "https://github.com/yuhonas/free-exercise-db/blob/main/exercises/Triceps_Stretch.json",
-    "tracking": "seconds"
+    "tracking": "seconds",
+    "unilateral": true
   },
   {
     "id": "db-seated-leg-tucks",
@@ -2303,19 +2249,19 @@
     "category": "Isolation",
     "equipment": "Bodyweight",
     "pattern": "Core",
-    "difficulty": "Beginner",
+    "difficulty": "Intermediate",
     "instructions": [
-      "Sit on a bench with the legs stretched out in front of you slightly below parallel and your arms holding on to the sides of the bench. Your torso should be leaning backwards around a 45-degree angle from the bench. This will be your starting position.",
-      "Bring the knees in toward you as you move your torso closer to them at the same time. Breathe out as you perform this movement.",
-      "After a second pause, go back to the starting position as you inhale.",
-      "Repeat for the recommended amount of repetitions."
+      "Sit securely on a stable exercise bench and hold its sides. Lean back only as far as you can keep the trunk controlled, with knees bent.",
+      "Bring the knees toward the torso a comfortable distance without rounding forcefully or pulling with the arms.",
+      "Extend the legs only as far as the back remains comfortable and controlled. Use a simpler floor core exercise if needed."
     ],
     "breathing": "Breathe normally throughout the movement; avoid prolonged breath-holding.",
     "mistakes": "Rushing, using momentum, or forcing a range or load that you cannot control.",
     "safety": "Use a comfortable, pain-free range and conservative effort. Check required supports/equipment and stop for unusual symptoms.",
     "alternatives": [],
-    "source": "Free Exercise DB (Unlicense), adapted reference descriptions. Community catalog; not individual clinical guidance.",
+    "source": "Adapted from Free Exercise DB (Unlicense); editorial technique and metadata audit 2026-11-03. Original community record is provenance, not clinical validation.",
     "sourceUrl": "https://github.com/yuhonas/free-exercise-db/blob/main/exercises/Seated_Leg_Tucks.json",
-    "tracking": "reps"
+    "tracking": "reps",
+    "requires": ["bench"]
   }
 ]

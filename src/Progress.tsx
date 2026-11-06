@@ -17,6 +17,7 @@ import { localDate, uid } from "./domain/engine";
 import type { Profile } from "./domain/types";
 import { Heading, Modal, Empty } from "./components/ui";
 import { exerciseById } from "./data/exercises";
+import { resistanceVolume } from "./domain/volume";
 export default function Progress({ profile: p }: { profile?: Profile }) {
   const weights =
     useLiveQuery(() => db.weights.orderBy("date").toArray()) || [];
@@ -26,7 +27,9 @@ export default function Progress({ profile: p }: { profile?: Profile }) {
   const [modal, setModal] = useState("");
   const [range, setRange] = useState(30);
   const [exercise, setExercise] = useState("");
-  const completed = sessions.filter((s) => s.status === "complete");
+  const completed = sessions
+    .filter((s) => s.status === "complete")
+    .sort((a, b) => a.date.localeCompare(b.date));
   const start = new Date();
   start.setDate(start.getDate() - range);
   const filtered = weights.filter((w) => w.date >= localDate(start));
@@ -42,9 +45,9 @@ export default function Progress({ profile: p }: { profile?: Profile }) {
       week: localDate(d).slice(5),
       workouts: ss.length,
       volume: Math.round(
-        logs
-          .filter((l) => l.done && ss.some((s) => s.id === l.sessionId))
-          .reduce((v, l) => v + l.weight * l.reps, 0),
+        resistanceVolume(
+          logs.filter((l) => ss.some((s) => s.id === l.sessionId)),
+        ),
       ),
     };
   });
@@ -97,18 +100,29 @@ export default function Progress({ profile: p }: { profile?: Profile }) {
     data: object[],
     key: string,
     x: string,
-    color = "#b8f34a",
+    color = "var(--chart-green)",
     bar = false,
   ) => (
     <section className="card chart-card">
       <h3>{title}</h3>
+      {key === "volume" && (
+        <p className="hint">
+          Recorded external load × repetitions. Timed holds and bands are
+          excluded; unweighted exercises contribute zero here. Paired dumbbells
+          use the per-hand load you recorded. This is a logging metric, not a
+          measure of effort or calories.
+        </p>
+      )}
       {data.length ? (
         <ResponsiveContainer width="100%" height={240}>
           {bar ? (
             <BarChart data={data}>
               <CartesianGrid stroke="var(--border)" vertical={false} />
-              <XAxis dataKey={x} tick={{ fill: "#92959d", fontSize: 11 }} />
-              <YAxis tick={{ fill: "#92959d", fontSize: 11 }} width={44} />
+              <XAxis
+                dataKey={x}
+                tick={{ fill: "var(--muted)", fontSize: 12 }}
+              />
+              <YAxis tick={{ fill: "var(--muted)", fontSize: 12 }} width={44} />
               <Tooltip
                 contentStyle={{
                   background: "var(--surface)",
@@ -120,10 +134,13 @@ export default function Progress({ profile: p }: { profile?: Profile }) {
           ) : (
             <LineChart data={data}>
               <CartesianGrid stroke="var(--border)" vertical={false} />
-              <XAxis dataKey={x} tick={{ fill: "#92959d", fontSize: 11 }} />
+              <XAxis
+                dataKey={x}
+                tick={{ fill: "var(--muted)", fontSize: 12 }}
+              />
               <YAxis
                 domain={["auto", "auto"]}
-                tick={{ fill: "#92959d", fontSize: 11 }}
+                tick={{ fill: "var(--muted)", fontSize: 12 }}
                 width={44}
               />
               <Tooltip
@@ -219,7 +236,7 @@ export default function Progress({ profile: p }: { profile?: Profile }) {
           weekly,
           "workouts",
           "week",
-          "#93b7fd",
+          "var(--chart-blue)",
           true,
         )}
         {chart(
@@ -227,7 +244,7 @@ export default function Progress({ profile: p }: { profile?: Profile }) {
           weekly,
           "volume",
           "week",
-          "#b8f34a",
+          "var(--chart-green)",
           true,
         )}
         <div>
@@ -253,7 +270,7 @@ export default function Progress({ profile: p }: { profile?: Profile }) {
             exerciseIds.length ? exerciseData : [],
             "load",
             "date",
-            "#d9adf9",
+            "var(--chart-purple)",
           )}
         </div>
       </div>

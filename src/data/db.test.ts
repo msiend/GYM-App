@@ -60,6 +60,26 @@ describe("local data and backups", () => {
   });
 });
 describe("custom foods and versioned backups", () => {
+  it("preserves partial-gym choices, feet/inches and explanation language through export/import", async () => {
+    await db.profiles.put({
+      ...profile,
+      equipment: "Partial gym",
+      equipmentInventory: ["dumbbells", "pulldown"],
+      supports: ["bench"],
+      heightUnit: "ft",
+    });
+    const { defaults } = await import("./db");
+    await db.settings.put({ ...defaults, exerciseLanguage: "hi" });
+    const backup = await repository.export();
+    await repository.clear();
+    await importBackup(JSON.stringify(backup));
+    expect((await db.profiles.get("me"))?.equipmentInventory).toEqual([
+      "dumbbells",
+      "pulldown",
+    ]);
+    expect((await db.profiles.get("me"))?.heightUnit).toBe("ft");
+    expect((await db.settings.get("preferences"))?.exerciseLanguage).toBe("hi");
+  });
   const custom = {
     id: "custom-soya",
     name: "My soya chunks",

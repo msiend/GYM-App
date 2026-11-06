@@ -17,9 +17,9 @@ export function Modal({
     const get = () =>
       Array.from(
         ref.current?.querySelectorAll<HTMLElement>(
-          'button:not([disabled]),a[href],input,select,textarea,[tabindex="0"]',
+          'button:not([disabled]),a[href],input:not([type="hidden"]):not([disabled]),select:not([disabled]),textarea:not([disabled]),summary,[tabindex="0"]',
         ) || [],
-      );
+      ).filter((element) => element.getClientRects().length > 0);
     get()[0]?.focus();
     const key = (e: KeyboardEvent) => {
       if (e.key === "Escape") close.current();

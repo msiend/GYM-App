@@ -1,0 +1,210 @@
+import type { Exercise } from "../domain/types";
+
+const base = {
+  difficulty: "Beginner",
+  alternatives: [],
+  breathing: "Breathe comfortably throughout. Do not hold or force the breath.",
+  mistakes:
+    "Forcing a position, rushing, or continuing through pain or loss of balance.",
+  source:
+    "App-authored educational summary, 6 November 2026. Official-source internet verification and independent clinical review remain incomplete.",
+};
+const yoga = (
+  id: string,
+  name: string,
+  aliases: string[],
+  muscle: string,
+  secondary: string[],
+  instructions: string[],
+  safety: string,
+  unilateral = false,
+): Exercise => ({
+  ...base,
+  id,
+  name,
+  aliases,
+  muscle,
+  secondary,
+  instructions,
+  safety,
+  unilateral,
+  category: "Yoga",
+  pattern: "Yoga",
+  equipment: "Bodyweight",
+  tracking: "seconds",
+  automatic: false,
+});
+export const yogaExercises: Exercise[] = [
+  yoga(
+    "yoga-mountain",
+    "Mountain pose · Tadasana",
+    ["ताड़ासन"],
+    "Full Body",
+    ["Abs", "Calves"],
+    [
+      "Stand with feet a comfortable distance apart near a wall if balance is uncertain. Keep knees soft and weight spread across both feet.",
+      "Let the arms rest by the sides and lengthen gently through the crown of the head without lifting the chin or forcing the spine.",
+      "Breathe normally for a few comfortable breaths, then relax. No tiptoe rise or breath hold is needed.",
+    ],
+    "Use wall support if needed. Stop if standing causes pain, dizziness or unsteadiness.",
+  ),
+  yoga(
+    "yoga-easy-seat",
+    "Comfortable seated breathing · Sukhasana",
+    ["सुखासन"],
+    "Full Body",
+    ["Back"],
+    [
+      "Sit comfortably on the floor with legs loosely crossed, or use a firm chair with feet supported. Support the hips if needed; do not force the knees down.",
+      "Rest the hands and allow the shoulders to relax. Keep the trunk comfortably upright without forcing a rigid posture.",
+      "Breathe quietly at your natural pace for a few breaths. Uncross or change the legs if uncomfortable.",
+    ],
+    "Avoid forced breath retention or fast breathing. Use a chair if floor sitting is uncomfortable; stop for dizziness.",
+  ),
+  yoga(
+    "yoga-cat-cow",
+    "Gentle cat–cow · Marjaryasana–Bitilasana",
+    ["मार्जरी आसन", "बितिलासन"],
+    "Back",
+    ["Abs"],
+    [
+      "Begin on hands and knees with comfortable padding, hands beneath shoulders and knees beneath hips.",
+      "Move slowly between a small, comfortable rounding and gentle opening of the spine. Let the head follow without throwing it backward.",
+      "Coordinate with easy breathing without forcing either position. A few smooth cycles are enough; return to a neutral position.",
+    ],
+    "Skip or seek an adapted version for wrist, knee or back pain. Do not force spinal range.",
+  ),
+  yoga(
+    "yoga-child",
+    "Supported child's pose · Balasana",
+    ["बालासन"],
+    "Back",
+    ["Glutes"],
+    [
+      "From hands and knees on a padded surface, slowly move the hips toward the heels only as far as comfortable.",
+      "Rest the trunk on a cushion if available and let the arms rest forward or beside the body. Keep enough room to breathe easily.",
+      "Take a few relaxed breaths, then return slowly using the hands for support. You do not need to reach the floor or sit fully on the heels.",
+    ],
+    "Skip for knee/hip pain, difficulty breathing in this position, or an unsuitable medical/pregnancy restriction. Never force the hips down.",
+  ),
+  yoga(
+    "yoga-rest",
+    "Comfortable resting pose · Shavasana",
+    ["शवासन"],
+    "Full Body",
+    [],
+    [
+      "Lie on the back on a comfortable surface, with arms resting loosely. Bend the knees or use support beneath them if that feels better.",
+      "Allow normal breathing without trying to hold the body perfectly still. Choose side lying or sitting if lying on the back is uncomfortable.",
+      "After a short comfortable rest, roll to the side and rise gradually rather than standing abruptly.",
+    ],
+    "Adapt lying positions for pregnancy or any medical restriction with professional guidance. Stop if breathless or dizzy.",
+  ),
+  yoga(
+    "yoga-tree",
+    "Supported tree balance · Vrksasana",
+    ["वृक्षासन"],
+    "Glutes",
+    ["Abs", "Calves"],
+    [
+      "Stand beside a wall and keep one hand supported. Shift weight gently onto one foot with the standing knee soft.",
+      "Rest the other toes on the floor with the heel against the ankle, or place the foot lightly against the lower calf. Avoid pressing into the knee joint.",
+      "Balance for a short comfortable time while breathing normally, then lower the foot and change sides. Keep the wall support as needed.",
+    ],
+    "Use stable support throughout if needed. Skip for dizziness, unsafe balance or lower-limb pain.",
+    true,
+  ),
+  yoga(
+    "yoga-butterfly",
+    "Gentle butterfly seat · Baddha Konasana",
+    ["बद्ध कोणासन", "तितली आसन"],
+    "Adductors",
+    ["Glutes"],
+    [
+      "Sit upright comfortably and bring the soles of the feet together only as close as the hips and knees allow. Sit on a folded cushion if helpful.",
+      "Support the thighs with cushions if needed. Allow the knees to rest naturally; do not press them down or flap them forcefully.",
+      "Breathe normally for a few breaths, then extend the legs slowly. Keep a gentle range without forcing a forward fold.",
+    ],
+    "Skip for hip, groin or knee pain. This is a comfortable mobility position, not a test of how far the knees can lower.",
+  ),
+  yoga(
+    "yoga-sphinx",
+    "Gentle sphinx · Salamba Bhujangasana",
+    ["सलम्ब भुजंगासन"],
+    "Back",
+    ["Abs"],
+    [
+      "Lie face down only if comfortable, with elbows beneath or slightly forward of the shoulders and forearms supported.",
+      "Lift the chest gently using the forearms, keeping the pelvis supported and the neck aligned. Choose a small height without compressing or forcing the lower back.",
+      "Breathe comfortably for a short time, then lower slowly. Rest or choose a different position if this is uncomfortable.",
+    ],
+    "Skip for back/neck pain, pregnancy or any restriction against lying prone or spinal extension. Do not use this to self-treat an injury.",
+  ),
+];
+
+const strengthBase = {
+  ...base,
+  category: "Compound",
+  safety:
+    "Use light resistance, a comfortable range and controlled technique. Stop for pain, dizziness or unusual symptoms.",
+  tracking: "reps" as const,
+};
+export const practicalExercises: Exercise[] = [
+  {
+    ...strengthBase,
+    id: "band-standing-row",
+    name: "Standing bent-over band row",
+    muscle: "Back",
+    secondary: ["Biceps", "Forearms"],
+    equipment: "Bands",
+    pattern: "Pull",
+    instructions: [
+      "Use an intact band designed by its manufacturer for standing on. Secure its centre under both feet and hold the handles with light tension; keep the face away from its recoil path.",
+      "Soften the knees and hinge at the hips while keeping the trunk comfortable and controlled. Pull the handles toward the lower ribs without jerking or shrugging.",
+      "Lower slowly. Stop if the band slips, exceeds its stretch limit or you cannot maintain trunk position.",
+    ],
+  },
+  {
+    ...strengthBase,
+    id: "band-hip-hinge",
+    name: "Standing band hip hinge",
+    muscle: "Hamstrings",
+    secondary: ["Glutes", "Back"],
+    equipment: "Bands",
+    pattern: "Hinge",
+    instructions: [
+      "Stand securely on the centre of an intact band approved for this use. Hold the handles beside the thighs with light resistance; do not place the band around the neck.",
+      "With knees softly bent, move the hips backward and lower the hands beside the legs only as far as the spine remains controlled and comfortable.",
+      "Extend the hips to stand without leaning backward. Stay within the band's stretch limit and stop if the band slips.",
+    ],
+  },
+  {
+    ...strengthBase,
+    id: "band-biceps-curl",
+    name: "Standing band biceps curl",
+    muscle: "Biceps",
+    secondary: ["Forearms"],
+    equipment: "Bands",
+    pattern: "Isolation",
+    category: "Isolation",
+    instructions: [
+      "Stand securely on the centre of an intact band approved for this use. Hold the handles with palms forward, elbows near the sides and light starting tension.",
+      "Bend the elbows to raise the handles through a comfortable range while the upper arms and trunk stay steady.",
+      "Lower slowly without swinging. Check grip and footing, and stay within the manufacturer's stretch limit.",
+    ],
+  },
+  {
+    ...strengthBase,
+    id: "dumbbell-standing-press",
+    name: "Standing dumbbell shoulder press",
+    muscle: "Shoulders",
+    secondary: ["Triceps", "Abs"],
+    equipment: "Dumbbells",
+    pattern: "Push",
+    instructions: [
+      "Stand with feet in a stable stance and light dumbbells near shoulder height. Keep wrists aligned over the forearms and knees softly extended.",
+      "Press overhead only through a comfortable range while keeping the ribs controlled and avoiding a backward lean.",
+      "Lower slowly to shoulder height. Use an easier press if getting the weights into position or the overhead range is uncomfortable.",
+    ],
+  },
+];

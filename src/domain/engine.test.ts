@@ -1,4 +1,4 @@
-import { describe, it, expect, beforeEach } from "vitest";
+import { describe, it, expect } from "vitest";
 import { generatePlan, nutrition, progression } from "./engine";
 import type { Profile, Session, SetLog } from "./types";
 import { profile } from "./fixture";
@@ -57,14 +57,14 @@ describe("personalized training and nutrition", () => {
       date: `2026-01-0${i}`,
       focus: "Full body",
       status: "complete",
-      exercises: [],
+      exercises: [{ exerciseId: "goblet", sets: 2, reps: 12, rest: 90 }],
       notes: "",
     }));
     const logs: SetLog[] = sessions.flatMap((s) =>
       [0, 1].map((i) => ({
         id: s.id + i,
         sessionId: s.id,
-        exerciseId: "squat",
+        exerciseId: "goblet",
         index: i,
         weight: 10,
         reps: 12,
@@ -74,14 +74,14 @@ describe("personalized training and nutrition", () => {
         technique: true,
       })),
     );
-    expect(progression(sessions, logs, "squat", 12)).toContain(
+    expect(progression(sessions, logs, "goblet", 12)).toContain(
       "Two consistent",
     );
     expect(
       progression(
         sessions,
         logs.map((l) => ({ ...l, pain: true })),
-        "squat",
+        "goblet",
         12,
       ),
     ).toContain("Stop");
@@ -89,7 +89,7 @@ describe("personalized training and nutrition", () => {
       progression(
         sessions,
         logs.map((l) => ({ ...l, technique: false })),
-        "squat",
+        "goblet",
         12,
       ),
     ).not.toContain("Two consistent");

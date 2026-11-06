@@ -1,5 +1,13 @@
-import type { Profile, WorkoutPlan, SetLog, Session } from "./types";
+import type {
+  Profile,
+  WorkoutPlan,
+  SetLog,
+  Session,
+  Exercise,
+  PlanExercise,
+} from "./types";
 import { exercises } from "../data/exercises";
+import { hasEquipment } from "./equipment";
 export { uid } from "./ids";
 export const localDate = (date = new Date()) =>
   `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, "0")}-${String(date.getDate()).padStart(2, "0")}`;
@@ -10,17 +18,39 @@ export const splitOptions = [
   "Push / pull / legs",
   "Body-part split (6 days)",
 ];
+export const PROGRAM_VERSION = 3;
+function reportedRestrictions(value: string) {
+  return /^(none|no restrictions|no pain|no injuries|n\/?a|not applicable)$/i.test(
+    value.trim(),
+  )
+    ? ""
+    : value.trim();
+}
+export function needsTrainingGuidance(p: Profile) {
+  return (
+    p.medical ||
+    p.nutritionRisk ||
+    p.age < 18 ||
+    /\b(pain|injur\w*|heart|blood pressure|surgery|fracture|hernia)\b|दर्द|चोट/i.test(
+      reportedRestrictions(p.restrictions),
+    )
+  );
+}
 export function eligible(p: Profile) {
-  const excluded = p.restrictions
+  const excluded = reportedRestrictions(p.restrictions)
     .toLowerCase()
-    .split(",")
-    .map((s) => s.trim())
+    .split(/[,;\n]/)
+    .map((s) =>
+      s
+        .trim()
+        .replace(/^(?:avoid|exclude|no|cannot do)\s+/, "")
+        .replace(/\bsquats\b/g, "squat"),
+    )
     .filter(Boolean);
   return exercises.filter(
     (e) =>
-      (e.equipment === "Bodyweight" ||
-        p.equipment === "Full gym" ||
-        p.equipment === e.equipment) &&
+      e.automatic !== false &&
+      hasEquipment(p, e) &&
       !excluded.some((s) =>
         `${e.name} ${e.muscle} ${e.secondary.join(" ")} ${e.pattern}`
           .toLowerCase()
@@ -29,6 +59,59 @@ export function eligible(p: Profile) {
       (!["Complete beginner", "Less than 3 months"].includes(p.experience) ||
         e.difficulty === "Beginner"),
   );
+}
+export function replacementOptions(p: Profile, original: Exercise) {
+  return eligible(p).filter(
+    (e) =>
+      e.id !== original.id &&
+      e.pattern === original.pattern &&
+      (e.muscle === original.muscle ||
+        (e.pattern === "Hinge" &&
+          ["Glutes", "Hamstrings"].includes(e.muscle) &&
+          ["Glutes", "Hamstrings"].includes(original.muscle))),
+  );
+}
+export function prescribeExercise(p: Profile, e: Exercise): PlanExercise {
+  const beginner = ["Complete beginner", "Less than 3 months"].includes(
+    p.experience,
+  );
+  const sets =
+    beginner ||
+    p.recovery === "Limited recovery" ||
+    p.age >= 65 ||
+    p.duration <= 30 ||
+    p.goal === "Flexibility & endurance"
+      ? 2
+      : 3;
+  const strength =
+    p.goal === "Strength building" &&
+    !beginner &&
+    e.category === "Compound" &&
+    ["Push", "Pull", "Squat", "Hinge"].includes(e.pattern);
+  return {
+    exerciseId: e.id,
+    sets,
+    reps:
+      e.tracking === "seconds"
+        ? 20
+        : e.pattern === "Core"
+          ? 8
+          : strength
+            ? 6
+            : e.category === "Isolation"
+              ? 15
+              : 12,
+    rest: strength
+      ? 180
+      : e.category === "Compound" && !["Core", "Carry"].includes(e.pattern)
+        ? 90
+        : 60,
+  };
+}
+export function exerciseMinutes(item: PlanExercise, e: Exercise) {
+  const work =
+    item.reps * (e.tracking === "seconds" ? 1 : 4) * (e.unilateral ? 2 : 1);
+  return (work * item.sets + item.rest * (item.sets - 1) + 45) / 60;
 }
 /** Pick the best-spaced available days, including the Sunday/Monday boundary. */
 function spacedDays(available: number[], count: number) {
@@ -55,6 +138,13 @@ const slot = (muscles: string[], pattern?: string): Slot => ({
   pattern,
 });
 export function generatePlan(p: Profile): WorkoutPlan {
+  // Normalize imported/edited availability; never schedule duplicate or invalid days.
+  p = {
+    ...p,
+    days: [...new Set(p.days)].filter(
+      (d) => Number.isInteger(d) && d >= 0 && d <= 6,
+    ),
+  };
   const beginner = ["Complete beginner", "Less than 3 months"].includes(
     p.experience,
   );
@@ -116,7 +206,7 @@ export function generatePlan(p: Profile): WorkoutPlan {
       "Some available days are consecutive. Space resistance sessions out where possible, or reduce effort when recovery is incomplete.",
     );
   const pool = eligible(p).filter(
-    (e) => !["Cardio", "Mobility", "Stretching"].includes(e.category),
+    (e) => !["Cardio", "Mobility", "Stretching", "Yoga"].includes(e.category),
   );
   const chest = slot(["Chest"], "Push"),
     back = slot(["Back"], "Pull"),
@@ -148,7 +238,8 @@ export function generatePlan(p: Profile): WorkoutPlan {
                 (_, i) => ["Push", "Pull", "Legs"][i % 3],
               );
   const missing = new Set<string>();
-  const days = p.medical
+  const guidanceNeeded = needsTrainingGuidance(p);
+  const days = guidanceNeeded
     ? []
     : chosen
         .map((day, i) => {
@@ -257,22 +348,10 @@ export function generatePlan(p: Profile): WorkoutPlan {
                                     isolate(["Biceps"]),
                                     isolate(["Calves"]),
                                   ];
-          const sets =
-            beginner ||
-            lowRecovery ||
-            p.age >= 65 ||
-            p.goal === "Flexibility & endurance"
-              ? 2
-              : 3;
-          const rest = p.goal === "Strength building" ? 120 : 75;
-          const minutesPerExercise = (sets * 40 + (sets - 1) * rest + 30) / 60;
-          const capacity = Math.max(
-            2,
-            Math.floor((p.duration - 8) / minutesPerExercise),
-          );
+          // Reserve five minutes each for warm-up/cool-down; unilateral work takes both sides.
+          let usedMinutes = 10;
           const picked: typeof exercises = [];
           for (const request of slots) {
-            if (picked.length >= capacity) break;
             const candidates = pool.filter(
               (e) =>
                 request.muscles.includes(e.muscle) &&
@@ -289,26 +368,24 @@ export function generatePlan(p: Profile): WorkoutPlan {
                 Number(priorities.includes(b.muscle)) -
                 Number(priorities.includes(a.muscle)),
             );
-            picked.push(candidates[(i + picked.length) % candidates.length]);
+            const fitting = candidates.filter(
+              (e) =>
+                usedMinutes + exerciseMinutes(prescribeExercise(p, e), e) <=
+                p.duration,
+            );
+            if (!fitting.length) continue;
+            const exercise = fitting[(i + picked.length) % fitting.length];
+            usedMinutes += exerciseMinutes(
+              prescribeExercise(p, exercise),
+              exercise,
+            );
+            picked.push(exercise);
           }
           return {
             day,
             focus,
-            exercises: picked.map((e) => ({
-              exerciseId: e.id,
-              sets,
-              reps:
-                e.tracking === "seconds"
-                  ? 20
-                  : p.goal === "Strength building" &&
-                      !beginner &&
-                      e.category === "Compound"
-                    ? 6
-                    : e.category === "Isolation"
-                      ? 15
-                      : 12,
-              rest: e.category === "Isolation" ? 60 : rest,
-            })),
+            estimatedMinutes: Math.ceil(usedMinutes),
+            exercises: picked.map((e) => prescribeExercise(p, e)),
           };
         })
         .filter((d) => d.exercises.length);
@@ -316,14 +393,29 @@ export function generatePlan(p: Profile): WorkoutPlan {
     warnings.push(
       `Equipment or exclusions limit options for: ${[...missing].join(", ")}. Do not improvise unsafe equipment; add suitable equipment or seek guidance for substitutions.`,
     );
+  if (
+    !guidanceNeeded &&
+    (days.length < count || days.some((d) => d.exercises.length < 4))
+  )
+    warnings.push(
+      "Time, equipment or exclusions limit movement coverage. This is a partial starting plan, not a complete assessment. Review missing movements with a qualified trainer; do not add unsafe improvised equipment.",
+    );
+  if (p.equipment !== "Full gym")
+    warnings.push(
+      "Only confirmed benches, band anchors and platforms are used. Update equipment details when these supports are available.",
+    );
+  if (guidanceNeeded)
+    warnings.push(
+      "Adult automatic programming is withheld: age or reported health restrictions need qualified professional guidance. The exercise library remains educational reference material.",
+    );
   return {
     id: "current",
     created: localDate(),
-    version: 2,
+    version: PROGRAM_VERSION,
     split,
     days,
-    rationale: p.medical
-      ? "Unrestricted training is withheld due to the health screening."
+    rationale: guidanceNeeded
+      ? "Unrestricted adult training is withheld due to age or reported health restrictions. Seek qualified guidance before choosing a program."
       : `${split} uses ${days.length} of your ${p.days.length} available days, ${p.duration}-minute sessions and ${p.equipment.toLowerCase()} equipment. ${beginner ? "Beginner volume starts at two sets per exercise." : "Volume and rep targets reflect your goal and recovery."} Different valid plans can look different; consistency, manageable volume and recovery matter more than matching one diagram.`,
     warnings,
   };
@@ -388,29 +480,64 @@ export function progression(
   logs: SetLog[],
   exerciseId: string,
   repTarget: number,
+  {
+    recoveryLimited = false,
+    prescribedSets,
+  }: { recoveryLimited?: boolean; prescribedSets?: number } = {},
 ) {
+  const exercise = exercises.find((e) => e.id === exerciseId);
+  const activePain = logs.some(
+    (l) =>
+      l.exerciseId === exerciseId &&
+      l.pain &&
+      sessions.some((s) => s.id === l.sessionId && s.status === "active"),
+  );
   const recent = sessions
     .filter((s) => s.status === "complete")
     .sort((a, b) => b.date.localeCompare(a.date))
-    .filter((s) =>
-      logs.some((l) => l.sessionId === s.id && l.exerciseId === exerciseId),
+    .filter(
+      (s) =>
+        s.exercises.some((e) => e.exerciseId === exerciseId) ||
+        logs.some((l) => l.sessionId === s.id && l.exerciseId === exerciseId),
     )
     .slice(0, 2);
   const sets = logs.filter(
     (l) =>
       recent.some((s) => s.id === l.sessionId) && l.exerciseId === exerciseId,
   );
-  if (sets.some((l) => l.pain))
+  if (activePain || sets.some((l) => l.pain))
     return "Stop painful movements and seek appropriate guidance before resuming.";
+  if (recoveryLimited)
+    return "Keep the load steady while recovery is limited. Reduce effort or add rest if fatigue is unusual.";
+  if (!exercise || exercise.tracking === "seconds")
+    return "Build comfortable duration and control gradually. Do not increase load based on a timed hold.";
+  if (["Bodyweight", "Bands"].includes(exercise.equipment))
+    return "Build controlled repetitions before changing the exercise difficulty or band resistance. A kilogram-based load increase is not appropriate for this movement.";
   if (sets.some((l) => l.rpe >= 9 || l.reps < repTarget - 3))
     return "Keep the load steady or reduce it. Prioritize technique and recovery.";
   if (
     recent.length === 2 &&
-    sets.length >= 4 &&
+    new Set(recent.map((s) => s.date)).size === 2 &&
+    recent.every((s) => {
+      const prescription = s.exercises.find((e) => e.exerciseId === exerciseId);
+      const recorded = sets.filter((l) => l.sessionId === s.id);
+      return (
+        prescription &&
+        prescription.reps === repTarget &&
+        prescription.sets ===
+          (prescribedSets ??
+            recent[0].exercises.find((e) => e.exerciseId === exerciseId)
+              ?.sets) &&
+        recorded.length >= prescription.sets &&
+        new Set(recorded.map((l) => l.index)).size === recorded.length
+      );
+    }) &&
+    sets.length > 0 &&
     sets.every(
       (l) => l.done && l.reps >= repTarget && l.technique && l.rpe <= 8,
     ) &&
-    new Set(sets.map((l) => l.weight)).size === 1
+    new Set(sets.map((l) => l.weight)).size === 1 &&
+    sets[0].weight > 0
   )
     return "Two consistent sessions. Consider the smallest available load increase next time, only if technique and recovery feel good. You decide.";
   return "Build consistent, comfortable repetitions before increasing load. Leave 2–3 repetitions in reserve.";

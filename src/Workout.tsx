@@ -5,6 +5,8 @@ import {
   Check,
   Clock,
   Dumbbell,
+  Flower2,
+  TrendingUp,
   BookOpen,
   Pause,
   Play,
@@ -13,16 +15,33 @@ import {
   Trash2,
   X,
 } from "lucide-react";
-import { ExerciseOverview, TutorialLink } from "./components/ExerciseGuide";
+import AboutExercise from "./components/AboutExercise";
+import { TutorialLink } from "./components/ExerciseGuide";
 import { bodyPartLabel } from "./domain/exercise-guide";
 import PlanSettings from "./components/PlanSettings";
 import { db, defaults } from "./data/db";
 import { exercises, exerciseById } from "./data/exercises";
-import { eligible, localDate, progression, uid } from "./domain/engine";
+import {
+  localDate,
+  progression,
+  uid,
+  needsTrainingGuidance,
+  PROGRAM_VERSION,
+  replacementOptions,
+  prescribeExercise,
+} from "./domain/engine";
 import type { Profile, Session, SetLog } from "./domain/types";
 import { Empty, Heading, Modal, Ring } from "./components/ui";
 import { days } from "./domain/calendar";
 import { useUI } from "./store";
+import { saveErrorMessage } from "./data/errors";
+import { displayedLoad, storedLoad } from "./domain/weight";
+import {
+  bodyParts,
+  matchesBodyPart,
+  matchesExerciseSearch,
+} from "./domain/body-parts";
+import FitnessDisclaimer from "./components/FitnessDisclaimer";
 export default function Workout({
   profile: p,
   onSetup,
@@ -32,11 +51,21 @@ export default function Workout({
 }) {
   const plan = useLiveQuery(() => db.plans.get("current"));
   const sessions = useLiveQuery(() => db.sessions.toArray()) || [];
-  const logs = useLiveQuery(() => db.sets.toArray()) || [];
+  const storedLogs = useLiveQuery(() => db.sets.toArray());
+  const [pendingSets, setPendingSets] = useState<
+    Record<string, Partial<SetLog>>
+  >({});
+  const logs = (storedLogs || []).map((log) => ({
+    ...log,
+    ...pendingSets[log.id],
+  }));
   const settings =
     useLiveQuery(() => db.settings.get("preferences")) || defaults;
   const [planSettings, setPlanSettings] = useState(false);
   const [muscleFilter, setMuscleFilter] = useState("All muscles");
+  const [bodyFilter, setBodyFilter] = useState("all");
+  const [workoutBodyFilter, setWorkoutBodyFilter] = useState("all");
+  const [activityFilter, setActivityFilter] = useState("All activities");
   const [equipmentFilter, setEquipmentFilter] = useState("All equipment");
   const [tab, setTab] = useState("plan");
   const [selected, setSelected] = useState(new Date().getDay());
@@ -49,13 +78,58 @@ export default function Workout({
   const [starting, setStarting] = useState(false);
   const { notify } = useUI();
   const active = sessions.find((s) => s.status === "active");
-  const day = plan?.days.find((d) => d.day === selected) || plan?.days[0];
+  const day = plan?.days.find((d) => d.day === selected);
+  const nextDay = plan?.days
+    .slice()
+    .sort(
+      (a, b) =>
+        ((a.day - selected + 7) % 7 || 7) - ((b.day - selected + 7) % 7 || 7),
+    )[0];
   const done = active
     ? logs.filter((l) => l.sessionId === active.id && l.done).length
     : 0;
   const total = active
     ? logs.filter((l) => l.sessionId === active.id).length
     : 0;
+  const scheduledExercises = active?.exercises || day?.exercises || [];
+  const visibleExercises = scheduledExercises.filter((item) =>
+    matchesBodyPart(exerciseById(item.exerciseId), workoutBodyFilter),
+  );
+  const libraryExercises = exercises.filter(
+    (e) =>
+      matchesExerciseSearch(e, search) &&
+      (muscleFilter === "All muscles" ||
+        [e.muscle, ...e.secondary].includes(muscleFilter)) &&
+      matchesBodyPart(e, bodyFilter) &&
+      (equipmentFilter === "All equipment" ||
+        e.equipment === equipmentFilter) &&
+      (tab === "yoga"
+        ? e.category === "Yoga"
+        : activityFilter === "All activities" ||
+          (activityFilter === "Strength"
+            ? !["Yoga", "Cardio", "Mobility", "Stretching"].includes(e.category)
+            : e.category === activityFilter)),
+  );
+  useEffect(() => {
+    if (!storedLogs) return;
+    setPendingSets((current) => {
+      let changed = false;
+      const next = { ...current };
+      for (const [id, patch] of Object.entries(current)) {
+        const saved = storedLogs.find((log) => log.id === id);
+        if (
+          !saved ||
+          Object.entries(patch).every(
+            ([key, value]) => saved[key as keyof SetLog] === value,
+          )
+        ) {
+          delete next[id];
+          changed = true;
+        }
+      }
+      return changed ? next : current;
+    });
+  }, [storedLogs]);
   useEffect(() => {
     if (!deadline || paused) return;
     const tick = setInterval(() => {
@@ -76,7 +150,14 @@ export default function Workout({
     return () => clearInterval(tick);
   }, [deadline, paused, notify]);
   async function start() {
-    if (!day || starting) return;
+    if (
+      !day ||
+      starting ||
+      !p ||
+      needsTrainingGuidance(p) ||
+      plan?.version !== PROGRAM_VERSION
+    )
+      return;
     setStarting(true);
     try {
       const session: Session = {
@@ -102,7 +183,7 @@ export default function Workout({
               done: false,
               rpe: 7,
               pain: false,
-              technique: true,
+              technique: false,
             })),
           );
       });
@@ -112,7 +193,27 @@ export default function Workout({
     }
   }
   async function saveSet(log: SetLog, patch: Partial<SetLog>) {
-    await db.sets.update(log.id, patch);
+    setPendingSets((current) => ({
+      ...current,
+      [log.id]: { ...current[log.id], ...patch },
+    }));
+    try {
+      if (!(await db.sets.update(log.id, patch)))
+        throw new Error("SetNotFound");
+    } catch (error) {
+      setPendingSets((current) => {
+        const remaining = { ...current[log.id] };
+        for (const [key, value] of Object.entries(patch))
+          if (remaining[key as keyof SetLog] === value)
+            delete remaining[key as keyof SetLog];
+        const next = { ...current };
+        if (Object.keys(remaining).length) next[log.id] = remaining;
+        else delete next[log.id];
+        return next;
+      });
+      notify(saveErrorMessage(error, "this set", { savedValueRestored: true }));
+      return;
+    }
     if (patch.done) {
       const rest =
         active?.exercises.find((e) => e.exerciseId === log.exerciseId)?.rest ||
@@ -138,8 +239,17 @@ export default function Workout({
     notify("Workout saved. Every effort counts.");
   }
   async function swap(id: string) {
-    if (!active) return;
+    if (
+      !active ||
+      !p ||
+      !replacementOptions(p, exerciseById(replace)).some((e) => e.id === id)
+    )
+      return;
     const old = active.exercises.find((e) => e.exerciseId === replace)!;
+    const prescription = {
+      ...prescribeExercise(p, exerciseById(id)),
+      sets: Math.min(old.sets, prescribeExercise(p, exerciseById(id)).sets),
+    };
     await db.transaction("rw", [db.sessions, db.sets], async () => {
       await db.sets
         .where("sessionId")
@@ -148,21 +258,21 @@ export default function Workout({
         .delete();
       await db.sessions.update(active.id, {
         exercises: active.exercises.map((e) =>
-          e.exerciseId === replace ? { ...e, exerciseId: id } : e,
+          e.exerciseId === replace ? prescription : e,
         ),
       });
       await db.sets.bulkAdd(
-        Array.from({ length: old.sets }, (_, i) => ({
+        Array.from({ length: prescription.sets }, (_, i) => ({
           id: uid(),
           sessionId: active.id,
           exerciseId: id,
           index: i,
           weight: 0,
-          reps: old.reps,
+          reps: prescription.reps,
           done: false,
           rpe: 7,
           pain: false,
-          technique: true,
+          technique: false,
         })),
       );
     });
@@ -190,18 +300,29 @@ export default function Workout({
           ) : undefined
         }
       />
-      <div className="tabs">
-        {["plan", "library", "history"].map((t) => (
+      <FitnessDisclaimer />
+      <div className="tabs workout-tabs">
+        {["plan", "library", "yoga", "history"].map((t) => (
           <button
             key={t}
             className={tab === t ? "active" : ""}
-            onClick={() => setTab(t)}
+            onClick={() => {
+              setTab(t);
+              if (t === "yoga") {
+                setBodyFilter("all");
+                setMuscleFilter("All muscles");
+                setEquipmentFilter("All equipment");
+                setSearch("");
+              }
+            }}
           >
             {t === "plan"
               ? "My workout"
               : t === "library"
                 ? "Exercise library"
-                : "History"}
+                : t === "yoga"
+                  ? "Yoga"
+                  : "History"}
           </button>
         ))}
       </div>
@@ -216,13 +337,50 @@ export default function Workout({
               <ArrowRight size={16} />
             </button>
           </Empty>
-        ) : p.medical ? (
+        ) : needsTrainingGuidance(p) ? (
           <Empty
             title="Let’s put your health first"
-            description="Your screening indicates that professional guidance is needed before an unrestricted plan. The exercise library is available for reference."
+            description="Your age or reported health restrictions need qualified guidance before using an unrestricted adult plan. The exercise library is available for educational reference."
           />
         ) : (
           <>
+            {!plan && !active && (
+              <Empty
+                title="Create your weekly plan"
+                description="Your profile is saved. Choose your available days and equipment to preview a weekly plan."
+              >
+                <button
+                  className="button"
+                  onClick={() => setPlanSettings(true)}
+                >
+                  Create weekly plan <ArrowRight size={16} />
+                </button>
+              </Empty>
+            )}
+            {p.goal === "Fat loss" && (
+              <section className="card fat-loss-guide">
+                <h2>Fat loss & body-part strength</h2>
+                <p>
+                  Train the whole body and build comfortable activity gradually.
+                  Choose a body part to learn strengthening exercises; these do
+                  not selectively burn fat from that area. Sustainable
+                  nutrition, recovery and consistency matter.
+                </p>
+                <button
+                  className="button secondary"
+                  onClick={() => {
+                    setTab("library");
+                    setBodyFilter("all");
+                    setMuscleFilter("All muscles");
+                    setActivityFilter("Strength");
+                    setEquipmentFilter("All equipment");
+                    setSearch("");
+                  }}
+                >
+                  Explore body-part exercises <ArrowRight size={16} />
+                </button>
+              </section>
+            )}
             {plan && !active && (
               <section className="card plan-explanation">
                 <div className="section-title">
@@ -251,6 +409,20 @@ export default function Workout({
                     {w}
                   </p>
                 ))}
+                {plan.version !== PROGRAM_VERSION && (
+                  <p className="notice">
+                    This saved plan predates the technique and programming
+                    audit. Use Change plan to review and save the updated
+                    preview before starting. Your history is preserved.
+                  </p>
+                )}
+                {plan.split === "Full body" && (
+                  <p className="hint">
+                    Full-body sessions train several muscle groups on each
+                    training day. A repeated focus is intentional; recovery days
+                    are separate.
+                  </p>
+                )}
                 <div className="training-day-list">
                   {plan.days.map((d) => (
                     <button
@@ -267,25 +439,55 @@ export default function Workout({
                 </div>
               </section>
             )}
-            <div className="day-picker">
-              {days.map((d, i) => (
-                <button
-                  key={d}
-                  className={selected === i ? "selected" : ""}
-                  onClick={() => setSelected(i)}
-                >
-                  {d.slice(0, 3)}
-                  {plan?.days.some((x) => x.day === i) && (
-                    <span className="tiny-dot" />
-                  )}
-                </button>
-              ))}
-            </div>
-            {!active && !plan?.days.some((d) => d.day === selected) && (
-              <div className="notice">
-                Recovery day. Gentle walking or comfortable mobility is
-                optional. Your next training session is shown below.
+            {!active && plan && (
+              <div className="day-picker" role="group" aria-label="Workout day">
+                {days.map((d, i) => (
+                  <button
+                    key={d}
+                    className={selected === i ? "selected" : ""}
+                    aria-pressed={selected === i}
+                    title={`${d}: ${plan?.days.find((x) => x.day === i)?.focus || "Recovery day"}`}
+                    onClick={() => {
+                      setSelected(i);
+                      setWorkoutBodyFilter("all");
+                    }}
+                  >
+                    {d.slice(0, 3)}
+                    {plan?.days.some((x) => x.day === i) && (
+                      <span className="tiny-dot" />
+                    )}
+                  </button>
+                ))}
               </div>
+            )}
+            {!active && plan && !day && (
+              <section className="card recovery-day">
+                <h2>{days[selected]} · Recovery day</h2>
+                <p>
+                  No workout is scheduled for {days[selected]}. Rest, or choose
+                  gentle walking or comfortable mobility if you feel ready.
+                </p>
+                {nextDay && (
+                  <>
+                    <p className="hint">
+                      Next scheduled workout: {days[nextDay.day]} ·{" "}
+                      {nextDay.focus}
+                    </p>
+                    <button
+                      className="button secondary"
+                      onClick={() => setSelected(nextDay.day)}
+                    >
+                      View {days[nextDay.day]} workout <ArrowRight size={16} />
+                    </button>
+                  </>
+                )}
+              </section>
+            )}
+            {active && (
+              <p className="notice">
+                Your workout from {active.date} is in progress. Finish this
+                workout to browse other days. Your sets are saved as you go.
+              </p>
             )}
             {(active || day) && (
               <>
@@ -294,7 +496,11 @@ export default function Workout({
                     <span className="tag green">
                       {active ? "WORKOUT IN PROGRESS" : plan?.split}
                     </span>
-                    <h2>{active?.focus || day?.focus}</h2>
+                    <h2>
+                      {active
+                        ? active.focus
+                        : `${days[selected]} · ${day?.focus}`}
+                    </h2>
                     <div className="session-muscles">
                       <span>Main focus</span>
                       {[
@@ -311,7 +517,7 @@ export default function Workout({
                     </div>
                     <p>
                       <Clock size={15} />
-                      {p.duration} min <span>•</span>{" "}
+                      Up to {p.duration} min <span>•</span>{" "}
                       {(active?.exercises || day?.exercises)?.length} exercises{" "}
                       <span>•</span>{" "}
                       {active
@@ -325,7 +531,7 @@ export default function Workout({
                     <button
                       className="button"
                       onClick={start}
-                      disabled={starting}
+                      disabled={starting || plan?.version !== PROGRAM_VERSION}
                     >
                       <Play size={16} />
                       {starting ? "Starting…" : "Start workout"}
@@ -341,7 +547,61 @@ export default function Workout({
                     pain-free range.
                   </p>
                 </details>
-                {(active?.exercises || day?.exercises || []).map((item, i) => {
+                {active && (
+                  <details className="card instruction">
+                    <summary>How to record sets, load & effort</summary>
+                    <p>
+                      Record what you actually performed. For paired dumbbells,
+                      record one dumbbell's weight; for a single dumbbell,
+                      record that weight. Barbell load includes the bar.
+                      Bodyweight practice can use zero external load. Check
+                      technique only when the set felt controlled.
+                    </p>
+                    <p>
+                      RPE is your perceived effort from 1 (very easy) to 10
+                      (maximum). Edit it for each set. Start with manageable
+                      effort and finish with about 2–3 repetitions still
+                      possible. Stop painful movements.
+                    </p>
+                  </details>
+                )}
+                <div className="workout-body-filter">
+                  <label>
+                    Filter workout by body part
+                    <select
+                      aria-label="Filter workout by body part"
+                      value={workoutBodyFilter}
+                      onChange={(e) => setWorkoutBodyFilter(e.target.value)}
+                    >
+                      {bodyParts.map((part) => (
+                        <option key={part.id} value={part.id}>
+                          {part.label}
+                        </option>
+                      ))}
+                    </select>
+                  </label>
+                  <p className="hint" role="status">
+                    Showing {visibleExercises.length} of{" "}
+                    {scheduledExercises.length} exercises. Filtering changes
+                    only the view; all scheduled sets stay saved.
+                  </p>
+                  {workoutBodyFilter !== "all" && (
+                    <button
+                      className="text-link"
+                      onClick={() => setWorkoutBodyFilter("all")}
+                    >
+                      Show all workout exercises
+                    </button>
+                  )}
+                </div>
+                {!visibleExercises.length && (
+                  <Empty
+                    title="No matching exercises in this session"
+                    description="Choose another body part or show the full workout. The exercise library includes other muscle groups."
+                  />
+                )}
+                {visibleExercises.map((item) => {
+                  const i = scheduledExercises.indexOf(item);
                   const ex = exerciseById(item.exerciseId);
                   const sets = logs
                     .filter(
@@ -376,9 +636,10 @@ export default function Workout({
                           <p>
                             {item.sets} sets ·{" "}
                             {ex.tracking === "seconds"
-                              ? `${item.reps} sec hold`
+                              ? `${item.reps} sec`
                               : `${Math.max(5, item.reps - 4)}–${item.reps} reps`}{" "}
-                            · {item.rest}s rest
+                            {ex.unilateral ? "each side · " : ""}· {item.rest}s
+                            rest
                           </p>
                         </div>
                         {active && (
@@ -394,20 +655,19 @@ export default function Workout({
                       <div className="exercise-help-actions">
                         <button
                           className="button secondary"
-                          aria-label={`Instructions for ${ex.name}`}
+                          aria-label={`About the exercise: ${ex.name}`}
                           onClick={() => setInfo(ex.id)}
                         >
                           <BookOpen size={16} />
-                          How to do it
+                          About the exercise
                         </button>
                         <TutorialLink exercise={ex} />
                       </div>
-                      <ExerciseOverview exercise={ex} />
                       {active && (
                         <>
                           <p className="hint">
                             {previous.length
-                              ? `Previous: ${previous.map((l) => `${l.weight} kg × ${l.reps}`).join(" · ")}`
+                              ? `Previous: ${previous.map((l) => `${displayedLoad(l.weight, settings.unit)} ${settings.unit} × ${l.reps}`).join(" · ")}`
                               : "Start with a load you can control; bodyweight or unloaded practice is fine."}
                           </p>
                           <div className="set-table">
@@ -432,30 +692,22 @@ export default function Workout({
                                     type="number"
                                     min="0"
                                     max="1000"
-                                    value={
-                                      Math.round(
-                                        log.weight *
-                                          (settings.unit === "lbs"
-                                            ? 2.20462
-                                            : 1) *
-                                          10,
-                                      ) / 10
-                                    }
+                                    step="any"
+                                    value={displayedLoad(
+                                      log.weight,
+                                      settings.unit,
+                                    )}
                                     onChange={(e) =>
                                       saveSet(log, {
-                                        weight:
-                                          Math.max(
-                                            0,
-                                            Math.min(1000, +e.target.value),
-                                          ) /
-                                          (settings.unit === "lbs"
-                                            ? 2.20462
-                                            : 1),
+                                        weight: storedLoad(
+                                          +e.target.value,
+                                          settings.unit,
+                                        ),
                                       })
                                     }
                                   />
                                   <input
-                                    aria-label={`Set ${index + 1} repetitions`}
+                                    aria-label={`Set ${index + 1} ${ex.tracking === "seconds" ? "seconds" : "repetitions"}`}
                                     type="number"
                                     min="0"
                                     max="999"
@@ -539,6 +791,12 @@ export default function Workout({
                                     Pain / discomfort
                                   </label>
                                 </div>
+                                {log.pain && (
+                                  <p role="alert" className="notice danger">
+                                    Stop painful movements and seek appropriate
+                                    guidance before resuming.
+                                  </p>
+                                )}
                               </div>
                             ))}
                           </div>
@@ -558,7 +816,7 @@ export default function Workout({
                                   done: false,
                                   rpe: 7,
                                   pain: false,
-                                  technique: true,
+                                  technique: false,
                                 })
                               }
                             >
@@ -591,7 +849,11 @@ export default function Workout({
                           </div>
                           <p className="coaching">
                             <Trending />{" "}
-                            {progression(sessions, logs, ex.id, item.reps)}
+                            {progression(sessions, logs, ex.id, item.reps, {
+                              recoveryLimited:
+                                p.recovery === "Limited recovery",
+                              prescribedSets: item.sets,
+                            })}
                           </p>
                         </>
                       )}
@@ -610,38 +872,136 @@ export default function Workout({
             )}
           </>
         ))}
-      {tab === "library" && (
+      {(tab === "library" || tab === "yoga") && (
         <>
-          <div className="library-filters">
-            <label>
-              Muscle
-              <select
-                value={muscleFilter}
-                onChange={(e) => setMuscleFilter(e.target.value)}
+          {tab === "yoga" ? (
+            <section className="card yoga-intro">
+              <h2>Gentle yoga · learn at your pace</h2>
+              <p>
+                Eight gentle guides for comfortable movement and relaxed
+                breathing. Stay within a pain-free range.
+              </p>
+              <details className="yoga-practice-notes">
+                <summary>Practice guidelines & limitations</summary>
+                <p>
+                  Start with a few easy breaths, adapt positions to your
+                  ability, and use a qualified instructor for unfamiliar poses.
+                  Skip painful positions, forced stretches, headstands, shoulder
+                  stands and breath holds. These guides do not prescribe
+                  treatment or replace strength/cardio training.
+                </p>
+              </details>
+            </section>
+          ) : (
+            <section className="card fat-loss-guide">
+              <h2>Choose a body part to strengthen</h2>
+              <p>
+                Body-part filters include primary and supporting muscles. Core,
+                arm or thigh exercises build muscle function; fat loss happens
+                across the body and cannot be targeted to one area.
+              </p>
+            </section>
+          )}
+          <div
+            className={`body-part-shortcuts ${tab === "yoga" ? "yoga-shortcuts" : ""}`}
+            role="group"
+            aria-label="Body-part exercise choices"
+          >
+            {bodyParts.map((part) => (
+              <button
+                className={bodyFilter === part.id ? "selected" : ""}
+                aria-pressed={bodyFilter === part.id}
+                key={part.id}
+                onClick={() => {
+                  setBodyFilter(part.id);
+                  setMuscleFilter("All muscles");
+                }}
               >
-                {[
-                  "All muscles",
-                  ...new Set(exercises.map((e) => e.muscle)),
-                ].map((x) => (
-                  <option key={x}>{x}</option>
-                ))}
-              </select>
-            </label>
+                {part.label}
+              </button>
+            ))}
+          </div>
+          <div
+            className={`library-main-filter ${tab === "yoga" ? "yoga-body-filter" : ""}`}
+          >
             <label>
-              Equipment
+              Body part
               <select
-                value={equipmentFilter}
-                onChange={(e) => setEquipmentFilter(e.target.value)}
+                aria-label="Filter library by body part"
+                value={bodyFilter}
+                onChange={(e) => setBodyFilter(e.target.value)}
               >
-                {[
-                  "All equipment",
-                  ...new Set(exercises.map((e) => e.equipment)),
-                ].map((x) => (
-                  <option key={x}>{x}</option>
+                {bodyParts.map((part) => (
+                  <option key={part.id} value={part.id}>
+                    {part.label}
+                  </option>
                 ))}
               </select>
             </label>
           </div>
+          <details className="library-advanced-filters">
+            <summary>
+              More filters: muscle, equipment & activity
+              {muscleFilter !== "All muscles" ||
+              equipmentFilter !== "All equipment" ||
+              (tab !== "yoga" && activityFilter !== "All activities")
+                ? " · filter active"
+                : ""}
+            </summary>
+            <div className="library-filters">
+              <label>
+                Specific muscle
+                <select
+                  aria-label="Filter by specific muscle"
+                  value={muscleFilter}
+                  onChange={(e) => setMuscleFilter(e.target.value)}
+                >
+                  {[
+                    "All muscles",
+                    ...new Set(exercises.map((e) => e.muscle)),
+                  ].map((x) => (
+                    <option key={x}>{x}</option>
+                  ))}
+                </select>
+              </label>
+              <label>
+                Equipment
+                <select
+                  aria-label="Filter library by equipment"
+                  value={equipmentFilter}
+                  onChange={(e) => setEquipmentFilter(e.target.value)}
+                >
+                  {[
+                    "All equipment",
+                    ...new Set(exercises.map((e) => e.equipment)),
+                  ].map((x) => (
+                    <option key={x}>{x}</option>
+                  ))}
+                </select>
+              </label>
+              {tab !== "yoga" && (
+                <label>
+                  Activity type
+                  <select
+                    aria-label="Filter by activity type"
+                    value={activityFilter}
+                    onChange={(e) => setActivityFilter(e.target.value)}
+                  >
+                    {[
+                      "All activities",
+                      "Strength",
+                      "Yoga",
+                      "Cardio",
+                      "Mobility",
+                      "Stretching",
+                    ].map((value) => (
+                      <option key={value}>{value}</option>
+                    ))}
+                  </select>
+                </label>
+              )}
+            </div>
+          </details>
           <div className="search-bar">
             <input
               placeholder="Search muscles, movements or exercises…"
@@ -649,47 +1009,62 @@ export default function Workout({
               value={search}
               onChange={(e) => setSearch(e.target.value)}
             />
-            <span>{exercises.length} offline exercises</span>
+            <span role="status">
+              {libraryExercises.length} matching · {exercises.length} offline
+              exercises
+            </span>
           </div>
           <div className="library-grid">
-            {exercises
-              .filter(
-                (e) =>
-                  (e.name + " " + e.muscle + " " + e.category)
-                    .toLowerCase()
-                    .includes(search.toLowerCase()) &&
-                  (muscleFilter === "All muscles" ||
-                    e.muscle === muscleFilter) &&
-                  (equipmentFilter === "All equipment" ||
-                    e.equipment === equipmentFilter),
-              )
-              .map((e) => (
-                <article className="card library-item" key={e.id}>
-                  <button
-                    className="exercise-library-open"
-                    onClick={() => setInfo(e.id)}
-                    aria-label={`Instructions for ${e.name}`}
-                  >
-                    <div className="exercise-glyph">
+            {libraryExercises.map((e) => (
+              <article className="card library-item" key={e.id}>
+                <button
+                  className="exercise-library-open"
+                  onClick={() => setInfo(e.id)}
+                >
+                  <div className="exercise-glyph">
+                    {e.category === "Yoga" ? (
+                      <Flower2 size={28} />
+                    ) : (
                       <Dumbbell size={28} />
-                    </div>
-                    <span className="eyebrow">
-                      {e.muscle} · {e.equipment}
-                    </span>
-                    <h3>{e.name}</h3>
-                    <span className="muted">
-                      How to do it <ArrowRight size={16} />
-                    </span>
-                  </button>
-                  <TutorialLink exercise={e} />
-                  <ExerciseOverview exercise={e} compact />
-                </article>
-              ))}
+                    )}
+                  </div>
+                  <span className="eyebrow">
+                    {e.muscle} · {e.equipment}
+                  </span>
+                  <h3>{e.name}</h3>
+                  <span className="muted">
+                    About the exercise <ArrowRight size={16} />
+                  </span>
+                </button>
+                <TutorialLink exercise={e} />
+              </article>
+            ))}
           </div>
+          {!libraryExercises.length && (
+            <Empty
+              title="No exercises match these filters"
+              description="Try a different body part, equipment choice or search."
+            >
+              <button
+                className="button secondary"
+                onClick={() => {
+                  setBodyFilter("all");
+                  setMuscleFilter("All muscles");
+                  setEquipmentFilter("All equipment");
+                  setActivityFilter("All activities");
+                  setSearch("");
+                }}
+              >
+                Reset exercise filters
+              </button>
+            </Empty>
+          )}
           <p className="hint">
-            The expanded descriptions come from Free Exercise DB (public-domain
-            catalog). Each exercise includes its source where available. These
-            are reference instructions, not a professional technique assessment.
+            This library combines adapted Free Exercise DB references with
+            app-authored introductory exercise and yoga guides. Each entry
+            states its provenance. Official-source verification remains
+            incomplete; these guides are not a professional technique
+            assessment.
           </p>
         </>
       )}
@@ -698,7 +1073,7 @@ export default function Workout({
           <div className="stack">
             {sessions
               .slice()
-              .reverse()
+              .sort((a, b) => b.date.localeCompare(a.date))
               .map((s) => (
                 <details className="card instruction" key={s.id}>
                   <summary>
@@ -713,17 +1088,23 @@ export default function Workout({
                             l.sessionId === s.id &&
                             l.exerciseId === e.exerciseId,
                         )
+                        .sort((a, b) => a.index - b.index)
                         .map((l) => (
                           <div className="history-set" key={l.id}>
                             <label>
-                              kg
+                              {settings.unit.toUpperCase()}
                               <input
                                 type="number"
                                 min="0"
-                                value={l.weight}
+                                max="1000"
+                                step="any"
+                                value={displayedLoad(l.weight, settings.unit)}
                                 onChange={(e) =>
                                   saveSet(l, {
-                                    weight: Math.max(0, +e.target.value),
+                                    weight: storedLoad(
+                                      +e.target.value,
+                                      settings.unit,
+                                    ),
                                   })
                                 }
                               />
@@ -787,46 +1168,20 @@ export default function Workout({
         <PlanSettings profile={p} onClose={() => setPlanSettings(false)} />
       )}
       {info && (
-        <Modal title={exerciseById(info).name} onClose={() => setInfo("")}>
-          <span className="tag green">
-            {exerciseById(info).muscle} · {exerciseById(info).equipment}
-          </span>
-          <TutorialLink exercise={exerciseById(info)} />
-          {exerciseById(info).source && (
-            <p className="hint">{exerciseById(info).source}</p>
-          )}
-          {exerciseById(info).sourceUrl && (
-            <a
-              className="text-link"
-              href={exerciseById(info).sourceUrl}
-              target="_blank"
-              rel="noreferrer"
-            >
-              Read the exercise source (internet required)
-            </a>
-          )}
-          <ExerciseOverview exercise={exerciseById(info)} />
-          <h3>How to move</h3>
-          <ol>
-            {exerciseById(info).instructions.map((t) => (
-              <li key={t}>{t}</li>
-            ))}
-          </ol>
-          <h4>Breathing</h4>
-          <p>{exerciseById(info).breathing}</p>
-          <h4>Common mistakes</h4>
-          <p>{exerciseById(info).mistakes}</p>
-          <p className="notice">{exerciseById(info).safety}</p>
-        </Modal>
+        <AboutExercise
+          exercise={exerciseById(info)}
+          onClose={() => setInfo("")}
+        />
       )}
       {replace && p && (
         <Modal title="Choose a replacement" onClose={() => setReplace("")}>
           <p className="hint">
-            Your sets for the replaced exercise will be removed. Match the
-            movement where possible.
+            Choose a matching movement for the same muscle focus and your
+            confirmed equipment. Current sets for the replaced exercise will be
+            removed and conservative targets reset.
           </p>
           <div className="option-list">
-            {eligible(p)
+            {replacementOptions(p, exerciseById(replace))
               .filter(
                 (e) => !active?.exercises.some((x) => x.exerciseId === e.id),
               )
@@ -850,6 +1205,15 @@ export default function Workout({
                   <small>{e.pattern}</small>
                 </button>
               ))}
+            {!replacementOptions(p, exerciseById(replace)).some(
+              (e) => !active?.exercises.some((x) => x.exerciseId === e.id),
+            ) && (
+              <p>
+                No matching replacement is available with your equipment and
+                restrictions. Skip the painful or unsuitable movement and ask a
+                qualified trainer for an alternative.
+              </p>
+            )}
           </div>
         </Modal>
       )}
@@ -888,5 +1252,5 @@ export default function Workout({
   );
 }
 function Trending() {
-  return <span className="lime">↗</span>;
+  return <TrendingUp className="lime" size={16} aria-hidden="true" />;
 }

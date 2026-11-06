@@ -21,8 +21,8 @@ describe("offline sourced catalogs", () => {
     expect(meal.verification).toBe("recipe-estimate");
   });
   it("has unique stable IDs and offline instructions across all major muscle groups", () => {
-    expect(exercises.length).toBe(120);
-    expect(new Set(exercises.map((e) => e.id)).size).toBe(120);
+    expect(exercises.length).toBe(132);
+    expect(new Set(exercises.map((e) => e.id)).size).toBe(132);
     for (const m of [
       "Chest",
       "Back",
