@@ -34,6 +34,7 @@ const Progress = lazy(() => import("./Progress"));
 const Settings = lazy(() => import("./Settings"));
 import type { Profile } from "./domain/types";
 import Brand from "./components/Brand";
+import InstallDialog, { InstallButton } from "./features/install/InstallApp";
 import { scheduleCounts } from "./domain/engine";
 export default function App() {
   const account = useLiveQuery(async () => {
@@ -167,6 +168,7 @@ export default function App() {
               {online ? <Wifi size={14} /> : <WifiOff size={14} />}
               <span>{online ? "On device" : "Offline"}</span>
             </span>
+            <InstallButton iconOnly className="icon-button" />
             <button
               className="avatar small"
               onClick={() => setWizard(true)}
@@ -258,6 +260,7 @@ export default function App() {
           </NavLink>
         ))}
       </nav>
+      <InstallDialog />
       <Suspense fallback={null}>
         {wizard && (
           <Onboarding profile={profile} onClose={() => setWizard(false)} />
@@ -334,8 +337,9 @@ function Home({
             </div>
             <div className="welcome-facts">
               <span>No account needed</span>
-              <span>Offline after setup</span>
+              <span>Offline after download</span>
             </div>
+            <InstallButton className="text-link welcome-install" />
           </div>
           <img
             className="welcome-logo"

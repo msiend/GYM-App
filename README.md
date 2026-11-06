@@ -2,7 +2,7 @@
 
 Mobile-first, offline-first personal fitness and nutrition PWA. React, TypeScript, Vite, Tailwind, React Router, Dexie, Zustand, Recharts, React Hook Form, Zod and Workbox. No backend, login, analytics, remote fonts or health-data uploads.
 
-**Web 1.3:** a consistent light-first interface, refreshed FORM logo, four-step setup and an explicit preview of every selected training day. Workout contains My workout, Exercise library, Yoga and History; the library and yoga are available without a profile, including offline after caching. See [release and validation notes](docs/WEB-RELEASE-1.3.md).
+**Web 1.3.1:** a consistent light-first interface, refreshed FORM logo, four-step setup and an explicit preview of every selected training day. Workout contains My workout, Exercise library, Yoga and History; the library and yoga are available without a profile, including offline after caching. A shared device-install flow is available from Home, the header and Settings. See [release and validation notes](docs/WEB-RELEASE-1.3.md).
 
 ## Run
 
@@ -22,6 +22,18 @@ npm run preview -- --port 4173
 ```
 
 PWA registration is enabled in production builds. Use HTTPS or localhost. Serve `dist` with navigation fallback to `index.html`; serve `/sw.js` with `Cache-Control: no-cache`. The initial online visit must finish precaching before offline reload works. Do not aggressively cache HTML or service-worker files on the host. Static assets are bundled locally. The 192/512 PNG icons and manifest support installation in Chromium; iOS uses browser-specific Home Screen installation.
+
+## Install on a device
+
+Open your deployed **HTTPS** website, then tap **Install app** in the header or **Settings → Install on your device**. Android Chrome/Edge display the native installer when available. On iPhone/iPad, open the site in Safari and choose **Share → Add to Home Screen**; keep **Open as Web App** enabled if shown. Desktop Chrome/Edge also support browser installation, and supported Mac Safari versions offer **File → Add to Dock**.
+
+Let the initial offline download finish while online, then launch FORM from the Home Screen/app launcher. Settings shows when offline access is ready. The install prompt is captured at startup, so visiting Settings later does not lose it. Dismissed prompts are not reused, and an accepted prompt is not reported as installed until the browser confirms installation. Browsers already running the installed app hide install controls.
+
+Plain HTTP local-IP URLs cannot install a PWA on a phone. Use an HTTPS deployment or an HTTPS development server with a certificate trusted by that phone. Computer localhost is trusted only on that computer. Keep using the same website/browser for your records; export a backup before changing origins. Installation does not upload records or grant notification permission.
+
+The hosting server must serve `manifest.webmanifest` and PNG icons as files, serve `/sw.js` as JavaScript with `Cache-Control: no-cache`, and route app navigation to `index.html`. Manifest identity, scope and start URL currently target the domain root. For hosting in a subdirectory, update Vite's base, router base, manifest and worker scope together.
+
+Run `npm run test:install` to check the production manifest/icons/service worker with Chromium's installability diagnostics, installation event handling, simulated iOS/Android/standalone guidance and real insecure-origin handling. Browser-native installation UI and physical-device installation are not automated by this suite. Validation on 6 November 2026 passed the production build, 74 unit tests, the offline/update suite, 24 UI audit screens, 14 redesign checks and 10 installation checks. Chromium reported no installability errors in a fresh normal browser profile.
 
 ## Implemented
 

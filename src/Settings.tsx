@@ -13,6 +13,7 @@ import {
   Trash2,
   Upload,
 } from "lucide-react";
+import { InstallSection } from "./features/install/InstallApp";
 import { appVersion } from "./version";
 import HydrationPreferences from "./features/hydration/HydrationPreferences";
 import { db, repository, saveSettings } from "./data/db";
@@ -22,10 +23,6 @@ import { importBackup } from "./data/backup";
 import { useUI } from "./store";
 import { days } from "./domain/calendar";
 import { displayHeight } from "./domain/height";
-type InstallEvent = Event & {
-  prompt: () => Promise<void>;
-  userChoice: Promise<{ outcome: string }>;
-};
 const policies: Record<string, string> = {
   "Privacy policy":
     "Your profile, health screening, workout sets, food records, preferences and measurements are stored in IndexedDB in this browser. The app does not transmit these records or use analytics. Hosting receives ordinary asset and update requests, including network metadata. YouTube opens only when you select a tutorial; its own policies apply. Backups are downloaded to a location you choose. Notifications require permission and are best-effort. No account or cloud synchronization is provided.",
@@ -54,7 +51,6 @@ export default function Settings({
   const [legal, setLegal] = useState("");
   const [storage, setStorage] = useState<StorageEstimate>();
   const [persistent, setPersistent] = useState(false);
-  const [install, setInstall] = useState<InstallEvent>();
   const [update, setUpdate] = useState("");
   const [waiting, setWaiting] = useState<ServiceWorker>();
   const [checking, setChecking] = useState(false);
@@ -73,15 +69,9 @@ export default function Settings({
       ?.persisted?.()
       .then(setPersistent)
       .catch(() => {});
-    const handler = (e: Event) => {
-      e.preventDefault();
-      setInstall(e as InstallEvent);
-    };
-    window.addEventListener("beforeinstallprompt", handler);
     navigator.serviceWorker?.getRegistration().then((r) => {
       if (r?.waiting) setWaiting(r.waiting);
     });
-    return () => window.removeEventListener("beforeinstallprompt", handler);
   }, []);
   async function checkUpdate() {
     if (!navigator.onLine) {
@@ -413,22 +403,8 @@ export default function Settings({
               Persistent storage is not a backup. Clearing browser data removes
               your records.
             </p>
-            <button
-              className="button secondary"
-              onClick={async () => {
-                if (install) {
-                  await install.prompt();
-                  setInstall(undefined);
-                } else
-                  notify(
-                    "To install: use your browser’s Install app menu. On iOS, Share → Add to Home Screen. HTTPS and a completed first cache are required.",
-                  );
-              }}
-            >
-              <Smartphone size={15} />
-              Install FORM
-            </button>
           </section>
+          <InstallSection />
           <section className="card settings-card">
             <h3>
               <ShieldCheck size={19} />

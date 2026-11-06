@@ -65,7 +65,9 @@ export function Modal({
             <X size={20} />
           </button>
         </header>
-        <div className="modal-body">{children}</div>
+        <div className="modal-body" tabIndex={0}>
+          {children}
+        </div>
       </section>
     </div>
   );
