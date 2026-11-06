@@ -160,11 +160,7 @@ export default function Settings({
   }
   return (
     <>
-      <Heading
-        eyebrow="MAKE IT YOURS"
-        title="Your preferences"
-        description="Your routine. Your privacy. You’re in control."
-      />
+      <Heading title="Settings" />
       <div className="settings-grid">
         <div className="stack">
           <section className="card settings-card">

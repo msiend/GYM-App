@@ -102,6 +102,7 @@ const schemas: Record<string, z.ZodType> = {
     days: z.array(
       z.object({
         day: num.int().min(0).max(6),
+        kind: z.enum(["strength", "light"]).optional(),
         focus: id,
         exercises: z.array(planExercise),
         estimatedMinutes: num.positive().optional(),
@@ -113,21 +114,31 @@ const schemas: Record<string, z.ZodType> = {
     date,
     focus: id,
     status: z.enum(["active", "complete"]),
+    kind: z.enum(["strength", "light"]).optional(),
     exercises: z.array(planExercise),
     notes: z.string(),
   }),
-  sets: z.object({
-    id,
-    sessionId: id,
-    exerciseId: id,
-    index: num.int().min(0),
-    weight: num.min(0).max(1000),
-    reps: num.min(0).max(999),
-    done: z.boolean(),
-    rpe: num.min(1).max(10),
-    pain: z.boolean(),
-    technique: z.boolean(),
-  }),
+  sets: z
+    .object({
+      id,
+      sessionId: id,
+      exerciseId: id,
+      index: num.int().min(0),
+      weight: num.min(0).max(1000),
+      reps: num.min(0).max(10800),
+      done: z.boolean(),
+      rpe: num.min(1).max(10),
+      pain: z.boolean(),
+      technique: z.boolean(),
+    })
+    .refine(
+      (log) =>
+        log.reps <= 999 ||
+        exercises.some(
+          (e) => e.id === log.exerciseId && e.tracking === "seconds",
+        ),
+      "Repetition count is out of range",
+    ),
   weights: z
     .object({ id, date, weight: num.min(25).max(350), notes: z.string() })
     .passthrough(),

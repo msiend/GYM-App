@@ -61,7 +61,9 @@ const settings = {
 };
 async function seed(page, patch = {}, preferences = {}) {
   await page.goto(base);
-  await page.getByRole("dialog").waitFor();
+  await page
+    .getByRole("button", { name: "Create my profile", exact: true })
+    .waitFor();
   await page.evaluate(
     async ({ profile, settings }) => {
       await new Promise((resolve, reject) => {
@@ -279,14 +281,14 @@ try {
   await page.getByRole("button", { name: "Save plan", exact: true }).click();
   await page.getByRole("dialog").waitFor({ state: "hidden" });
   await page
-    .getByRole("heading", {
-      name: "Fat loss & body-part strength",
+    .getByRole("button", {
+      name: "Explore body-part exercises",
       exact: true,
     })
     .waitFor();
   await page
     .getByRole("group", { name: "Workout day", exact: true })
-    .getByRole("button", { name: "Mon", exact: true })
+    .getByRole("button", { name: "Monday", exact: true })
     .click();
   const allExercises = await page.locator(".exercise-card").count();
   await page
@@ -409,7 +411,7 @@ try {
     await scan(page, `${name}-dark-large-hi-360`);
   }
   await page.goto(`${base}/workout`);
-  await page.getByRole("button", { name: "History", exact: true }).click();
+  await page.getByRole("tab", { name: "History", exact: true }).click();
   await page.locator(".instruction > summary").first().click();
   if (
     Number(
@@ -419,7 +421,7 @@ try {
     throw new Error("History did not use the selected pounds unit");
   await page.getByLabel("LBS", { exact: true }).first().fill("24");
   await page.reload();
-  await page.getByRole("button", { name: "History", exact: true }).click();
+  await page.getByRole("tab", { name: "History", exact: true }).click();
   await page.locator(".instruction > summary").first().click();
   if (
     Number(
@@ -428,7 +430,10 @@ try {
   )
     throw new Error("Pound-based history edit did not persist");
   await scan(page, "history-pounds-edit-dark-360");
-  await page.getByRole("button", { name: "Yoga", exact: true }).click();
+  await page.getByRole("tab", { name: "Yoga", exact: true }).click();
+  await page
+    .getByRole("tab", { name: "Yoga", exact: true, selected: true })
+    .waitFor();
   if ((await page.locator(".library-item").count()) !== 8)
     throw new Error("Yoga section is incomplete");
   await page
@@ -447,7 +452,10 @@ try {
   await page.evaluate(() => navigator.serviceWorker.ready);
   await context.setOffline(true);
   await page.reload();
-  await page.getByRole("button", { name: "Yoga", exact: true }).click();
+  await page.getByRole("tab", { name: "Yoga", exact: true }).click();
+  await page
+    .getByRole("tab", { name: "Yoga", exact: true, selected: true })
+    .waitFor();
   if ((await page.locator(".library-item").count()) !== 8)
     throw new Error("Yoga is not available offline");
   await scan(page, "yoga-offline-dark-360");
@@ -505,8 +513,9 @@ try {
       )
         throw new Error(`${persona.name} received an unrestricted workout`);
       await next.page
-        .getByRole("button", { name: "Exercise library", exact: true })
+        .getByRole("tab", { name: "Exercise library", exact: true })
         .click();
+      await next.page.locator(".library-item").first().waitFor();
       if (!(await next.page.locator(".library-item").count()))
         throw new Error("Educational library is blocked");
     }

@@ -65,7 +65,7 @@ export function Modal({
             <X size={20} />
           </button>
         </header>
-        {children}
+        <div className="modal-body">{children}</div>
       </section>
     </div>
   );
@@ -76,7 +76,7 @@ export function Empty({
   children,
 }: {
   title: string;
-  description: string;
+  description?: string;
   children?: ReactNode;
 }) {
   return (
@@ -85,7 +85,7 @@ export function Empty({
         <ArrowUpRight size={22} />
       </span>
       <h3>{title}</h3>
-      <p>{description}</p>
+      {description && <p>{description}</p>}
       {children}
     </div>
   );
@@ -96,20 +96,17 @@ export function Heading({
   description,
   action,
 }: {
-  eyebrow: string;
+  eyebrow?: string;
   title: string;
-  description: string;
+  description?: string;
   action?: ReactNode;
 }) {
   return (
     <div className="page-heading">
       <div>
-        <div className="eyebrow">{eyebrow}</div>
-        <h1>
-          {title}
-          <span className="lime">.</span>
-        </h1>
-        <p>{description}</p>
+        {eyebrow && <div className="eyebrow">{eyebrow}</div>}
+        <h1>{title}</h1>
+        {description && <p>{description}</p>}
       </div>
       {action}
     </div>

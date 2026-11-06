@@ -5,6 +5,7 @@ import type {
   Session,
   Exercise,
   PlanExercise,
+  PlanDay,
 } from "./types";
 import { exercises } from "../data/exercises";
 import { hasEquipment } from "./equipment";
@@ -18,7 +19,11 @@ export const splitOptions = [
   "Push / pull / legs",
   "Body-part split (6 days)",
 ];
-export const PROGRAM_VERSION = 3;
+export const PROGRAM_VERSION = 4;
+export function scheduleCounts(plan: WorkoutPlan) {
+  const light = plan.days.filter((day) => day.kind === "light").length;
+  return { total: plan.days.length, strength: plan.days.length - light, light };
+}
 function reportedRestrictions(value: string) {
   return /^(none|no restrictions|no pain|no injuries|n\/?a|not applicable)$/i.test(
     value.trim(),
@@ -155,10 +160,6 @@ export function generatePlan(p: Profile): WorkoutPlan {
     beginner || lowRecovery ? 3 : early ? 4 : 6,
   );
   const warnings: string[] = [];
-  if (count < p.days.length)
-    warnings.push(
-      `${p.days.length} days are available, but ${count} resistance sessions are used for experience/recovery. Other days can be rest or gentle activity.`,
-    );
   let split =
     count <= 3
       ? "Full body"
@@ -239,7 +240,7 @@ export function generatePlan(p: Profile): WorkoutPlan {
               );
   const missing = new Set<string>();
   const guidanceNeeded = needsTrainingGuidance(p);
-  const days = guidanceNeeded
+  const strengthDays: PlanDay[] = guidanceNeeded
     ? []
     : chosen
         .map((day, i) => {
@@ -383,19 +384,76 @@ export function generatePlan(p: Profile): WorkoutPlan {
           }
           return {
             day,
+            kind: "strength" as const,
             focus,
             estimatedMinutes: Math.ceil(usedMinutes),
             exercises: picked.map((e) => prescribeExercise(p, e)),
           };
         })
         .filter((d) => d.exercises.length);
+  const easyPool = eligible(p);
+  const walking =
+    easyPool.find((e) => e.id === "walk") ||
+    easyPool.find((e) => e.id === "march");
+  const lightDays: PlanDay[] = guidanceNeeded
+    ? []
+    : p.days
+        .filter((day) => !strengthDays.some((d) => d.day === day))
+        .map((day) => {
+          let used = 10;
+          const items: PlanExercise[] = [];
+          const candidates: PlanExercise[] = [
+            ...(walking
+              ? [
+                  {
+                    exerciseId: walking.id,
+                    sets: 1,
+                    reps: Math.min(900, Math.max(60, (p.duration - 14) * 60)),
+                    rest: 30,
+                  },
+                ]
+              : []),
+            ...["mobility", "stretch"]
+              .filter((id) => easyPool.some((e) => e.id === id))
+              .map((id) => ({
+                exerciseId: id,
+                sets: 1,
+                reps: id === "stretch" ? 20 : 8,
+                rest: 30,
+              })),
+          ];
+          for (const item of candidates) {
+            const exercise = easyPool.find((e) => e.id === item.exerciseId)!;
+            const cost = exerciseMinutes(item, exercise);
+            if (used + cost <= p.duration) {
+              items.push(item);
+              used += cost;
+            }
+          }
+          return {
+            day,
+            kind: "light" as const,
+            focus: "Easy cardio & mobility",
+            exercises: items,
+            estimatedMinutes: Math.ceil(used),
+          };
+        })
+        .filter((d) => d.exercises.length);
+  const days = [...strengthDays, ...lightDays].sort(
+    (a, b) => ((a.day + 6) % 7) - ((b.day + 6) % 7),
+  );
+  if (lightDays.length)
+    warnings.unshift(
+      `${days.length} selected days: ${strengthDays.length} strength + ${lightDays.length} easy days. Easy days support recovery between resistance sessions.`,
+    );
   if (missing.size)
     warnings.push(
       `Equipment or exclusions limit options for: ${[...missing].join(", ")}. Do not improvise unsafe equipment; add suitable equipment or seek guidance for substitutions.`,
     );
   if (
     !guidanceNeeded &&
-    (days.length < count || days.some((d) => d.exercises.length < 4))
+    (strengthDays.length < count ||
+      strengthDays.some((d) => d.exercises.length < 4))
   )
     warnings.push(
       "Time, equipment or exclusions limit movement coverage. This is a partial starting plan, not a complete assessment. Review missing movements with a qualified trainer; do not add unsafe improvised equipment.",
@@ -408,6 +466,10 @@ export function generatePlan(p: Profile): WorkoutPlan {
     warnings.push(
       "Adult automatic programming is withheld: age or reported health restrictions need qualified professional guidance. The exercise library remains educational reference material.",
     );
+  if (!guidanceNeeded && days.length < p.days.length)
+    warnings.push(
+      "Some selected days have no suitable exercises after your exclusions. Review the plan with a qualified trainer.",
+    );
   return {
     id: "current",
     created: localDate(),
@@ -416,7 +478,7 @@ export function generatePlan(p: Profile): WorkoutPlan {
     days,
     rationale: guidanceNeeded
       ? "Unrestricted adult training is withheld due to age or reported health restrictions. Seek qualified guidance before choosing a program."
-      : `${split} uses ${days.length} of your ${p.days.length} available days, ${p.duration}-minute sessions and ${p.equipment.toLowerCase()} equipment. ${beginner ? "Beginner volume starts at two sets per exercise." : "Volume and rep targets reflect your goal and recovery."} Different valid plans can look different; consistency, manageable volume and recovery matter more than matching one diagram.`,
+      : `${days.length} scheduled days · ${strengthDays.length} strength${lightDays.length ? ` + ${lightDays.length} easy` : ""} · up to ${p.duration} min per session. ${beginner ? "Beginner resistance sessions use two sets per exercise." : "Volume reflects your goal and recovery."}`,
     warnings,
   };
 }

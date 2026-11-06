@@ -28,6 +28,39 @@ describe("local data and backups", () => {
     expect((await db.profiles.get("me"))?.name).toBe("Test");
     expect((await db.sets.get("a"))?.done).toBe(true);
   });
+  it("roundtrips easy-session durations longer than 999 seconds", async () => {
+    const { saveProfileAndPlan } = await import("./profile-repository");
+    await saveProfileAndPlan(profile);
+    await db.sessions.put({
+      id: "easy",
+      date: "2026-11-06",
+      focus: "Easy cardio & mobility",
+      kind: "light",
+      status: "active",
+      notes: "",
+      exercises: [{ exerciseId: "walk", sets: 1, reps: 900, rest: 30 }],
+    });
+    await db.sets.put({
+      id: "easy-set",
+      sessionId: "easy",
+      exerciseId: "walk",
+      index: 0,
+      weight: 0,
+      reps: 1200,
+      done: true,
+      rpe: 3,
+      pain: false,
+      technique: true,
+    });
+    const json = JSON.stringify(await repository.export());
+    await repository.clear();
+    await importBackup(json);
+    expect((await db.sessions.get("easy"))?.kind).toBe("light");
+    expect((await db.sets.get("easy-set"))?.reps).toBe(1200);
+    expect(
+      (await db.plans.get("current"))?.days.filter((d) => d.kind === "light"),
+    ).toHaveLength(3);
+  });
   it("rejects malformed or unknown references without clearing existing records", async () => {
     await db.profiles.put(profile);
     const backup = await repository.export();

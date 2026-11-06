@@ -3,13 +3,16 @@ import { generatePlan, nutrition, progression } from "./engine";
 import type { Profile, Session, SetLog } from "./types";
 import { profile } from "./fixture";
 describe("personalized training and nutrition", () => {
-  it("caps beginner frequency and uses full-body sessions", () => {
+  it("limits beginner strength frequency while scheduling every selected day", () => {
     const plan = generatePlan(profile);
-    expect(plan.days).toHaveLength(3);
+    expect(plan.days).toHaveLength(6);
+    expect(plan.days.filter((d) => d.kind === "strength")).toHaveLength(3);
     expect(plan.split).toBe("Full body");
-    expect(plan.days.every((d) => d.exercises.every((e) => e.sets === 2))).toBe(
-      true,
-    );
+    expect(
+      plan.days
+        .filter((d) => d.kind === "strength")
+        .every((d) => d.exercises.every((e) => e.sets === 2)),
+    ).toBe(true);
   });
   it("uses equipment and movement restrictions", () => {
     const plan = generatePlan({ ...profile, restrictions: "squat,plank" });
@@ -111,7 +114,7 @@ describe("expanded plan programming", () => {
       "Pull",
       "Legs",
     ]);
-    expect(plan.rationale).toContain("5 of your 5");
+    expect(plan.rationale).toContain("5 scheduled days");
   });
   it("offers the six-day reference style only for suitable experienced profiles", () => {
     const plan = generatePlan({
@@ -134,7 +137,10 @@ describe("expanded plan programming", () => {
       ...profile,
       preferredSplit: "Body-part split (6 days)",
     });
-    expect(novice.days.length).toBeLessThanOrEqual(3);
+    expect(novice.days).toHaveLength(6);
+    expect(
+      novice.days.filter((d) => d.kind === "strength").length,
+    ).toBeLessThanOrEqual(3);
     expect(novice.split).toBe("Full body");
     expect(novice.warnings?.length).toBeGreaterThan(0);
   });
@@ -144,10 +150,12 @@ describe("expanded plan programming", () => {
         ...profile,
         experience: "More than 1 year",
         recovery: "Limited recovery",
-      }).days.length,
+      }).days.filter((d) => d.kind === "strength").length,
     ).toBeLessThanOrEqual(3));
   it("spaces three beginner sessions across the week", () => {
-    const days = generatePlan(profile).days.map((d) => d.day);
+    const days = generatePlan(profile)
+      .days.filter((d) => d.kind === "strength")
+      .map((d) => d.day);
     expect(days.every((d) => !days.includes((d + 1) % 7))).toBe(true);
   });
   it("uses actual repetition tracking for crunches rather than timed holds", () => {
@@ -162,16 +170,17 @@ describe("expanded plan programming", () => {
     expect(plan.days.flatMap((d) => d.exercises).length).toBeGreaterThan(20);
   });
 });
-it("caps three-to-six-month profiles at four sessions even when six days are available", () => {
+it("schedules four strength and two easy days for three-to-six-month profiles", () => {
   const plan = generatePlan({
     ...profile,
     experience: "3–6 months",
     equipment: "Full gym",
   });
-  expect(plan.days).toHaveLength(4);
+  expect(plan.days).toHaveLength(6);
+  expect(plan.days.filter((d) => d.kind === "strength")).toHaveLength(4);
   expect(
-    plan.days.every(
-      (d) => d.focus === "Upper body" || d.focus === "Lower body",
-    ),
+    plan.days
+      .filter((d) => d.kind === "strength")
+      .every((d) => d.focus === "Upper body" || d.focus === "Lower body"),
   ).toBe(true);
 });

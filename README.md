@@ -2,7 +2,7 @@
 
 Mobile-first, offline-first personal fitness and nutrition PWA. React, TypeScript, Vite, Tailwind, React Router, Dexie, Zustand, Recharts, React Hook Form, Zod and Workbox. No backend, login, analytics, remote fonts or health-data uploads.
 
-**Web 1.2:** partial/half-gym inventory, body-part workout/library filters, fat-loss guidance, eight gentle yoga guides and visible disclaimers. The catalog contains 132 entries. See the [release and validation notes](docs/WEB-RELEASE-1.2.md), including the still-blocked official-source Internet verification. No independent clinical certification is claimed.
+**Web 1.3:** a consistent light-first interface, refreshed FORM logo, four-step setup and an explicit preview of every selected training day. Workout contains My workout, Exercise library, Yoga and History; the library and yoga are available without a profile, including offline after caching. See [release and validation notes](docs/WEB-RELEASE-1.3.md).
 
 ## Run
 
@@ -14,6 +14,7 @@ npm run dev
 npm test
 npm run test:e2e
 npm run test:ux
+npm run test:redesign
 # All validation, including production browser checks:
 npm run check
 npm run build
@@ -24,8 +25,8 @@ PWA registration is enabled in production builds. Use HTTPS or localhost. Serve 
 
 ## Implemented
 
-- Eight-step profile wizard including fitness goals, availability, equipment, dietary exclusions and health screening. Profile edits regenerate the training plan after confirmation while preserving history.
-- Pure training engine with beginner frequency/volume caps, equipment and named-movement exclusions, full-body, upper/lower and push/pull/legs templates. Warm-up, cool-down and 120 offline exercise guides with source links.
+- Four-step optional profile setup with shared training/equipment controls, health screening, optional food preferences and a weekly preview. Setup is opened explicitly; guests can explore workout and yoga guides immediately. Plan edits preserve history and active sessions.
+- Pure training engine honoring all 2–6 selected days, with suitable strength/easy-activity allocation, equipment and named-movement exclusions, full-body, upper/lower and push/pull/legs templates. Beginners selecting six days receive three strength and three easy days rather than six heavy sessions. Warm-up, cool-down and 132 offline exercise/yoga guides with source links.
 - Transactional workout creation, immediate set persistence, resume after reload, weight units, editable reps/weights/rest/RPE, technique and pain feedback, set addition/deletion, exercise replacement, previous performance and conservative progression suggestions. No automatic weight increases.
 - Workout history, measurements and notes, body-weight and training-volume charts, cardio logging and recorded exercise-load trends.
 - 100 offline generic food references plus 12 ingredient-calculated Indian meal ideas with preparation states, dietary/allergen filtering, gram-adjusted food logging, macros/fiber, hydration logging, seven-day editable meal suggestions, protein/lean-mass estimates, nutrition analytics and educational content.
@@ -36,7 +37,7 @@ PWA registration is enabled in production builds. Use HTTPS or localhost. Serve 
 ## Architecture
 
 - `src/domain`: framework-independent types, program/progression/nutrition calculations.
-- `src/data`: IndexedDB schemas (version 1 training, version 2 nutrition), repository/backup operations, exercise and food catalogs.
+- `src/data`: IndexedDB schemas (version 1 training, version 2 nutrition, version 3 custom foods), repository/backup operations, exercise and food catalogs.
 - Screen modules and reusable dialog/form/chart components provide UI. IndexedDB is the source of truth; live queries refresh screens. Zustand carries transient toast state only.
 - Static resources use Cache Storage / Workbox; health records use IndexedDB. No personal records are placed in caches or sent through network APIs. User-selected backups contain sensitive information and are not encrypted.
 
@@ -61,7 +62,7 @@ This is a functional first implementation, not completion of every item in the s
 - Legal policies are templates. Before publishing, supply deployment-specific identity/contact details, obtain legal review for applicable Indian data protection/consumer law, review clinical screening and content with qualified professionals, test accessibility and actual target devices, and test an update between real hosted releases.
 - Browser storage can be evicted. Regular JSON backups are essential. Import is capped at 10 MB. There is no encryption, sync, account recovery, remote backup or cross-device restore without a user-managed file.
 
-The application has not been deployed. Environment draft saving and publication are separate from app deployment.
+Serve the production build from your hosting provider. A repository push does not by itself confirm that a hosted deployment has finished.
 
 ## Web 1.1 update
 

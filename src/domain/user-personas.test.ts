@@ -176,9 +176,10 @@ describe("representative user profile matrix", () => {
                       : experience === "3–6 months"
                         ? 4
                         : 6;
-                  expect(plan.days.length).toBeLessThanOrEqual(
-                    Math.min(available, cap),
-                  );
+                  expect(plan.days).toHaveLength(available);
+                  expect(
+                    plan.days.filter((d) => d.kind === "strength").length,
+                  ).toBeLessThanOrEqual(Math.min(available, cap));
                   for (const day of plan.days) {
                     expect(p.days).toContain(day.day);
                     const minutes =
@@ -193,12 +194,17 @@ describe("representative user profile matrix", () => {
                     for (const item of day.exercises) {
                       const e = exerciseById(item.exerciseId);
                       expect(hasEquipment(p, e)).toBe(true);
-                      expect([
-                        "Yoga",
-                        "Cardio",
-                        "Mobility",
-                        "Stretching",
-                      ]).not.toContain(e.category);
+                      if (day.kind === "light")
+                        expect(["Cardio", "Mobility", "Stretching"]).toContain(
+                          e.category,
+                        );
+                      else
+                        expect([
+                          "Yoga",
+                          "Cardio",
+                          "Mobility",
+                          "Stretching",
+                        ]).not.toContain(e.category);
                       if (age >= 65 || recovery === "Limited recovery")
                         expect(item.sets).toBeLessThanOrEqual(2);
                     }

@@ -170,9 +170,7 @@ export default function Progress({ profile: p }: { profile?: Profile }) {
   return (
     <>
       <Heading
-        eyebrow="YOUR EFFORT, OVER TIME"
-        title="Look how far you’ll go"
-        description="Follow the trends. Celebrate the showing up."
+        title="Progress"
         action={
           <div className="inline-form">
             <button

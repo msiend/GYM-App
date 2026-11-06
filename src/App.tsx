@@ -4,7 +4,6 @@ import { useLiveQuery } from "dexie-react-hooks";
 import {
   ArrowRight,
   ArrowUpRight,
-  Bell,
   Check,
   ChevronRight,
   Dumbbell,
@@ -34,25 +33,30 @@ const Nutrition = lazy(() => import("./Nutrition"));
 const Progress = lazy(() => import("./Progress"));
 const Settings = lazy(() => import("./Settings"));
 import type { Profile } from "./domain/types";
+import Brand from "./components/Brand";
+import { scheduleCounts } from "./domain/engine";
 export default function App() {
-  const profile = useLiveQuery(() => db.profiles.get("me"));
-  const settings = useLiveQuery(() => db.settings.get("preferences"));
+  const account = useLiveQuery(async () => {
+    try {
+      return { profile: await db.profiles.get("me"), error: "" };
+    } catch (error) {
+      return {
+        profile: undefined,
+        error: saveErrorMessage(error, "the local database"),
+      };
+    }
+  });
+  const profile = account?.profile;
+  const loaded = account !== undefined;
+  const loadError = account?.error || "";
+  const settings = useLiveQuery(() =>
+    db.settings.get("preferences").catch(() => undefined),
+  );
   useHydrationReminders({ ...defaults, ...settings });
-  const [loadError, setLoadError] = useState("");
   const [wizard, setWizard] = useState(false);
-  const [loaded, setLoaded] = useState(false);
   const [online, setOnline] = useState(navigator.onLine);
   const { toast, notify } = useUI();
   useEffect(() => {
-    db.profiles
-      .get("me")
-      .then((p) => {
-        setLoaded(true);
-        if (!p) setWizard(true);
-      })
-      .catch((error) => {
-        setLoadError(saveErrorMessage(error, "the local database"));
-      });
     const on = () => setOnline(navigator.onLine);
     window.addEventListener("online", on);
     window.addEventListener("offline", on);
@@ -115,13 +119,12 @@ export default function App() {
   ] as const;
   return (
     <div className="app-shell">
+      <a className="skip-link" href="#main">
+        Skip to content
+      </a>
       <aside className="sidebar">
-        <NavLink to="/" className="brand">
-          <span className="brand-mark">F</span>FORM
-          <span className="brand-dot">®</span>
-        </NavLink>
-        <div className="sidebar-label">YOUR EVERYDAY STRONG</div>
-        <nav>
+        <Brand />
+        <nav aria-label="Main navigation">
           {links.map(([path, label, Icon]) => (
             <NavLink key={path} to={path} end={path === "/"}>
               <Icon size={20} />
@@ -130,25 +133,20 @@ export default function App() {
           ))}
         </nav>
         <div className="sidebar-bottom">
-          <div className="privacy-card">
-            <ShieldCheck size={23} />
-            <strong>Your data. Your device.</strong>
-            <p>
-              Made for you.
-              <br />
-              Built to work offline.
-            </p>
-            <span>
-              <i /> On-device storage
-            </span>
-          </div>
-          <button className="profile-button" onClick={() => setWizard(true)}>
+          <p className="device-note">
+            <ShieldCheck size={16} /> Stored on this device
+          </p>
+          <button
+            className="profile-button"
+            disabled={!loaded || !!loadError}
+            onClick={() => setWizard(true)}
+          >
             <span className="avatar">
               <UserRound size={18} aria-hidden="true" />
             </span>
             <span>
               <strong>{profile?.name || "Your profile"}</strong>
-              <small>{profile ? "Keep showing up" : "Let’s get started"}</small>
+              <small>{profile ? "Edit profile" : "Create a plan"}</small>
             </span>
             <ChevronRight size={16} />
           </button>
@@ -156,40 +154,30 @@ export default function App() {
       </aside>
       <div className="workspace">
         <header className="topbar">
-          <div className="breadcrumb">
-            Your space <span>/</span>{" "}
-            <strong>Every day is a fresh start</strong>
-          </div>
+          <Brand />
+          <span className="topbar-date">
+            {new Date().toLocaleDateString(hi ? "hi-IN" : "en-IN", {
+              weekday: "short",
+              day: "numeric",
+              month: "short",
+            })}
+          </span>
           <div className="top-actions">
             <span className="connection">
               {online ? <Wifi size={14} /> : <WifiOff size={14} />}
-              <span>{online ? "On-device data" : "You’re offline"}</span>
+              <span>{online ? "On device" : "Offline"}</span>
             </span>
-            <button
-              className="icon-button"
-              aria-label="Reminder settings"
-              onClick={() => (location.hash = "")}
-              style={{ display: "none" }}
-            >
-              <Bell size={18} />
-            </button>
-            <NavLink
-              to="/settings"
-              className="icon-button"
-              aria-label="Open settings"
-            >
-              <Bell size={18} />
-            </NavLink>
             <button
               className="avatar small"
               onClick={() => setWizard(true)}
-              aria-label="Edit profile"
+              aria-label={profile ? "Open profile" : "Create profile"}
+              disabled={!loaded || !!loadError}
             >
-              {profile?.name[0]?.toUpperCase() || "Y"}
+              <UserRound size={18} aria-hidden="true" />
             </button>
           </div>
         </header>
-        <main>
+        <main id="main" tabIndex={-1}>
           {loadError ? (
             <Empty title="Local storage unavailable" description={loadError}>
               <button className="button" onClick={() => location.reload()}>
@@ -255,15 +243,14 @@ export default function App() {
             </Suspense>
           )}
           <footer className="app-footer">
-            <span>SMALL STEPS. STRONGER YOU.</span>
             <span>
-              <ShieldCheck size={12} /> Private by design · *Offline after first
-              cache
+              <ShieldCheck size={14} /> Private on your device
             </span>
+            <NavLink to="/settings">Backup & settings</NavLink>
           </footer>
         </main>
       </div>
-      <nav className="mobile-nav">
+      <nav className="mobile-nav" aria-label="Mobile navigation">
         {links.map(([path, label, Icon]) => (
           <NavLink key={path} end={path === "/"} to={path}>
             <Icon size={21} />
@@ -319,6 +306,72 @@ function Home({
       ((foods.find((f) => f.id === l.foodId)?.protein || 0) * l.grams) / 100,
     0,
   );
+  if (!p)
+    return (
+      <>
+        <Heading
+          title="Your fitness, simplified"
+          description="Create a plan or explore the library first."
+        />
+        <section className="welcome-panel">
+          <div>
+            <span className="eyebrow">WELCOME TO FORM</span>
+            <h2>A routine that fits your life.</h2>
+            <p>
+              Choose your days, your goal and your equipment. Keep everything on
+              your device.
+            </p>
+            <div className="welcome-actions">
+              <button className="button" onClick={onSetup}>
+                Create my profile <ArrowRight size={17} />
+              </button>
+              <button
+                className="button secondary"
+                onClick={() => navigate("/workout?tab=library")}
+              >
+                Browse exercises
+              </button>
+            </div>
+            <div className="welcome-facts">
+              <span>No account needed</span>
+              <span>Offline after setup</span>
+            </div>
+          </div>
+          <img
+            className="welcome-logo"
+            src="/icon-192.png"
+            alt=""
+            width="132"
+            height="132"
+          />
+        </section>
+        <div className="quick-start-grid">
+          <button
+            className="card quick-start"
+            onClick={() => navigate("/workout?tab=library")}
+          >
+            <Dumbbell />
+            <div>
+              <h3>Exercise library</h3>
+              <p>132 guides. Browse without a profile.</p>
+            </div>
+            <ArrowRight size={18} />
+          </button>
+          <button
+            className="card quick-start"
+            onClick={() => navigate("/workout?tab=yoga")}
+          >
+            <Leaf />
+            <div>
+              <h3>Gentle yoga</h3>
+              <p>Movement, balance and easy breathing.</p>
+            </div>
+            <ArrowRight size={18} />
+          </button>
+        </div>
+      </>
+    );
+  const counts = plan ? scheduleCounts(plan) : null;
   return (
     <>
       <Heading
@@ -331,7 +384,6 @@ function Home({
             ? `नमस्ते${p ? ", " + p.name.split(" ")[0] : ""}`
             : `Hello${p ? ", " + p.name.split(" ")[0] : ""}`
         }
-        description="Your workout, meals and progress in one place."
         action={
           <button
             className="button secondary"
@@ -342,17 +394,6 @@ function Home({
           </button>
         }
       />
-      {!p && (
-        <Empty
-          title="Let’s set up your plan"
-          description="Tell us your goal, experience, schedule and equipment. You can change everything later."
-        >
-          <button className="button" onClick={onSetup}>
-            Create my profile
-            <ArrowRight size={16} />
-          </button>
-        </Empty>
-      )}
       <div className="simple-today-grid">
         <section className="card today-workout">
           <span className="eyebrow">TODAY’S WORKOUT</span>
@@ -363,7 +404,9 @@ function Home({
                 ? active.focus
                 : day
                   ? day.focus
-                  : "Rest & recovery"}
+                  : !plan
+                    ? "Set up your week"
+                    : "Rest & recovery"}
           </h2>
           <p>
             {trainingGuidance
@@ -372,7 +415,9 @@ function Home({
                 ? "Your last saved session is ready to continue."
                 : day
                   ? `${day.exercises.length} exercises · up to ${p?.duration} min`
-                  : "No resistance workout scheduled today. Gentle movement is optional."}
+                  : !plan
+                    ? "Choose your training days, time and equipment."
+                    : "No workout scheduled today. Gentle movement is optional."}
           </p>
           <button
             className="button"
@@ -424,10 +469,18 @@ function Home({
       <HydrationCard />
       <SectionTitle
         title="Your week"
-        detail={plan?.split || "Set up a profile to create your weekly plan."}
+        detail={
+          counts
+            ? counts.total +
+              " scheduled · " +
+              counts.strength +
+              " strength" +
+              (counts.light ? " · " + counts.light + " easy" : "")
+            : "Create a weekly plan to get started."
+        }
         action={
           <button className="text-link" onClick={() => navigate("/workout")}>
-            View or change plan <ArrowRight size={15} />
+            View week <ArrowRight size={15} />
           </button>
         }
       />
@@ -439,17 +492,29 @@ function Home({
             <button
               className={`card week-item ${d === new Date().getDay() ? "is-today" : ""}`}
               key={d}
-              onClick={() => navigate("/workout")}
+              onClick={() => navigate("/workout?day=" + d)}
+              title={days[d] + ": " + (training?.focus || "Rest day")}
             >
               <span>
-                {days[d]}
-                {d === new Date().getDay() && <small>Today</small>}
+                <span aria-hidden="true">{days[d].slice(0, 3)}</span>
+                <span className="sr-only">{days[d]} </span>
               </span>
-              <strong>{training?.focus || "Rest day"}</strong>
+              <span
+                className={
+                  "week-dot " +
+                  (training?.kind === "light"
+                    ? "light"
+                    : training
+                      ? "strength"
+                      : "rest")
+                }
+              />
               <small>
                 {training
-                  ? `${training.exercises.length} exercises`
-                  : "Recover / gentle movement"}
+                  ? training.kind === "light"
+                    ? "Easy"
+                    : "Strength"
+                  : "Rest"}
               </small>
             </button>
           );
@@ -457,7 +522,7 @@ function Home({
       </div>
       {plan?.rationale && (
         <details className="card instruction">
-          <summary>Why this plan?</summary>
+          <summary>Plan details</summary>
           <p>{plan.rationale}</p>
         </details>
       )}
@@ -467,8 +532,8 @@ function Home({
           onClick={() => navigate("/nutrition?tab=foods")}
         >
           <Leaf size={22} />
-          <strong>Indian foods & your own labels</strong>
-          <p>Moong, dal, roti, peanut butter and more.</p>
+          <strong>Food library</strong>
+          <p>Indian foods, meals and your own entries.</p>
           <ArrowUpRight size={17} />
         </button>
         <button className="card" onClick={() => navigate("/progress")}>

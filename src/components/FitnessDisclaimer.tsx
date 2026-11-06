@@ -1,7 +1,7 @@
 export default function FitnessDisclaimer() {
   return (
     <details className="fitness-disclaimer">
-      <summary>Fitness, fat-loss & yoga disclaimer</summary>
+      <summary>Health & training guidance</summary>
       <p>
         These educational plans and nutrition estimates do not replace a
         qualified trainer, physiotherapist or clinician. Content has not been

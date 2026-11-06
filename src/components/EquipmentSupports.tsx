@@ -18,43 +18,53 @@ export default function EquipmentSupports({
     ["anchor", "A rated resistance-band anchor, installed as instructed"],
     ["step", "A stable exercise step/platform"],
   ] as const;
+  const common = new Set([
+    "dumbbells",
+    "bands",
+    "barbell",
+    "rack",
+    "cable",
+    "dual-cable",
+    "pulldown",
+    "leg-press",
+  ]);
+  const item = ({ id, label }: (typeof equipmentItems)[number]) => (
+    <label className="check" key={id}>
+      <input
+        type="checkbox"
+        checked={profile.equipmentInventory?.includes(id) || false}
+        onChange={(e) =>
+          onInventoryChange(
+            e.target.checked
+              ? [...(profile.equipmentInventory || []), id]
+              : (profile.equipmentInventory || []).filter(
+                  (value) => value !== id,
+                ),
+          )
+        }
+      />
+      {label}
+    </label>
+  );
   return (
     <>
       {["Partial gym", "Limited equipment"].includes(profile.equipment) && (
         <fieldset className="height-input equipment-inventory span2">
           <legend>Your available gym equipment</legend>
-          <p className="hint">
-            A partial gym uses only the items you select, plus bodyweight
-            exercises. Leave unavailable machines unchecked.
-          </p>
+          <p className="hint">Only selected equipment will be used.</p>
           <div className="equipment-check-grid">
-            {equipmentItems.map(({ id, label }) => (
-              <label className="check" key={id}>
-                <input
-                  type="checkbox"
-                  checked={profile.equipmentInventory?.includes(id) || false}
-                  onChange={(e) =>
-                    onInventoryChange(
-                      e.target.checked
-                        ? [...(profile.equipmentInventory || []), id]
-                        : (profile.equipmentInventory || []).filter(
-                            (x) => x !== id,
-                          ),
-                    )
-                  }
-                />
-                {label}
-              </label>
-            ))}
+            {equipmentItems.filter((e) => common.has(e.id)).map(item)}
           </div>
+          <details className="form-details">
+            <summary>Other machines</summary>
+            <div className="equipment-check-grid">
+              {equipmentItems.filter((e) => !common.has(e.id)).map(item)}
+            </div>
+          </details>
         </fieldset>
       )}
       <fieldset className="height-input span2">
-        <legend>Other equipment you actually have</legend>
-        <p className="hint">
-          Leave unchecked if unavailable. Plans will avoid exercises that
-          require these supports.
-        </p>
+        <legend>Optional supports</legend>
         {options.map(([key, label]) => (
           <label className="check" key={key}>
             <input

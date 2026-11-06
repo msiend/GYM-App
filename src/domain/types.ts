@@ -94,6 +94,7 @@ export interface PlanExercise {
 }
 export interface PlanDay {
   day: number;
+  kind?: "strength" | "light";
   focus: string;
   exercises: PlanExercise[];
   estimatedMinutes?: number;
@@ -121,6 +122,7 @@ export interface SetLog {
 }
 export interface Session {
   id: string;
+  kind?: "strength" | "light";
   date: string;
   focus: string;
   status: "active" | "complete";
@@ -183,7 +185,16 @@ export interface Settings {
   theme: string;
   textSize?: "normal" | "large";
   exerciseLanguage?:
-    "en" | "hi" | "mr" | "gu" | "bn" | "ta" | "te" | "kn" | "ml" | "pa";
+    | "en"
+    | "hi"
+    | "mr"
+    | "gu"
+    | "bn"
+    | "ta"
+    | "te"
+    | "kn"
+    | "ml"
+    | "pa";
   language: string;
   unit: string;
   rest: number;

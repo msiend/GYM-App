@@ -153,9 +153,14 @@ describe("equipment, time and movement coverage", () => {
                 for (const item of day.exercises) {
                   const e = exerciseById(item.exerciseId);
                   expect(eligible(p).some((x) => x.id === e.id)).toBe(true);
-                  expect(["Cardio", "Mobility", "Stretching"]).not.toContain(
-                    e.category,
-                  );
+                  if (day.kind === "light")
+                    expect(["Cardio", "Mobility", "Stretching"]).toContain(
+                      e.category,
+                    );
+                  else
+                    expect(["Cardio", "Mobility", "Stretching"]).not.toContain(
+                      e.category,
+                    );
                   if (
                     goal === "Strength building" &&
                     experience === "More than 1 year" &&

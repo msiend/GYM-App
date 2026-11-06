@@ -323,9 +323,7 @@ export default function Nutrition({
   return (
     <>
       <Heading
-        eyebrow="FUEL YOUR EVERYDAY"
-        title="Good food. Better energy"
-        description="Build balanced habits, one meal at a time."
+        title="Nutrition"
         action={
           <button
             className="button"

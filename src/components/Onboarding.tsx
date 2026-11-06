@@ -1,16 +1,16 @@
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { ArrowRight, Check, ChevronLeft, ShieldCheck } from "lucide-react";
+import { ArrowRight, ChevronLeft } from "lucide-react";
 import type { Profile } from "../domain/types";
 import { saveProfileAndPlan } from "../data/profile-repository";
 import { saveErrorMessage } from "../data/errors";
-import { splitOptions } from "../domain/engine";
+import { generatePlan } from "../domain/engine";
 import { Modal } from "./ui";
-import { days } from "../domain/calendar";
-import EquipmentSupports from "./EquipmentSupports";
-import { equipmentOptions } from "../domain/equipment";
+import TrainingFields from "./TrainingFields";
+import EquipmentFields from "./EquipmentFields";
+import PlanPreview from "./PlanPreview";
 import {
   cmToFeetInches,
   feetInchesToCm,
@@ -56,8 +56,14 @@ export default function Onboarding({
 }) {
   const [p, setP] = useState<Profile>(profile || initial);
   const [step, setStep] = useState(0);
+  const stepHeading = useRef<HTMLHeadingElement>(null);
+  useEffect(() => {
+    stepHeading.current?.focus({ preventScroll: true });
+    stepHeading.current?.closest(".modal-body")?.scrollTo({ top: 0 });
+  }, [step]);
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState("");
+  const [foodGoalTouched, setFoodGoalTouched] = useState(false);
   const [imperialHeight, setImperialHeight] = useState(() =>
     cmToFeetInches(p.height),
   );
@@ -80,31 +86,49 @@ export default function Onboarding({
       shouldValidate: true,
     });
   }
+
   const titles = [
-    "Make it personal",
-    "Your starting point",
-    "Find your direction",
-    "Make room for movement",
-    "Your training space",
-    "Fuel your everyday",
-    "Health comes first",
-    "Your plan, your pace",
+    "About you",
+    "Your training",
+    "Equipment & health",
+    "Review your week",
   ];
+  const preview = generatePlan(p);
+  function updateTraining(patch: Partial<Profile>) {
+    if (patch.goal && !profile && !foodGoalTouched)
+      patch.nutritionGoal =
+        patch.goal === "Fat loss"
+          ? "Fat loss"
+          : patch.goal === "Muscle building"
+            ? "Muscle building"
+            : "General health";
+    setP((current) => ({ ...current, ...patch }));
+  }
   async function next() {
     if (step === 0) {
-      const valid = await form.trigger();
-      if (!valid) return;
-      setP((v) => ({ ...v, ...schema.parse(form.getValues()) }));
+      if (!(await form.trigger())) return;
+      setP((current) => ({ ...current, ...schema.parse(form.getValues()) }));
     }
-    if (step === 3 && p.days.length < 2) {
+    if (step === 1 && p.days.length < 2) {
       setError("Choose at least two training days.");
       return;
     }
+    if (
+      step === 2 &&
+      ((p.target !== undefined && (p.target < 25 || p.target > 350)) ||
+        (p.referenceWeight !== undefined &&
+          (p.referenceWeight < 25 || p.referenceWeight > 350)) ||
+        (p.bodyFat !== undefined && (p.bodyFat < 3 || p.bodyFat > 65)))
+    ) {
+      setError("Check your optional weight and body-fat values.");
+      return;
+    }
     setError("");
-    setStep((v) => v + 1);
+    setStep((current) => current + 1);
   }
   async function save() {
     setBusy(true);
+    setError("");
     try {
       await saveProfileAndPlan(p);
       onClose();
@@ -135,461 +159,362 @@ export default function Onboarding({
       </select>
     </label>
   );
+
   return (
     <Modal
-      title={profile ? "Edit your profile" : "Welcome to FORM"}
+      title={profile ? "Edit your profile" : "Create your plan"}
       onClose={onClose}
     >
-      <div className="wizard-progress">
-        {titles.map((_, i) => (
-          <span key={i} className={i <= step ? "active" : ""} />
-        ))}
-      </div>
-      <div className="eyebrow">STEP {step + 1} OF 8</div>
-      <h2 className="wizard-title">
-        {titles[step]}
-        <span className="lime">.</span>
-      </h2>
-      <p className="muted">A little about you. A plan that fits your life.</p>
-      {step === 0 && (
-        <div className="form-grid">
-          <label className="span2">
-            Full name
-            <input {...form.register("name")} />
-            {form.formState.errors.name && (
-              <small className="danger">Enter your name.</small>
-            )}
-          </label>
-          {(["age", "weight"] as const).map((k) => (
-            <label key={k}>
-              {k === "weight" ? "Current weight (kg)" : "Age"}
-              <input type="number" {...form.register(k)} />
-              {form.formState.errors[k] && (
-                <small className="danger">Enter a valid {k}.</small>
+      <form
+        noValidate
+        onSubmit={(event) => {
+          event.preventDefault();
+          if (!busy) void (step === 3 ? save() : next());
+        }}
+      >
+        <div
+          className="setup-progress"
+          role="progressbar"
+          aria-label="Profile setup"
+          aria-valuemin={1}
+          aria-valuemax={4}
+          aria-valuenow={step + 1}
+        >
+          {titles.map((title, index) => (
+            <span key={title} className={index <= step ? "active" : ""} />
+          ))}
+        </div>
+        <p className="eyebrow">STEP {step + 1} OF 4</p>
+        <h3 className="wizard-title" tabIndex={-1} ref={stepHeading}>
+          {titles[step]}
+        </h3>
+        {step === 0 && (
+          <div className="form-grid">
+            <label className="span2">
+              Full name
+              <input {...form.register("name")} />
+              {form.formState.errors.name && (
+                <small className="danger">Enter your name.</small>
               )}
             </label>
-          ))}
-          <fieldset className="height-input span2">
-            <legend>Height</legend>
-            <label>
-              Height unit
-              <select
-                aria-label="Height unit"
-                value={heightUnit}
-                onChange={(e) => {
-                  const unit = e.target.value as "cm" | "ft";
-                  const cm = Number(form.getValues("height"));
-                  if (unit === "ft" && Number.isFinite(cm))
-                    setImperialHeight(cmToFeetInches(cm));
-                  update("heightUnit", unit);
-                }}
-              >
-                <option value="ft">Feet & inches</option>
-                <option value="cm">Centimetres</option>
-              </select>
-            </label>
-            {heightUnit === "cm" ? (
+            {(["age", "weight"] as const).map((k) => (
+              <label key={k}>
+                {k === "weight" ? "Current weight (kg)" : "Age"}
+                <input type="number" {...form.register(k)} />
+                {form.formState.errors[k] && (
+                  <small className="danger">Enter a valid {k}.</small>
+                )}
+              </label>
+            ))}
+            <fieldset className="height-input span2">
+              <legend>Height</legend>
               <label>
-                Height (cm)
+                Height unit
+                <select
+                  aria-label="Height unit"
+                  value={heightUnit}
+                  onChange={(e) => {
+                    const unit = e.target.value as "cm" | "ft";
+                    const cm = Number(form.getValues("height"));
+                    if (unit === "ft" && Number.isFinite(cm))
+                      setImperialHeight(cmToFeetInches(cm));
+                    update("heightUnit", unit);
+                  }}
+                >
+                  <option value="ft">Feet & inches</option>
+                  <option value="cm">Centimetres</option>
+                </select>
+              </label>
+              {heightUnit === "cm" ? (
+                <label>
+                  Height (cm)
+                  <input
+                    type="number"
+                    min="100"
+                    max="250"
+                    step="any"
+                    {...form.register("height")}
+                  />
+                </label>
+              ) : (
+                <>
+                  <input type="hidden" {...form.register("height")} />
+                  <div className="height-parts">
+                    <label>
+                      Feet
+                      <input
+                        type="number"
+                        inputMode="numeric"
+                        min="3"
+                        max="8"
+                        step="1"
+                        value={imperialHeight.feet}
+                        onChange={(e) =>
+                          changeImperialHeight("feet", e.target.value)
+                        }
+                      />
+                    </label>
+                    <label>
+                      Inches
+                      <input
+                        type="number"
+                        inputMode="decimal"
+                        min="0"
+                        max="11.99"
+                        step="0.01"
+                        value={imperialHeight.inches}
+                        onChange={(e) =>
+                          changeImperialHeight("inches", e.target.value)
+                        }
+                      />
+                    </label>
+                  </div>
+                  <p className="hint">
+                    For 5 ft 8 in, enter 5 feet and 8 inches.
+                  </p>
+                </>
+              )}
+              {form.formState.errors.height && (
+                <small role="alert" className="danger">
+                  Enter a height between 100 and 250 cm (about 3 ft 3 in to 8 ft
+                  2 in). Inches must be from 0 to less than 12.
+                </small>
+              )}
+            </fieldset>
+            {select("Gender (optional)", "gender", [
+              "Prefer not to say",
+              "Female",
+              "Male",
+            ])}
+            <label>
+              Target weight (kg, optional)
+              <input
+                type="number"
+                min="25"
+                max="350"
+                value={p.target || ""}
+                onChange={(e) =>
+                  update("target", Number(e.target.value) || undefined)
+                }
+              />
+            </label>
+          </div>
+        )}
+
+        {step === 1 && <TrainingFields profile={p} onChange={updateTraining} />}
+        {step === 2 && (
+          <>
+            <EquipmentFields
+              profile={p}
+              onChange={(patch) =>
+                setP((current) => ({ ...current, ...patch }))
+              }
+            />
+            <fieldset className="health-fields">
+              <legend>Health & limitations</legend>
+              <label className="check">
                 <input
-                  type="number"
-                  min="100"
-                  max="250"
-                  step="any"
-                  {...form.register("height")}
+                  type="checkbox"
+                  checked={p.medical}
+                  onChange={(e) => update("medical", e.target.checked)}
+                />
+                I have an injury, significant pain, a heart/blood-pressure
+                condition or medical exercise restrictions.
+              </label>
+              <label>
+                Exercises or muscles to avoid
+                <input
+                  value={p.restrictions}
+                  placeholder="e.g. squat, shoulders, plank"
+                  onChange={(e) => update("restrictions", e.target.value)}
                 />
               </label>
-            ) : (
-              <>
-                <input type="hidden" {...form.register("height")} />
-                <div className="height-parts">
-                  <label>
-                    Feet
-                    <input
-                      type="number"
-                      inputMode="numeric"
-                      min="3"
-                      max="8"
-                      step="1"
-                      value={imperialHeight.feet}
-                      onChange={(e) =>
-                        changeImperialHeight("feet", e.target.value)
-                      }
-                    />
-                  </label>
-                  <label>
-                    Inches
-                    <input
-                      type="number"
-                      inputMode="decimal"
-                      min="0"
-                      max="11.99"
-                      step="0.01"
-                      value={imperialHeight.inches}
-                      onChange={(e) =>
-                        changeImperialHeight("inches", e.target.value)
-                      }
-                    />
-                  </label>
-                </div>
-                <p className="hint">
-                  For 5 ft 8 in, enter 5 feet and 8 inches.
+              <label className="check">
+                <input
+                  type="checkbox"
+                  checked={p.nutritionRisk}
+                  onChange={(e) => update("nutritionRisk", e.target.checked)}
+                />
+                Pregnancy, an eating disorder, kidney/liver disease or a
+                prescribed diet.
+              </label>
+              {(p.medical || p.nutritionRisk || p.age < 18) && (
+                <p className="notice">
+                  Personal training targets need qualified professional
+                  guidance. You can still browse the library.
                 </p>
-              </>
-            )}
-            {form.formState.errors.height && (
-              <small role="alert" className="danger">
-                Enter a height between 100 and 250 cm (about 3 ft 3 in to 8 ft 2
-                in). Inches must be from 0 to less than 12.
-              </small>
-            )}
-          </fieldset>
-          {select("Gender (optional)", "gender", [
-            "Prefer not to say",
-            "Female",
-            "Male",
-          ])}
-          <label>
-            Target weight (kg, optional)
-            <input
-              type="number"
-              min="25"
-              max="350"
-              value={p.target || ""}
-              onChange={(e) =>
-                update("target", Number(e.target.value) || undefined)
-              }
-            />
-          </label>
-        </div>
-      )}
-      {step === 1 && (
-        <div className="option-list">
-          {[
-            "Complete beginner",
-            "Less than 3 months",
-            "3–6 months",
-            "6–12 months",
-            "More than 1 year",
-          ].map((x) => (
-            <button
-              key={x}
-              className={p.experience === x ? "option selected" : "option"}
-              onClick={() => update("experience", x)}
-            >
-              {x}
-              {p.experience === x && <Check size={18} />}
-            </button>
-          ))}
-          <p className="hint">
-            Start where you are. Experience determines volume, not your goal.
-          </p>
-        </div>
-      )}
-      {step === 2 && (
-        <div className="option-list">
-          {[
-            "General fitness",
-            "Fat loss",
-            "Muscle building",
-            "Strength building",
-            "Flexibility & endurance",
-          ].map((x, i) => (
-            <button
-              key={x}
-              className={p.goal === x ? "option selected" : "option"}
-              onClick={() => update("goal", x)}
-            >
-              <div>
-                <strong>{x}</strong>
-                <small>
-                  {
-                    [
-                      "Move better, feel stronger, build healthy habits.",
-                      "Build strength and support sustainable body composition.",
-                      "Build muscle with gradual, manageable training volume.",
-                      "Practice compound movements and build your strength.",
-                      "Move freely and improve your aerobic capacity.",
-                    ][i]
-                  }
-                </small>
+              )}
+            </fieldset>
+            <details className="form-details">
+              <summary>Food preferences & optional details</summary>
+              <div className="form-grid">
+                {select("Dietary preference", "diet", [
+                  "Vegetarian",
+                  "Vegan",
+                  "Eggetarian",
+                  "Non-vegetarian",
+                  "Pescatarian",
+                ])}
+                <label>
+                  Nutrition goal
+                  <select
+                    aria-label="Nutrition goal"
+                    value={p.nutritionGoal}
+                    onChange={(e) => {
+                      setFoodGoalTouched(true);
+                      update("nutritionGoal", e.target.value);
+                    }}
+                  >
+                    {[
+                      "General health",
+                      "Fat loss",
+                      "Muscle building",
+                      "Lean muscle building",
+                      "Weight maintenance",
+                      "Athletic performance",
+                    ].map((value) => (
+                      <option key={value}>{value}</option>
+                    ))}
+                  </select>
+                </label>
+                <label>
+                  Allergies / intolerances
+                  <input
+                    value={p.allergies}
+                    placeholder="e.g. milk, nuts, gluten, soy"
+                    onChange={(e) => update("allergies", e.target.value)}
+                  />
+                </label>
+                <label>
+                  Foods to avoid
+                  <input
+                    value={p.dislikes}
+                    onChange={(e) => update("dislikes", e.target.value)}
+                  />
+                </label>
+                <label>
+                  Meals per day
+                  <select
+                    aria-label="Meals per day"
+                    value={p.meals}
+                    onChange={(e) => update("meals", Number(e.target.value))}
+                  >
+                    {[2, 3, 4, 5, 6].map((n) => (
+                      <option key={n}>{n}</option>
+                    ))}
+                  </select>
+                </label>
+                {select("Budget preference", "budget", [
+                  "Low",
+                  "Medium",
+                  "Flexible",
+                ])}
+                <label>
+                  Daily activity
+                  <select
+                    aria-label="Daily activity"
+                    value={p.activity}
+                    onChange={(e) => update("activity", Number(e.target.value))}
+                  >
+                    {[
+                      [1.2, "Sedentary"],
+                      [1.375, "Lightly active"],
+                      [1.55, "Moderately active"],
+                      [1.725, "Very active"],
+                    ].map(([value, label]) => (
+                      <option key={value} value={value}>
+                        {label}
+                      </option>
+                    ))}
+                  </select>
+                </label>
+                {select("Protein calculation reference", "proteinMethod", [
+                  "Body weight",
+                  "Lean mass",
+                  "Reference weight",
+                ])}
+                <label>
+                  Clinician-provided reference weight (kg)
+                  <input
+                    type="number"
+                    min="25"
+                    max="350"
+                    value={p.referenceWeight ?? ""}
+                    onChange={(e) =>
+                      update(
+                        "referenceWeight",
+                        e.target.value === ""
+                          ? undefined
+                          : Number(e.target.value),
+                      )
+                    }
+                  />
+                </label>
+                <label>
+                  Body fat % (optional)
+                  <input
+                    type="number"
+                    min="3"
+                    max="65"
+                    value={p.bodyFat ?? ""}
+                    onChange={(e) =>
+                      update(
+                        "bodyFat",
+                        e.target.value === ""
+                          ? undefined
+                          : Number(e.target.value),
+                      )
+                    }
+                  />
+                </label>
               </div>
-              {p.goal === x && <Check size={18} />}
-            </button>
-          ))}
-        </div>
-      )}
-      {step === 3 && (
-        <>
-          {select(
-            "Plan style (you can change this later)",
-            "preferredSplit",
-            splitOptions,
-          )}
-          {select("Recovery capacity", "recovery", [
-            "Normal recovery",
-            "Limited recovery",
-          ])}
-          <label>Available days (choose 2–6)</label>
-          <div className="day-picker">
-            {days.map((d, i) => (
-              <button
-                key={d}
-                className={p.days.includes(i) ? "selected" : ""}
-                onClick={() =>
-                  update(
-                    "days",
-                    p.days.includes(i)
-                      ? p.days.filter((x) => x !== i)
-                      : p.days.length < 6
-                        ? [...p.days, i].sort()
-                        : p.days,
-                  )
-                }
-              >
-                {d.slice(0, 3)}
-              </button>
-            ))}
-          </div>
-          <label>
-            Session duration
-            <select
-              value={p.duration}
-              onChange={(e) => update("duration", +e.target.value)}
-            >
-              {[20, 30, 45, 60, 75, 90].map((n) => (
-                <option key={n} value={n}>
-                  {n} minutes
-                </option>
-              ))}
-            </select>
-          </label>
-          <p className="hint">
-            New to training? We’ll use up to three of your days for resistance
-            work and keep recovery in your week.
+            </details>
+          </>
+        )}
+        {step === 3 && (
+          <>
+            <div className="profile-review">
+              <strong>{p.name}</strong>
+              <span>
+                {displayHeight(p.height, p.heightUnit)} · {p.weight} kg
+              </span>
+              <span>
+                {p.goal} · {p.equipment}
+              </span>
+            </div>
+            <PlanPreview plan={preview} />
+          </>
+        )}
+        {error && (
+          <p className="danger" role="alert">
+            {error}
           </p>
-        </>
-      )}
-      {step === 4 && (
-        <div className="option-list">
-          {equipmentOptions.map((x) => (
-            <button
-              key={x}
-              className={p.equipment === x ? "option selected" : "option"}
-              onClick={() => update("equipment", x)}
-            >
-              {x === "Partial gym" ? "Partial / half gym" : x}
-              {p.equipment === x && <Check size={18} />}
-            </button>
-          ))}
-          <EquipmentSupports
-            profile={p}
-            onChange={(v) => update("supports", v)}
-            onInventoryChange={(v) => update("equipmentInventory", v)}
-          />
-        </div>
-      )}
-      {step === 5 && (
-        <div className="form-grid">
-          {select("Dietary preference", "diet", [
-            "Vegetarian",
-            "Vegan",
-            "Eggetarian",
-            "Non-vegetarian",
-            "Pescatarian",
-          ])}
-          {select("Nutrition goal", "nutritionGoal", [
-            "General health",
-            "Fat loss",
-            "Muscle building",
-            "Lean muscle building",
-            "Weight maintenance",
-            "Athletic performance",
-          ])}
-          <label>
-            Allergies / intolerances (comma separated)
-            <input
-              value={p.allergies}
-              placeholder="milk, nuts, gluten, soy"
-              onChange={(e) => update("allergies", e.target.value)}
-            />
-          </label>
-          <label>
-            Disliked or restricted foods
-            <input
-              value={p.dislikes}
-              placeholder="eggs, fish…"
-              onChange={(e) => update("dislikes", e.target.value)}
-            />
-          </label>
-          <label>
-            Meals per day
-            <select
-              value={p.meals}
-              onChange={(e) => update("meals", +e.target.value)}
-            >
-              {[2, 3, 4, 5, 6].map((n) => (
-                <option key={n}>{n}</option>
-              ))}
-            </select>
-          </label>
-          {select("Budget preference", "budget", ["Low", "Medium", "Flexible"])}
-          {select("Protein calculation reference", "proteinMethod", [
-            "Body weight",
-            "Lean mass",
-            "Reference weight",
-          ])}
-          <label>
-            Clinician-provided reference weight (kg)
-            <input
-              type="number"
-              min="25"
-              max="350"
-              value={p.referenceWeight || ""}
-              onChange={(e) =>
-                update(
-                  "referenceWeight",
-                  Math.max(25, Math.min(350, +e.target.value)) || undefined,
-                )
-              }
-            />
-          </label>
-          <label>
-            Daily activity
-            <select
-              value={p.activity}
-              onChange={(e) => update("activity", +e.target.value)}
-            >
-              {[
-                [1.2, "Sedentary"],
-                [1.375, "Lightly active"],
-                [1.55, "Moderately active"],
-                [1.725, "Very active"],
-              ].map(([v, l]) => (
-                <option key={v} value={v}>
-                  {l}
-                </option>
-              ))}
-            </select>
-          </label>
-          <label>
-            Body fat % (optional)
-            <input
-              type="number"
-              min="3"
-              max="65"
-              value={p.bodyFat || ""}
-              onChange={(e) =>
-                update(
-                  "bodyFat",
-                  Math.min(65, Math.max(3, +e.target.value)) || undefined,
-                )
-              }
-            />
-          </label>
-        </div>
-      )}
-      {step === 6 && (
-        <>
-          <div className="notice">
-            <ShieldCheck />
-            <p>
-              Train with care. This app offers general guidance and cannot
-              assess medical conditions.
-            </p>
-          </div>
-          <label className="check">
-            <input
-              type="checkbox"
-              checked={p.medical}
-              onChange={(e) => update("medical", e.target.checked)}
-            />
-            I have heart conditions, high blood pressure, significant pain,
-            injuries or medical exercise restrictions.
-          </label>
-          <label>
-            Movements, muscles or exercises to exclude (comma separated)
-            <textarea
-              placeholder="e.g. squat, shoulders, plank"
-              value={p.restrictions}
-              onChange={(e) => update("restrictions", e.target.value)}
-            />
-          </label>
-          <label className="check">
-            <input
-              type="checkbox"
-              checked={p.nutritionRisk}
-              onChange={(e) => update("nutritionRisk", e.target.checked)}
-            />
-            I am pregnant, have an eating disorder, kidney/liver disease or a
-            condition requiring dietary restrictions.
-          </label>
-          {(p.medical || p.nutritionRisk || p.age < 18) && (
-            <p className="notice">
-              Please consult a qualified healthcare professional. Unrestricted
-              plans or nutrition targets will be withheld where relevant.
-            </p>
-          )}
-        </>
-      )}
-      {step === 7 && (
-        <>
-          <div className="review-grid">
-            {[
-              ["Name", p.name],
-              ["Height", displayHeight(p.height, p.heightUnit)],
-              ["Goal", p.goal],
-              ["Experience", p.experience],
-              [
-                "Training",
-                `${p.days.length} available days · ${p.duration} min`,
-              ],
-              ["Equipment", p.equipment],
-              ["Nutrition", `${p.diet} · ${p.meals} meals`],
-              [
-                "Screening",
-                p.medical || p.nutritionRisk
-                  ? "Professional guidance recommended"
-                  : "No conditions reported",
-              ],
-              ["Restrictions", p.restrictions || "None reported"],
-            ].map(([k, v]) => (
-              <div key={k}>
-                <small>{k}</small>
-                <strong>{v}</strong>
-              </div>
-            ))}
-          </div>
-          <p className="hint">
-            Your plan is a starting point. Use manageable loads, practice
-            technique, and adjust to your recovery. Saving an edited profile
-            regenerates your workout plan but preserves your history.
-          </p>
-        </>
-      )}
-      {error && (
-        <p role="alert" className="danger">
-          {error}
-        </p>
-      )}
-      <footer className="wizard-footer">
-        <button
-          className="button secondary"
-          disabled={!step}
-          onClick={() => setStep((s) => s - 1)}
-        >
-          <ChevronLeft size={16} />
-          Back
-        </button>
-        <button
-          className="button"
-          disabled={busy}
-          onClick={step === 7 ? save : next}
-        >
-          {step === 7 ? (busy ? "Saving…" : "Create my plan") : "Continue"}
-          <ArrowRight size={17} />
-        </button>
-      </footer>
+        )}
+        <footer className="wizard-footer">
+          <button
+            type="button"
+            className="button secondary"
+            disabled={!step || busy}
+            onClick={() => {
+              setError("");
+              setStep((current) => current - 1);
+            }}
+          >
+            <ChevronLeft size={16} />
+            Back
+          </button>
+          <button type="submit" className="button" disabled={busy}>
+            {step === 3
+              ? busy
+                ? "Saving…"
+                : profile
+                  ? "Save profile"
+                  : "Create my plan"
+              : "Continue"}
+            <ArrowRight size={16} />
+          </button>
+        </footer>
+      </form>
     </Modal>
   );
 }

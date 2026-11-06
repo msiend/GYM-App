@@ -1,12 +1,12 @@
 import { useState } from "react";
 import type { Profile } from "../domain/types";
-import { generatePlan, splitOptions } from "../domain/engine";
+import { generatePlan } from "../domain/engine";
 import { saveProfileAndPlan } from "../data/profile-repository";
 import { saveErrorMessage } from "../data/errors";
 import { Modal } from "./ui";
-import { days } from "../domain/calendar";
-import EquipmentSupports from "./EquipmentSupports";
-import { equipmentOptions } from "../domain/equipment";
+import TrainingFields from "./TrainingFields";
+import EquipmentFields from "./EquipmentFields";
+import PlanPreview from "./PlanPreview";
 export default function PlanSettings({
   profile,
   onClose,
@@ -18,28 +18,25 @@ export default function PlanSettings({
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState("");
   const preview = generatePlan(p);
-  const update = (key: keyof Profile, v: unknown) =>
-    setP((s) => ({ ...s, [key]: v }));
+  const update = (patch: Partial<Profile>) =>
+    setP((current) => ({ ...current, ...patch }));
   return (
-    <Modal title="Change your training plan" onClose={onClose}>
-      <p>
-        Choose what fits your life. The preview explains the plan before you
-        save. Workout history and your active session are preserved.
-      </p>
+    <Modal title="Edit your week" onClose={onClose}>
       <form
         onSubmit={async (e) => {
           e.preventDefault();
           if (p.days.length < 2) {
-            setError("Choose at least two available days.");
+            setError("Choose at least two training days.");
             return;
           }
           if (
             !confirm(
-              "Replace your future weekly plan with this preview? Saved workouts are preserved.",
+              "Save this weekly plan? Your workout history and active session will be kept.",
             )
           )
             return;
           setBusy(true);
+          setError("");
           try {
             await saveProfileAndPlan(p, {
               includeStartingWeight: false,
@@ -53,145 +50,22 @@ export default function PlanSettings({
           }
         }}
       >
-        <div className="form-grid">
-          <label>
-            Training goal
-            <select
-              aria-label="Training goal"
-              value={p.goal}
-              onChange={(e) => update("goal", e.target.value)}
-            >
-              {[
-                "General fitness",
-                "Fat loss",
-                "Muscle building",
-                "Strength building",
-                "Flexibility & endurance",
-              ].map((x) => (
-                <option key={x}>{x}</option>
-              ))}
-            </select>
-          </label>
-          <label>
-            Training experience
-            <select
-              aria-label="Training experience"
-              value={p.experience}
-              onChange={(e) => update("experience", e.target.value)}
-            >
-              {[
-                "Complete beginner",
-                "Less than 3 months",
-                "3–6 months",
-                "6–12 months",
-                "More than 1 year",
-              ].map((x) => (
-                <option key={x}>{x}</option>
-              ))}
-            </select>
-          </label>
-          <label>
-            Plan style
-            <select
-              aria-label="Plan style"
-              value={p.preferredSplit || "Automatic"}
-              onChange={(e) => update("preferredSplit", e.target.value)}
-            >
-              {splitOptions.map((s) => (
-                <option key={s}>{s}</option>
-              ))}
-            </select>
-          </label>
-          <label>
-            Recovery
-            <select
-              aria-label="Recovery"
-              value={p.recovery || "Normal recovery"}
-              onChange={(e) => update("recovery", e.target.value)}
-            >
-              <option>Normal recovery</option>
-              <option>Limited recovery</option>
-            </select>
-          </label>
-          <label>
-            Equipment
-            <select
-              aria-label="Equipment"
-              value={p.equipment}
-              onChange={(e) => update("equipment", e.target.value)}
-            >
-              {equipmentOptions.map((x) => (
-                <option key={x} value={x}>
-                  {x === "Partial gym" ? "Partial / half gym" : x}
-                </option>
-              ))}
-            </select>
-          </label>
-          <label>
-            Minutes per session
-            <select
-              aria-label="Minutes per session"
-              value={p.duration}
-              onChange={(e) => update("duration", +e.target.value)}
-            >
-              {[20, 30, 45, 60, 75, 90].map((n) => (
-                <option key={n}>{n}</option>
-              ))}
-            </select>
-          </label>
-        </div>
-        <EquipmentSupports
-          profile={p}
-          onChange={(v) => update("supports", v)}
-          onInventoryChange={(v) => update("equipmentInventory", v)}
-        />
-        <label>Available days (choose 2–6)</label>
-        <div className="day-picker">
-          {days.map((d, i) => (
-            <button
-              type="button"
-              key={d}
-              className={p.days.includes(i) ? "selected" : ""}
-              onClick={() =>
-                update(
-                  "days",
-                  p.days.includes(i)
-                    ? p.days.filter((x) => x !== i)
-                    : p.days.length < 6
-                      ? [...p.days, i].sort()
-                      : p.days,
-                )
-              }
-            >
-              {d.slice(0, 3)}
-            </button>
-          ))}
-        </div>
-        <div className="card plan-preview">
-          <h3>Preview: {preview.split}</h3>
-          <p>{preview.rationale}</p>
-          {preview.days.map((d) => (
-            <div key={d.day}>
-              <strong>{days[d.day]}</strong>
-              <span>
-                {d.focus} · {d.exercises.length} exercises
-              </span>
-            </div>
-          ))}
-          {preview.warnings?.map((w) => (
-            <p className="hint" key={w}>
-              {w}
-            </p>
-          ))}
-        </div>
+        <TrainingFields profile={p} onChange={update} />
+        <EquipmentFields profile={p} onChange={update} />
+        <PlanPreview plan={preview} />
         {error && (
           <p role="alert" className="danger">
             {error}
           </p>
         )}
-        <button className="button" type="submit" disabled={busy}>
-          {busy ? "Saving…" : "Save plan"}
-        </button>
+        <footer className="form-footer">
+          <button type="button" className="button secondary" onClick={onClose}>
+            Cancel
+          </button>
+          <button className="button" type="submit" disabled={busy}>
+            {busy ? "Saving…" : "Save plan"}
+          </button>
+        </footer>
       </form>
     </Modal>
   );

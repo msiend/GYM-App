@@ -86,7 +86,9 @@ try {
     });
   });
   await legacyPage.goto("http://localhost:4175");
-  await legacyPage.getByRole("dialog").waitFor();
+  await legacyPage
+    .getByRole("button", { name: "Create my profile", exact: true })
+    .waitFor();
   const migrated = await legacyPage.evaluate(
     () =>
       new Promise((resolve) => {
@@ -111,13 +113,16 @@ try {
   const errors = [];
   page.on("pageerror", (e) => errors.push(e.message));
   await page.goto("http://localhost:4175");
-  await page.getByRole("dialog").waitFor();
+  await page
+    .getByRole("button", { name: "Create my profile", exact: true })
+    .waitFor();
   if (
     (await page.evaluate(() => document.documentElement.dataset.theme)) !==
     "light"
   )
     throw new Error("Light theme should be the default");
-  await page.getByRole("button", { name: "Close dialog" }).click();
+  if (await page.getByRole("dialog").count())
+    throw new Error("Guest browsing is blocked by setup");
   await page.screenshot({
     path: "test-results/dashboard-desktop.png",
     fullPage: true,
@@ -153,14 +158,15 @@ try {
   await page.getByLabel("Height (cm)", { exact: true }).fill("172.72");
   await page.getByLabel("Height unit", { exact: true }).selectOption("ft");
   await page.getByRole("button", { name: "Continue", exact: true }).click();
+  await page
+    .getByLabel("Training goal", { exact: true })
+    .selectOption("Muscle building");
   await page.getByRole("button", { name: "Continue", exact: true }).click();
-  await page.getByRole("button", { name: "Muscle building" }).click();
+  await page
+    .getByLabel("Equipment", { exact: true })
+    .selectOption("Bodyweight");
   await page.getByRole("button", { name: "Continue", exact: true }).click();
-  await page.getByRole("button", { name: "Continue", exact: true }).click();
-  await page.getByRole("button", { name: "Bodyweight", exact: true }).click();
-  await page.getByRole("button", { name: "Continue", exact: true }).click();
-  await page.getByRole("button", { name: "Continue", exact: true }).click();
-  await page.getByRole("button", { name: "Continue", exact: true }).click();
+  await page.getByRole("region", { name: "Weekly plan preview" }).waitFor();
   await page
     .getByRole("button", { name: "Create my plan", exact: true })
     .click();
@@ -271,7 +277,9 @@ try {
     name: "Workout day",
     exact: true,
   });
-  await workoutDays.getByRole("button", { name: "Sun", exact: true }).click();
+  await workoutDays
+    .getByRole("button", { name: "Sunday", exact: true })
+    .click();
   await page
     .getByRole("heading", { name: "Sunday · Recovery day", exact: true })
     .waitFor();
@@ -288,11 +296,15 @@ try {
   await page
     .getByRole("heading", { name: "Monday · Full body", exact: true })
     .waitFor();
-  await workoutDays.getByRole("button", { name: "Wed", exact: true }).click();
+  await workoutDays
+    .getByRole("button", { name: "Wednesday", exact: true })
+    .click();
   await page
     .getByRole("heading", { name: "Wednesday · Full body", exact: true })
     .waitFor();
-  await workoutDays.getByRole("button", { name: "Tue", exact: true }).click();
+  await workoutDays
+    .getByRole("button", { name: "Tuesday", exact: true })
+    .click();
   await page
     .getByRole("heading", { name: "Tuesday · Recovery day", exact: true })
     .waitFor();
@@ -323,9 +335,11 @@ try {
   // Raw IndexedDB writes do not emit Dexie's in-process live-query notifications.
   await page.reload();
   await page
-    .getByText(/This saved plan predates the technique and programming audit/)
+    .getByText(/Update your week to include every selected day/)
     .waitFor();
-  await workoutDays.getByRole("button", { name: "Mon", exact: true }).click();
+  await workoutDays
+    .getByRole("button", { name: "Monday", exact: true })
+    .click();
   if (
     !(await page
       .getByRole("button", { name: "Start workout", exact: true })
@@ -342,10 +356,11 @@ try {
     .getByLabel("Training experience", { exact: true })
     .selectOption("More than 1 year");
   await page.getByLabel("Equipment", { exact: true }).selectOption("Full gym");
+  await page.getByText("Training options", { exact: true }).click();
   await page
     .getByLabel("Plan style", { exact: true })
     .selectOption("Body-part split (6 days)");
-  for (const day of ["Tue", "Thu", "Sat"])
+  for (const day of ["Tuesday", "Thursday", "Saturday"])
     await page
       .getByRole("dialog")
       .getByRole("button", { name: day, exact: true })
@@ -353,7 +368,9 @@ try {
   page.once("dialog", (d) => d.accept());
   await page.getByRole("button", { name: "Save plan", exact: true }).click();
   await page.getByRole("dialog").waitFor({ state: "hidden" });
-  await page.getByRole("button", { name: /Monday Chest & triceps/ }).waitFor();
+  await page
+    .getByRole("heading", { name: "Monday · Chest & triceps", exact: true })
+    .waitFor();
   for (const [short, full, focus] of [
     ["Mon", "Monday", "Chest & triceps"],
     ["Tue", "Tuesday", "Back & biceps"],
@@ -362,18 +379,22 @@ try {
     ["Fri", "Friday", "Glutes & hamstrings"],
     ["Sat", "Saturday", "Abs & forearms"],
   ]) {
-    await workoutDays.getByRole("button", { name: short, exact: true }).click();
+    await workoutDays.getByRole("button", { name: full, exact: true }).click();
     await page
       .getByRole("heading", { name: `${full} · ${focus}`, exact: true })
       .waitFor();
   }
-  await workoutDays.getByRole("button", { name: "Sun", exact: true }).click();
+  await workoutDays
+    .getByRole("button", { name: "Sunday", exact: true })
+    .click();
   await page
     .getByRole("heading", { name: "Sunday · Recovery day", exact: true })
     .waitFor();
   if (await page.locator(".exercise-card").count())
     throw new Error("Sunday repeats Monday's workout");
-  await workoutDays.getByRole("button", { name: "Mon", exact: true }).click();
+  await workoutDays
+    .getByRole("button", { name: "Monday", exact: true })
+    .click();
   const firstExercise = page.locator(".exercise-card").first();
   const exerciseName = await firstExercise.locator("h3").innerText();
   await firstExercise
@@ -411,7 +432,7 @@ try {
     throw new Error("Tutorial did not open the expected YouTube search");
   await popup.close();
   await page
-    .getByRole("button", { name: "Exercise library", exact: true })
+    .getByRole("tab", { name: "Exercise library", exact: true })
     .click();
   await page
     .getByLabel("Search exercise library", { exact: true })
@@ -480,7 +501,7 @@ try {
     .getByRole("link", { name: /tutorial on YouTube/ })
     .waitFor();
   await page.getByRole("button", { name: "Close dialog" }).click();
-  await page.getByRole("button", { name: "My workout", exact: true }).click();
+  await page.getByRole("tab", { name: "My workout", exact: true }).click();
   await page
     .getByRole("button", { name: "Start workout", exact: true })
     .click();
@@ -497,7 +518,7 @@ try {
   console.log("sets saved");
   if (await workoutDays.count())
     throw new Error("Weekday picker misleadingly switches an active session");
-  await page.getByText(/Finish this workout to browse other days/).waitFor();
+  await page.getByText(/Session in progress/).waitFor();
   await page.reload();
   await page
     .getByRole("button", { name: "Mark set incomplete" })
@@ -613,7 +634,7 @@ try {
     throw new Error("Workout guide overflows mobile viewport");
   await page.screenshot({ path: "test-results/workout-mobile.png" });
   await page
-    .getByRole("button", { name: "Exercise library", exact: true })
+    .getByRole("tab", { name: "Exercise library", exact: true })
     .click();
   await page
     .locator(".library-item")
@@ -626,9 +647,7 @@ try {
     throw new Error("Exercise library overflows mobile viewport");
   await page.screenshot({ path: "test-results/exercise-library-mobile.png" });
   await page.goto("http://localhost:4175/nutrition");
-  await page
-    .getByRole("heading", { name: "Good food. Better energy." })
-    .waitFor();
+  await page.getByRole("heading", { name: "Nutrition", exact: true }).waitFor();
   await page.screenshot({
     path: "test-results/nutrition-mobile.png",
     fullPage: true,
@@ -689,9 +708,9 @@ try {
     .getByRole("button", { name: "Install update", exact: true })
     .click();
   await page.waitForTimeout(1000);
-  await page.getByRole("heading", { name: "Your preferences." }).waitFor();
+  await page.getByRole("heading", { name: "Settings", exact: true }).waitFor();
   await page.goto("http://localhost:4175/workout");
-  await page.getByRole("button", { name: "History", exact: true }).click();
+  await page.getByRole("tab", { name: "History", exact: true }).click();
   await page.getByText("complete", { exact: true }).waitFor();
   console.log(
     JSON.stringify({
